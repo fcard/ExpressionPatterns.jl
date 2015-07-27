@@ -50,6 +50,9 @@ using ExpressionPatterns.Dispatch
 @metafunction getname(M.m) = getname(m)
 getname(m::Symbol) = m
 
+getname(:(M1.M2.m)) == :m
+
+
 @macromethod inverse_op(x+y) :($x-$y)
 @macromethod inverse_op(x-y) :($x+$y)
 @macromethod inverse_op(x*y) :($x/$y)
