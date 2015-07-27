@@ -1,5 +1,8 @@
-using ExpressionPatterns
-using Base.Test
+module Tests
 
-# write your own tests here
-@test 1 == 1
+include("matching.jl")
+include("destructuring.jl")
+include("dispatch.jl")
+include("reflection.jl")
+
+end

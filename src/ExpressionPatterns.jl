@@ -1,5 +1,15 @@
 module ExpressionPatterns
+export @metadispatch, @metadestruct
 
-# package code goes here
+path(name) = joinpath(name, "$name.jl")
 
-end # module
+include(path("Helper"))
+include(path("PatternStructure"))
+include(path("Analyzer"))
+include(path("Matching"))
+include(path("Destructuring"))
+include(path("Dispatch"))
+include(path("Docs"))
+
+import .Dispatch: @metadestruct, @metadispatch
+end
