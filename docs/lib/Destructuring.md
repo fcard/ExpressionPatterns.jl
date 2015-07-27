@@ -3,26 +3,26 @@ Destructuring.Structure
 
 #### DestructureTree
 
-`DestructureTree`s are created from [`PatternTree`](../PatternStructure.md#patterntree)s in [`destructure`](../Destructuring.md#destructure)
+`DestructureTree`s are created from [`PatternTree`](./PatternStructure.md#patterntree)s in [`destructure`](./Destructuring.md#destructure)
 to aid destructuration.
 
 Subtypes:
-- [`DestructureNode`](../Destructuring.md#destructurenode)
-- [`DestructureBind`](../Destructuring.md#destructurebind)
-- [`DestructureLeaf`](../Destructuring.md#destructureleaf)
-- [`DestructureSlurp`](../Destructuring.md#destructureslurp)
+- [`DestructureNode`](./Destructuring.md#destructurenode)
+- [`DestructureBind`](./Destructuring.md#destructurebind)
+- [`DestructureLeaf`](./Destructuring.md#destructureleaf)
+- [`DestructureSlurp`](./Destructuring.md#destructureslurp)
 
 Relevant functions
 - `insert!`
-- [`depth`](../Destructuring.md#depth)
+- [`depth`](./Destructuring.md#depth)
 
 ---
 #### DestructureNode
 
-Created from a [[`PatternNode`](../PatternStructure.md#patternnode)](../PatternStructure.md#patternnode). Can have any number of children
-(each corresponding to a child of the [[`PatternNode`](../PatternStructure.md#patternnode)](../PatternStructure.md#patternnode)). It doesn't
+Created from a [[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode). Can have any number of children
+(each corresponding to a child of the [[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)). It doesn't
 have a head value, since it's irrelevant to destructuring. It retains
-the step, however. Has a slurp [`depth`](../Destructuring.md#depth), and a `name` that is used
+the step, however. Has a slurp [`depth`](./Destructuring.md#depth), and a `name` that is used
 to name a temporary variable containing the arguments of the expression
 being destructured.
 
@@ -42,12 +42,12 @@ end
 ```
 
 Related:
-- [`DestructureTree`](../Destructuring.md#destructuretree)
+- [`DestructureTree`](./Destructuring.md#destructuretree)
 
 ---
 #### DestructureBind
 
-Created from a [`PatternGate`](../PatternStructure.md#patterngate) whose test is a [`Binding`](../PatternStructure.md#binding).
+Created from a [`PatternGate`](./PatternStructure.md#patterngate) whose test is a [`Binding`](./PatternStructure.md#binding).
 Represents a variable binding, keeping track of its name.
 
 example:
@@ -59,16 +59,16 @@ binding_code(B, 1) == :(a = 1)
 ```
 
 Related:
-- [`DestructureTree`](../Destructuring.md#destructuretree)
+- [`DestructureTree`](./Destructuring.md#destructuretree)
 
 ---
 #### DestructureLeaf
 
-Created from a [`PatternLeaf`](../PatternStructure.md#patternleaf), `DestructureLeaf`s signify
+Created from a [`PatternLeaf`](./PatternStructure.md#patternleaf), `DestructureLeaf`s signify
 that there is nothing to be done.
 
-e.g. A destructuring tree of :(1+x) is a [`DestructureNode`](../Destructuring.md#destructurenode) whose
-children are a `DestructureLeaf` (1) and a [`DestructureBind`](../Destructuring.md#destructurebind) (x).
+e.g. A destructuring tree of :(1+x) is a [`DestructureNode`](./Destructuring.md#destructurenode) whose
+children are a `DestructureLeaf` (1) and a [`DestructureBind`](./Destructuring.md#destructurebind) (x).
 The code constructuded from that code would more or less be
 ```julia
 let temp = :(1+x).args
@@ -78,12 +78,12 @@ end
 ```
 
 Related:
-- [`DestructureTree`](../Destructuring.md#destructuretree)
+- [`DestructureTree`](./Destructuring.md#destructuretree)
 
 ---
 #### DestructureSlurp
 
-Created from a [`PatternNode`](../PatternStructure.md#patternnode) with a [`SlurpHead`](../PatternStructure.md#slurphead) head. It has
+Created from a [`PatternNode`](./PatternStructure.md#patternnode) with a [`SlurpHead`](./PatternStructure.md#slurphead) head. It has
 a destructuring `func`tion that extracts elements from a list
 of expressions.
 
@@ -153,15 +153,15 @@ b == [2,4]
 ---
 #### DestructuringInformation
 
-Packs a [`DestructureTree`](../Destructuring.md#destructuretree), the declarations of the bindings,
-and one [`Variables`](../Matching.md#variables) object.
+Packs a [`DestructureTree`](./Destructuring.md#destructuretree), the declarations of the bindings,
+and one [`Variables`](./Matching.md#variables) object.
 
 ---
 #### depth
 
 `depth(DestructureTree) -> Int`
 
-Gets the slurp `depth` of a [`DestructureTree`](../Destructuring.md#destructuretree), e.g. from the trees
+Gets the slurp `depth` of a [`DestructureTree`](./Destructuring.md#destructuretree), e.g. from the trees
 constructed of `:a`, `:[*{a}]`, and `:[*{[*{a}]}],)`, `a` has
 `depth` of respectively 0, 1, and 2.
 
@@ -175,15 +175,15 @@ Destructuring.Slurps
 
 `slurp_functions(SlurpHead) -> Function`
 
-Obtains the binding function that corresponds to the given [`SlurpHead`](../PatternStructure.md#slurphead).
+Obtains the binding function that corresponds to the given [`SlurpHead`](./PatternStructure.md#slurphead).
 
 ---
 #### set_slurp_bindings!
 
 `set_slurp_bindings!(DestructureSlurp)`
 
-Obtains the binding variables of the slurp with [`get_slurp_bindings`](../Destructuring.md#get_slurp_bindings) and
-sets them to the `bindings` parameter of the [`DestructureSlurp`](../Destructuring.md#destructureslurp).
+Obtains the binding variables of the slurp with [`get_slurp_bindings`](./Destructuring.md#get_slurp_bindings) and
+sets them to the `bindings` parameter of the [`DestructureSlurp`](./Destructuring.md#destructureslurp).
 
 ---
 #### get_slurp_bindings
@@ -215,7 +215,7 @@ binding variables, returning the remaining values.
 `retract!(bindings, tree)`
 
 Pops out values attributed to binding variables, reverting
-the actions of a [`extract!`](../Destructuring.md#extract!) call.
+the actions of a [`extract!`](./Destructuring.md#extract!) call.
 
 ---
 #### add_binding_iteration!
@@ -247,7 +247,7 @@ Destructuring.CodeGeneration
 
 Using the bindings in `info` and `ex` being the value to
 to be deconstructed, creates the code that is returned
-by [`destructure`](../Destructuring.md#destructure).
+by [`destructure`](./Destructuring.md#destructure).
 
 ---
 #### declare_bindings

@@ -93,21 +93,21 @@ but `a` also matches some expressions that `b` don't, and virce versa.
 
 `(a::PatternTree ⊆ b::PatternTree) -> Bool`
 
-Uses [`compare_trees`](../Matching.md#compare_trees) to check if `a` is a subset of `b`.
+Uses [`compare_trees`](./Matching.md#compare_trees) to check if `a` is a subset of `b`.
 
 ---
 #### ⊇
 
 `(a::PatternTree ⊇ b::PatternTree) -> Bool`
 
-Uses [`compare_trees`](../Matching.md#compare_trees) to check if `a` is a superset of `b`.
+Uses [`compare_trees`](./Matching.md#compare_trees) to check if `a` is a superset of `b`.
 
 ---
 #### conflicts
 
 `conflicts(a::PatternTree, b::PatternTree) -> Bool`
 
-Uses [`compare_trees`](../Matching.md#compare_trees) to check if `a` conflicts with `b`.
+Uses [`compare_trees`](./Matching.md#compare_trees) to check if `a` conflicts with `b`.
 
 ---
 

@@ -5,7 +5,7 @@ Analyzer.Function
 
 `getstep(head::Symbol) -> PatternStep`
 
-Get the [`PatternStep`](../PatternStructure.md#patternstep) that should be used with
+Get the [`PatternStep`](./PatternStructure.md#patternstep) that should be used with
 expressions with the given `head`.
 
 ---
@@ -26,14 +26,14 @@ Checks if `ex` is of the form `:X{ys...}` or `(*\?){ys...}` and thus
 represents a special pattern.
 
 Related:
-- [`PatternCheck`](../PatternStructure.md#patterncheck)
+- [`PatternCheck`](./PatternStructure.md#patterncheck)
 
 ---
 #### assertation_args
 
 `assertation_args(expr_args) -> Vector`
 
-Used to determine the arguments of a [`PatternCheck`](../PatternStructure.md#patterncheck),
+Used to determine the arguments of a [`PatternCheck`](./PatternStructure.md#patterncheck),
 this converts the one argument form of the a pattern
 check to a two arguments form.
 
@@ -78,7 +78,7 @@ If no module is specified, `current_module` is used.
 
 `analyze!(ex, AnalysisState)`
 
-Used by [`analyze`](../Analyzer.md#analyze), this creates patterns from `ex`
+Used by [`analyze`](./Analyzer.md#analyze), this creates patterns from `ex`
 and inserts them in the current pattern tree.
 
 ---

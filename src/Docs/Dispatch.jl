@@ -56,7 +56,7 @@ An optionally given `label` will be associated with the new method, so that it
 can be accessed with `table.labels[label]`.
 
 """
-newmethod!
+newmethod!;
 
 """
 `removemethod(table, label)`
@@ -165,7 +165,7 @@ Associates a metatable to a new module.
 import_metatable;
 
 #-----------------------------------------------------------------------------------
-# Dispatch.Applications
+# Dispatch.Applications;
 #-----------------------------------------------------------------------------------
 import ..Dispatch.Applications: @macromethod, @metafunction, @metadestruct, @metadispatch
 
@@ -175,9 +175,9 @@ import ..Dispatch.Applications: @macromethod, @metafunction, @metadestruct, @met
 
 Creates a extensible macro that matches and destructures the given patterns.
 
-For examples see the [`/examples`](../../../examples) directory or the [dispatch tests](../../../test/dispatch.jl).
+For examples see the [`/examples`](../../examples) directory or the [dispatch tests](../../test/dispatch.jl).
 """
-:@macromethod
+:@macromethod;
 
 """
 `@metafunction name(patterns...) body`
@@ -185,10 +185,10 @@ For examples see the [`/examples`](../../../examples) directory or the [dispatch
 
 Creates a function that dispatches on expression patterns.
 
-For examples see the [`/examples`](../../../examples) directory or the [dispatch tests](../../../test/dispatch.jl).
+For examples see the [`/examples`](../../examples) directory or the [dispatch tests](../../test/dispatch.jl).
 
 """
-:@metafunction
+:@metafunction;
 
 """
 `@metadestruct let ...;  ... end`
@@ -206,7 +206,7 @@ Related:
 - `@funds`
 
 """
-:@metadestruct
+:@metadestruct;
 
 """
 `@metadispatch macro m(...) ... end`
@@ -220,4 +220,4 @@ Related:
 - `@metafunction`
 
 """
-:@metadispatch
+:@metadispatch;

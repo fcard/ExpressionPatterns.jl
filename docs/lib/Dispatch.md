@@ -4,19 +4,19 @@ Dispatch.Structure
 #### MetaMethod
 
 `MetaMethod` associates a pattern tree to a function. They populate
-[`MetaMethodTable`](../Dispatch.md#metamethodtable)s.
+[`MetaMethodTable`](./Dispatch.md#metamethodtable)s.
 
 ---
 #### MetaMethodTable
 
-`MetaMethodTable`s are collections of [`MetaMethod`](../Dispatch.md#metamethod)s, they associate
+`MetaMethodTable`s are collections of [`MetaMethod`](./Dispatch.md#metamethod)s, they associate
 each one with both a index and a label.
 
 Relevant functions:
-- [`getmethod`](../Dispatch.md#getmethod)
-- `newmethod!`
-- `removemethod!`
-- [`prefermethod!`](../Dispatch.md#prefermethod!)
+- [`getmethod`](./Dispatch.md#getmethod)
+- [`newmethod!`](./Dispatch.md#newmethod!)
+- [`removemethod!`](./Dispatch.md#removemethod!)
+- [`prefermethod!`](./Dispatch.md#prefermethod!)
 - `prefermethod_over!`
 
 ---
@@ -24,7 +24,7 @@ Relevant functions:
 
 `MetaMethodError`
 
-Error that is thrown when a method is not found in a [`MetaMethodTable`](../Dispatch.md#metamethodtable).
+Error that is thrown when a method is not found in a [`MetaMethodTable`](./Dispatch.md#metamethodtable).
 
 ---
 
@@ -37,23 +37,10 @@ Dispatch.TableManipulation
 `getmethod(table, parameters) -> MetaMethod`
 
 Find the method whose pattern matches the given parameters.
-Throws a [`MetaMethodError`](../Dispatch.md#metamethoderror) if no method is found.
+Throws a [`MetaMethodError`](./Dispatch.md#metamethoderror) if no method is found.
 
 ---
 #### newmethod!
-
-"""
-`removemethod(table, label)`
-
-Removes the method associated with `label` from `table`.
-
-`removemethod(table, pattern)`
-
-Same as above, but associates the method with a pattern instead.
-
-
-"""
-removemethod!
 
 `newmethod!(table, pattern, body, mod[, label])`
 
@@ -61,6 +48,17 @@ Creates a new method in `table` that matches `pattern` and executes `body`.
 Also takes a module that will be used in the evaluation of `pattern` and `body`.
 An optionally given `label` will be associated with the new method, so that it
 can be accessed with `table.labels[label]`.
+
+---
+#### removemethod!
+
+`removemethod(table, label)`
+
+Removes the method associated with `label` from `table`.
+
+`removemethod(table, pattern)`
+
+Same as above, but associates the method with a pattern instead.
 
 ---
 #### prefermethod!
@@ -112,7 +110,7 @@ Dispatch.TopMetaTables
 
 #### TopMetaTable
 
-`TopMetaTable`s keep track of a collection of [`MetaMethodTable`](../Dispatch.md#metamethodtable)s for each module.
+`TopMetaTable`s keep track of a collection of [`MetaMethodTable`](./Dispatch.md#metamethodtable)s for each module.
 They are used to implement `@macromethod` and `@metafunction`.
 
 ---
@@ -149,34 +147,48 @@ Associates a metatable to a new module.
 
 
 Dispatch.Applications
-#-----------------------------------------------------------------------------------
-import ..Dispatch.Applications: @macromethod, @metafunction, @metadestruct, @metadispatch
+==========
 
-"""
+#### macromethod
+
 `@macromethod name(patterns...) body`
 `@macromethod name(patterns...) = body`
 
 Creates a extensible macro that matches and destructures the given patterns.
 
-See the [dispatch tests](../../../test/dispatch.jl) for examples.
-"""
-:@macromethod
+For examples see the [`/examples`](../../examples) directory or the [dispatch tests](../../test/dispatch.jl).
 
-"""
+---
+#### metafunction
+
 `@metafunction name(patterns...) body`
 `@metafunction name(patterns...) = body`
 
 Creates a function that dispatches on expression patterns.
 
-See the [dispatch tests](../../../test/dispatch.jl) for examples.
-"""
-:@metafunction
+For examples see the [`/examples`](../../examples) directory or the [dispatch tests](../../test/dispatch.jl).
 
-"""
-`@metadestruct let ...
-==========
+---
+#### metadestruct
 
-#### `@metadispatch macro m(...) ... end`
+`@metadestruct let ...;  ... end`
+`@metadestruct macro m(...) ... end`
+`@metadestruct (...,) -> ...`
+`@metadestruct f(...) = ...`
+`@metadestruct function f(...) ... end`
+
+Adds expression destructuring to its parameter.
+
+Related:
+- `@letds`
+- `@macrods`
+- `@anonds`
+- `@funds`
+
+---
+#### metadispatch
+
+`@metadispatch macro m(...) ... end`
 `@metadispatch function f(...) ... end`
 `@metadispatch f(...) = ...`
 
@@ -185,11 +197,6 @@ Adds expression destructuring and dispatch to its parameter.
 Related:
 - `@macromethod`
 - `@metafunction`
-
-"""
-metadispatch
-
-:@metadestruct
 
 ---
 

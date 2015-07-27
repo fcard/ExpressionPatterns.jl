@@ -7,16 +7,16 @@ PatternTree is an expression pattern represented as a tree
 data structure. It can be a root, check, node or leaf.
 
 Subtypes:
-- [`PatternLeaf`](../PatternStructure.md#patternleaf)
-- [`PatternNode`](../PatternStructure.md#patternnode)
-- [`PatternRoot`](../PatternStructure.md#patternroot)
-- [`PatternGate`](../PatternStructure.md#patterngate)
+- [`PatternLeaf`](./PatternStructure.md#patternleaf)
+- [`PatternNode`](./PatternStructure.md#patternnode)
+- [`PatternRoot`](./PatternStructure.md#patternroot)
+- [`PatternGate`](./PatternStructure.md#patterngate)
 
 
 Relevant functions:
 - `insert!`
-- [`newleaf!`](../PatternStructure.md#newleaf!)
-- [`newnode!`](../PatternStructure.md#newnode!)
+- [`newleaf!`](./PatternStructure.md#newleaf!)
+- [`newnode!`](./PatternStructure.md#newnode!)
 
 ---
 #### PatternRoot
@@ -26,7 +26,7 @@ have one child. It's used to simplify initialization
 of pattern trees.
 
 Related:
-- [`PatternTree`](../PatternStructure.md#patterntree)
+- [`PatternTree`](./PatternStructure.md#patterntree)
 
 ---
 #### PatternNode
@@ -39,9 +39,9 @@ it's trying to match. Nodes also keep track of
 which of its children, if any, are slurps.
 
 Related:
-- [`PatternStep`](../PatternStructure.md#patternstep)
-- [`PatternHead`](../PatternStructure.md#patternhead)
-- [`PatternTree`](../PatternStructure.md#patterntree)
+- [`PatternStep`](./PatternStructure.md#patternstep)
+- [`PatternHead`](./PatternStructure.md#patternhead)
+- [`PatternTree`](./PatternStructure.md#patterntree)
 
 ---
 #### PatternGate
@@ -71,8 +71,8 @@ example:
 ```
 
 Related:
-- [`PatternTree`](../PatternStructure.md#patterntree)
-- [`PatternCheck`](../PatternStructure.md#patterncheck)
+- [`PatternTree`](./PatternStructure.md#patterntree)
+- [`PatternCheck`](./PatternStructure.md#patterncheck)
 
 ---
 #### PatternLeaf
@@ -81,7 +81,7 @@ PatternLeaves signify the end of the pattern. Matching anything to
 a leaf always return true.
 
 Related:
-- [`PatternTree`](../PatternStructure.md#patterntree)
+- [`PatternTree`](./PatternStructure.md#patterntree)
 
 ---
 #### PatternCheck
@@ -119,73 +119,73 @@ the children of the node.
 
 Types of step:
 
-[`ArgsStep`](../PatternStructure.md#argsstep): takes the args of the expression without modification.
+[`ArgsStep`](./PatternStructure.md#argsstep): takes the args of the expression without modification.
 
-[`QuoteStep`](../PatternStructure.md#quotestep): if the expression is a QuoteNode, take its value,
+[`QuoteStep`](./PatternStructure.md#quotestep): if the expression is a QuoteNode, take its value,
 if the expression is a :quote Expr, take its argument.
 
-[`BlockStep`](../PatternStructure.md#blockstep): Filter out the LineNumberNodes and :line Exprs.
+[`BlockStep`](./PatternStructure.md#blockstep): Filter out the LineNumberNodes and :line Exprs.
 
-[`SlurpStep`](../PatternStructure.md#slurpstep): Only exists because slurps are just pattern nodes
+[`SlurpStep`](./PatternStructure.md#slurpstep): Only exists because slurps are just pattern nodes
 with special names. This step is not used.
 
 ---
 #### PatternHead
 
-Represents the type of a [`PatternNode`](../PatternStructure.md#patternnode).
+Represents the type of a [`PatternNode`](./PatternStructure.md#patternnode).
 
 Subtypes:
 - `ExprHead`
-- [`SlurpHead`](../PatternStructure.md#slurphead)
+- [`SlurpHead`](./PatternStructure.md#slurphead)
 
 ---
 #### makenode
 
 `makenode(head, step) -> PatternNode`
 
-Creates a [[`PatternNode`](../PatternStructure.md#patternnode)](../PatternStructure.md#patternnode) with the provided `head` and `step`.
+Creates a [[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode) with the provided `head` and `step`.
 
 Related:
-- [[`PatternNode`](../PatternStructure.md#patternnode)](../PatternStructure.md#patternnode)
-- [`PatternStep`](../PatternStructure.md#patternstep)
+- [[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)
+- [`PatternStep`](./PatternStructure.md#patternstep)
 
 ---
 #### newnode!
 
 `newnode!(head, step, parent) -> PatternNode`
 
-Creates a [[[`PatternNode`](../PatternStructure.md#patternnode)](../PatternStructure.md#patternnode)](../PatternStructure.md#patternnode) from the provided `head` and `step`
+Creates a [[[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode) from the provided `head` and `step`
 and inserts the node into `parent`.
 (returns the new node)
 
 `newnode!(check, head, step, parent) -> PatternNode`
 
-Creates a [[[`PatternNode`](../PatternStructure.md#patternnode)](../PatternStructure.md#patternnode)](../PatternStructure.md#patternnode) with `head` and `step`, inserts
-it into a [[`PatternGate`](../PatternStructure.md#patterngate)](../PatternStructure.md#patterngate) along with the check, and inserts
+Creates a [[[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode) with `head` and `step`, inserts
+it into a [[`PatternGate`](./PatternStructure.md#patterngate)](./PatternStructure.md#patterngate) along with the check, and inserts
 the gate into `parent`.
 
 Related:
-- [[[`PatternNode`](../PatternStructure.md#patternnode)](../PatternStructure.md#patternnode)](../PatternStructure.md#patternnode)
-- [`PatternStep`](../PatternStructure.md#patternstep)
-- [[`PatternGate`](../PatternStructure.md#patterngate)](../PatternStructure.md#patterngate)
+- [[[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)
+- [`PatternStep`](./PatternStructure.md#patternstep)
+- [[`PatternGate`](./PatternStructure.md#patterngate)](./PatternStructure.md#patterngate)
 
 ---
 #### newleaf!
 
 `newleaf!(parent) -> PatternLeaf`
 
-Creates a [[[`PatternLeaf`](../PatternStructure.md#patternleaf)](../PatternStructure.md#patternleaf)](../PatternStructure.md#patternleaf) and inserts it into `parent`.
+Creates a [[[`PatternLeaf`](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf) and inserts it into `parent`.
 (returns the new leaf)
 
 `newleaf!(check, parent) -> PatternLeaf`
 
-Creates a [[[`PatternLeaf`](../PatternStructure.md#patternleaf)](../PatternStructure.md#patternleaf)](../PatternStructure.md#patternleaf), inserts it into a [[`PatternGate`](../PatternStructure.md#patterngate)](../PatternStructure.md#patterngate)
+Creates a [[[`PatternLeaf`](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf), inserts it into a [[`PatternGate`](./PatternStructure.md#patterngate)](./PatternStructure.md#patterngate)
 along with the check, and then inserts the gate into `parent`.
 
 Related:
-- [[[`PatternLeaf`](../PatternStructure.md#patternleaf)](../PatternStructure.md#patternleaf)](../PatternStructure.md#patternleaf)
-- [`PatternStep`](../PatternStructure.md#patternstep)
-- [[`PatternGate`](../PatternStructure.md#patterngate)](../PatternStructure.md#patterngate)
+- [[[`PatternLeaf`](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf)
+- [`PatternStep`](./PatternStructure.md#patternstep)
+- [[`PatternGate`](./PatternStructure.md#patterngate)](./PatternStructure.md#patterngate)
 
 ---
 #### slicenode
@@ -196,7 +196,7 @@ Creates a pattern node that matches the children of `node` at
 the given interval.
 
 Related:
-- [`PatternNode`](../PatternStructure.md#patternnode)
+- [`PatternNode`](./PatternStructure.md#patternnode)
 
 ---
 
@@ -219,37 +219,37 @@ effect.
 ---
 #### EqualityCheck
 
-`EqualityCheck` is a [`PatternCheck`](../PatternStructure.md#patterncheck) that tests
+`EqualityCheck` is a [`PatternCheck`](./PatternStructure.md#patterncheck) that tests
 if an expression is equal to some value.
 
 ---
 #### TypeCheck
 
-`TypeCheck` is a [`PatternCheck`](../PatternStructure.md#patterncheck) that tests
+`TypeCheck` is a [`PatternCheck`](./PatternStructure.md#patterncheck) that tests
 if an expression is of some type.
 
 ---
 #### PredicateCheck
 
-`PredicateCheck` is a [`PatternCheck`](../PatternStructure.md#patterncheck) that tests
+`PredicateCheck` is a [`PatternCheck`](./PatternStructure.md#patterncheck) that tests
 if an expression fulfills some predicate.
 
 ---
 #### ArgsStep
 
-`ArgsStep` is a [`PatternStep`](../PatternStructure.md#patternstep) that extracts
+`ArgsStep` is a [`PatternStep`](./PatternStructure.md#patternstep) that extracts
 the arguments from a expression unmodified.
 
 ---
 #### BlockStep
 
-`BlockStep` is a [`PatternStep`](../PatternStructure.md#patternstep) that extracts
+`BlockStep` is a [`PatternStep`](./PatternStructure.md#patternstep) that extracts
 the non-line-number arguments from a expression.
 
 ---
 #### QuoteStep
 
-`QuoteStep` is a [`PatternStep`](../PatternStructure.md#patternstep) that extracts
+`QuoteStep` is a [`PatternStep`](./PatternStructure.md#patternstep) that extracts
 the value of a `QuoteNode` or the arguments
 from a `:quote` expression.
 
@@ -268,14 +268,14 @@ PatternStructure.SlurpTypes
 
 #### SlurpHead
 
-Represents a slurp algorithm. Can be a [[`LazySlurp`](../PatternStructure.md#lazyslurp)](../PatternStructure.md#lazyslurp) or a [[`GreedySlurp`](../PatternStructure.md#greedyslurp)](../PatternStructure.md#greedyslurp), and
+Represents a slurp algorithm. Can be a [[`LazySlurp`](./PatternStructure.md#lazyslurp)](./PatternStructure.md#lazyslurp) or a [[`GreedySlurp`](./PatternStructure.md#greedyslurp)](./PatternStructure.md#greedyslurp), and
 many variations of each.
 
 Subtypes:
-- [[`LazySlurp`](../PatternStructure.md#lazyslurp)](../PatternStructure.md#lazyslurp)
-- [[`GreedySlurp`](../PatternStructure.md#greedyslurp)](../PatternStructure.md#greedyslurp)
-- [`GenericLazySlurp`](../PatternStructure.md#genericlazyslurp)
-- [`GenericGreedySlurp`](../PatternStructure.md#genericgreedyslurp)
+- [[`LazySlurp`](./PatternStructure.md#lazyslurp)](./PatternStructure.md#lazyslurp)
+- [[`GreedySlurp`](./PatternStructure.md#greedyslurp)](./PatternStructure.md#greedyslurp)
+- [`GenericLazySlurp`](./PatternStructure.md#genericlazyslurp)
+- [`GenericGreedySlurp`](./PatternStructure.md#genericgreedyslurp)
 
 ---
 #### LazySlurp
@@ -293,12 +293,12 @@ can't match the expression.
 ---
 #### GenericLazySlurp
 
-Slowest version of a [`LazySlurp`](../PatternStructure.md#lazyslurp), but works for any pattern.
+Slowest version of a [`LazySlurp`](./PatternStructure.md#lazyslurp), but works for any pattern.
 
 ---
 #### GenericGreedySlurp
 
-Slowest version of a [`GreedySlurp`](../PatternStructure.md#greedyslurp), but works for any pattern.
+Slowest version of a [`GreedySlurp`](./PatternStructure.md#greedyslurp), but works for any pattern.
 
 ---
 

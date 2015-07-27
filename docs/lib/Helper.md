@@ -19,7 +19,7 @@ object.
 #### current
 
 `current(L::Looping)` returns the current element,
-which can be changed through [`next!`](../Helper.md#next!) and [`restart!`](../Helper.md#restart!).
+which can be changed through [`next!`](./Helper.md#next!) and [`restart!`](./Helper.md#restart!).
 
 ---
 #### next!

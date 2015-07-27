@@ -87,7 +87,7 @@ function add_references!(docdb)
     for mention in get_mentions(fdoc.text)
       if haskey(docdb.fdocs, mention) && mention != fdoc.name
         fun  = docdb.fdocs[mention]
-        ref  = "[`$(fun.name)`](../$(fun.file).md#$(lowercase(fun.name)))"
+        ref  = "[`$(fun.name)`](./$(fun.file).md#$(lowercase(fun.name)))"
         fdoc.text = replace(fdoc.text, "`$mention`", ref)
       end
     end
