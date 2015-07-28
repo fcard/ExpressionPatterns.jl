@@ -79,7 +79,7 @@ function analyze_args!(args, node, state)
   for i in eachindex(args)
     analyze!(args[i], nstate)
   end
-  optimize_slurps!(node, length(node.children))
+  optimize_slurps!(node)
 end
 
 #-----------------------------------------------------------------------------------

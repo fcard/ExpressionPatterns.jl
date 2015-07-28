@@ -104,7 +104,7 @@ Analyzer.SlurpOptimizations
 
 #### optimize_slurps!
 
-`optimize_slurps!(node, i)`
+`optimize_slurps!(node)`
 
 Starting from the last, replaces the generic slurp algorithms
 with faster ones, if possible.

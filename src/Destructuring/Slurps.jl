@@ -8,9 +8,11 @@ export slurp_functions, set_slurp_bindings!
 # get function
 #----------------------------------------------------------------------------
 
-slurp_functions(::GenericLazySlurp)   = lazy_slurp_bind!
-slurp_functions(::GenericGreedySlurp) = greedy_slurp_bind!
-slurp_functions(::SimpleLastSlurp)    = simple_last_slurp_bind!
+slurp_functions(::GenericLazySlurp)       = lazy_slurp_bind!
+slurp_functions(::GenericGreedySlurp)     = greedy_slurp_bind!
+slurp_functions(::SimpleLastSlurp)        = simple_last_slurp_bind!
+slurp_functions(::SimpleGreedySlurpUntil) = simple_greedy_slurp_until_bind!
+slurp_functions(::SimpleLazySlurpUntil)   = simple_lazy_slurp_until_bind!
 
 #----------------------------------------------------------------------------
 # set_slurp_bindings!
@@ -83,6 +85,15 @@ function add_binding_iteration!(slurp, bindings, tree::DestructureBind)
   push!(bindings, Any[])
 end
 
+function get_single_binding(slurp, bindings)
+  depth   = slurp.depth
+  binding = bindings
+  while depth != 0
+    binding = binding[end]
+    depth  -= 1
+  end
+  binding
+end
 
 function retract!(bindings, tree::DestructureTree)
   for (b,d) in zip(bindings, tree.children)
@@ -104,6 +115,7 @@ function lazy_slurp_bind!(slurp, bindings, values)
   return values
 end
 
+#----------------------------------------------------------------------------
 
 function greedy_slurp_bind!(slurp, bindings, values)
   bindlen   = length(bindings)
@@ -123,16 +135,57 @@ function greedy_slurp_bind!(slurp, bindings, values)
   return oldvalues[vlen:end]
 end
 
+#----------------------------------------------------------------------------
+
 function simple_last_slurp_bind!(slurp, bindings, values)
-  depth   = slurp.depth
-  binding = bindings
-  while depth != 0
-    binding = binding[end]
-    depth  -= 1
-  end
+  binding = get_single_binding(slurp, bindings)
 
   append!(binding, values[1:end-slurp.head.post])
   values[end-slurp.head.post+1:end]
 end
 
+#----------------------------------------------------------------------------
+
+function simple_lazy_slurp_until_bind!(slurp, bindings, values)
+  slurp.postmatch(values) && return values
+
+  until = slurp.head.until
+  index = slurp.head.index
+  found = filter(x->x>=index, findin(values, until))
+
+  start   = 1
+  after   = 1
+  binding = get_single_binding(slurp, bindings)
+
+  while !slurp.postmatch(values[after:end])
+    after = found[1]-index+1
+    found = found[2:end]
+    append!(binding, values[start:after-1])
+    start = after
+  end
+  values[after:end]
+end
+
+
+#----------------------------------------------------------------------------
+
+function simple_greedy_slurp_until_bind!(slurp, bindings, values)
+  until = slurp.head.until
+  index = slurp.head.index
+  found = reverse(filter(x->x>=index, findin(values, until)))
+
+  binding = get_single_binding(slurp, bindings)
+  result  = values[1:found[1]-index]
+
+  while !slurp.postmatch(values[found[1]-index+1:end])
+    result = values[1:found[2]-index]
+    found  = found[2:end]
+  end
+  append!(binding, result)
+
+  return values[found[1]-index+1:end]
+end
+
+
+#----------------------------------------------------------------------------
 end
