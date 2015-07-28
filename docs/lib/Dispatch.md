@@ -110,7 +110,7 @@ Dispatch.TopMetaTables
 #### TopMetaTable
 
 `TopMetaTable`s keep track of a collection of [`MetaMethodTable`](./Dispatch.md#metamethodtable)s for each module.
-They are used to implement `@macromethod` and `@metafunction`.
+They are used to implement [`@macromethod`](./Dispatch.md#@macromethod) and [`@metafunction`](./Dispatch.md#@metafunction).
 
 ---
 #### init_module_table!
@@ -148,7 +148,7 @@ Associates a metatable to a new module.
 Dispatch.Applications
 ==========
 
-#### macromethod
+#### @macromethod
 
 `@macromethod name(patterns...) body`  
 `@macromethod name(patterns...) = body`
@@ -158,7 +158,7 @@ Creates a extensible macro that matches and destructures the given patterns.
 For examples see the [`/examples`](../../examples) directory or the [dispatch tests](../../test/dispatch.jl).
 
 ---
-#### metafunction
+#### @metafunction
 
 `@metafunction name(patterns...) body`  
 `@metafunction name(patterns...) = body`
@@ -168,7 +168,7 @@ Creates a function that dispatches on expression patterns.
 For examples see the [`/examples`](../../examples) directory or the [dispatch tests](../../test/dispatch.jl).
 
 ---
-#### metadestruct
+#### @metadestruct
 
 `@metadestruct let ...;  ... end`  
 `@metadestruct macro m(...) ... end`  
@@ -179,13 +179,13 @@ For examples see the [`/examples`](../../examples) directory or the [dispatch te
 Adds expression destructuring to its parameter.
 
 Related:
-- `@letds`
-- `@macrods`
-- `@anonds`
-- `@funds`
+- [`@letds`](./Destructuring.md#@letds)
+- [`@macrods`](./Destructuring.md#@macrods)
+- [`@anonds`](./Destructuring.md#@anonds)
+- [`@funds`](./Destructuring.md#@funds)
 
 ---
-#### metadispatch
+#### @metadispatch
 
 `@metadispatch macro m(...) ... end`  
 `@metadispatch function f(...) ... end`  
@@ -194,8 +194,8 @@ Related:
 Adds expression destructuring and dispatch to its parameter.
 
 Related:
-- `@macromethod`
-- `@metafunction`
+- [`@macromethod`](./Dispatch.md#@macromethod)
+- [`@metafunction`](./Dispatch.md#@metafunction)
 
 ---
 

@@ -34,7 +34,7 @@ start from the beginning.
 Makes `current(L::Looping)` return the first object.
 
 ---
-#### implicit
+#### @implicit
 
 ```julia
 @implicit v₁,v₂,...,vₙ begin

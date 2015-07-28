@@ -287,7 +287,7 @@ eval(destructure(pattern, :value, quote x,coll,b end)) #> (:x, :(1:10), :(print(
 Destructuring.Applications
 ==========
 
-#### letds
+#### @letds
 
 ```julia
 @letds p1=v1 p2=v2 ... pn=vn begin
@@ -314,7 +314,7 @@ end
 ```
 
 ---
-#### macrods
+#### @macrods
 
 ```julia
 @macrods name(p1,p2,...,pn) begin
@@ -335,7 +335,7 @@ examples:
 ```
 
 ---
-#### macrods
+#### @macrods
 
 ```julia
 @macrods name(p1,p2,...,pn) begin
@@ -356,7 +356,7 @@ examples:
 ```
 
 ---
-#### anonds
+#### @anonds
 
 ```julia
 @anonds (p1,p2,...,pn) -> body
@@ -379,7 +379,7 @@ last_index(ex)  == 7
 ```
 
 ---
-#### anonds
+#### @funds
 
 ```julia
 @funds name(p1,p2,...,pn) = body

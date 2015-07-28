@@ -426,4 +426,4 @@ extract_int(:[a,b,4,d,e,f,g]) == 4
 ```
 
 """
-:@anonds;
+:@funds;

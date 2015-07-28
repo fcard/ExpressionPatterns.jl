@@ -74,7 +74,8 @@ function make_file_doc(filename)
     while modtext != ""
       fhelp, modtext = capture(modtext, from="\"\"\"", until="\"\"\"")
       fname, modtext = capture(modtext, from="", until=";")
-      fname != "" && push!(fdocs, FuncDoc(strip(fname), fhelp, strip(mname), filename[1:end-3]))
+      fname  = replace(strip(fname), ":@", "@")
+      fname != "" && push!(fdocs, FuncDoc(fname, fhelp, strip(mname), filename[1:end-3]))
     end
     push!(mods, ModDoc(strip(mname), fdocs, filename[1:end-3]))
   end
@@ -118,8 +119,7 @@ function write_file(filedoc::DocFile, directory)
   filename = filepath(filedoc, directory)
 
   println("Creating $filename... ")
-  make_directory(directory, "MD")
-  make_directory(directory, "MD", "lib")
+  make_directory(directory, "lib")
 
   open(filename, "w") do output
     for mod in filedoc.mods
@@ -139,8 +139,6 @@ function write_module(output, mod)
 end
 
 function prepare_name(name)
-  name = strip(name)
-  name = replace(name, ":@", "")
   name = "#### $name\n"
 end
 
@@ -151,8 +149,8 @@ end
 
 filepath(filedoc, dir) =
   dir == pwd()?
-    joinpath("MD", "lib", "$(filedoc.name).md") :
-    joinpath(dir, "lib", "MD", "$(filedoc.name).md")
+    joinpath("lib", "$(filedoc.name).md") :
+    joinpath(dir, "lib", "$(filedoc.name).md")
 
 
 #-----------------------------------------------------------------------------------
@@ -192,7 +190,7 @@ end
 #-----------------------------------------------------------------------------------
 
 function main()
-  compile(readdir(pwd()), pwd())
+  compile(readdir(pwd()), joinpath("..","..","docs"))
 end
 
 function compile(from, to)
