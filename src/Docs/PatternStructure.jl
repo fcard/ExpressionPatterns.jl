@@ -100,22 +100,9 @@ if it passes the test.
 
 Types of test:
 
-  **TypeCheck**  
-  `description   `: Tests if an expression is of a given type.  
-  `name\shortcut `: `(:type)`\\`(:T)`  
-  `pattern usage `: `(:T{Type})` or `(:T{pattern, Type})`  
-
--
-  **EqualityCheck**  
-  `description   `: Tests if an expression is equal to some value.  
-  `name\shortcut `: `(:equals)`\\`(:EQ)`\\`(:E)`  
-  `pattern usage `: `(:EQ{val})` or `(:EQ{pattern, val})` or use a literal (`10`,`'a'`,etc.)  
-
--
-  **PredicateCheck**  
-  `description   `: Tests if an expression fulfills some predicate.  
-  `name\shortcut `: `(:predicate)`\\`(:P)`  
-  `pattern usage `: `(:P{func})` or `(:P{pattern, func})`  
+- `TypeCheck`  
+- `EqualityCheck`  
+- `PredicateCheck`
 
 """
 PatternCheck;
@@ -127,15 +114,10 @@ the children of the node.
 
 Types of step:
 
-`ArgsStep`: takes the args of the expression without modification.
-
-`QuoteStep`: if the expression is a QuoteNode, take its value,
-if the expression is a :quote Expr, take its argument.
-
-`BlockStep`: Filter out the LineNumberNodes and :line Exprs.
-
-`SlurpStep`: Only exists because slurps are just pattern nodes
-with special names. This step is not used.
+- `ArgsStep`
+- `QuoteStep`
+- `BlockStep`
+- `SlurpStep`
 
 """
 PatternStep;
@@ -284,7 +266,8 @@ QuoteStep;
 """
 Since slurps already work with extracted
 arguments, there is no need for a step for
-them. Calling `SlurpStep` causes an error.
+them, this being a placeholder.
+Calling `SlurpStep` causes an error.
 
 """
 SlurpStep;
@@ -293,7 +276,8 @@ SlurpStep;
 # PatternStructure.SlurpTypes;
 #-----------------------------------------------------------------------------------
 import ..PatternStructure.SlurpTypes: SlurpHead, LazySlurp, GreedySlurp,
-                                      GenericGreedySlurp, GenericLazySlurp
+                                      GenericGreedySlurp, GenericLazySlurp,
+                                      SimpleLastSlurp
 
 """
 Represents a slurp algorithm. Can be a `LazySlurp` or a `GreedySlurp`, and
@@ -304,6 +288,7 @@ Subtypes:
 - `GreedySlurp`
 - `GenericLazySlurp`
 - `GenericGreedySlurp`
+- `SimpleLastSlurp`
 
 """
 SlurpHead;
@@ -334,3 +319,12 @@ Slowest version of a `GreedySlurp`, but works for any pattern.
 
 """
 GenericGreedySlurp;
+
+"""
+Assumes the slurp is the last one, and its match a single symbol.
+If the expression is of the form `*{s}, a₁,...,aₙ`, capture
+everything minus the last `n` arguments.
+
+"""
+SimpleLastSlurp
+

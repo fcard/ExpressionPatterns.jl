@@ -93,22 +93,9 @@ if it passes the test.
 
 Types of test:
 
-  **TypeCheck**  
-  `description   `: Tests if an expression is of a given type.  
-  `nameshortcut `: `(:type)`\`(:T)`  
-  `pattern usage `: `(:T{Type})` or `(:T{pattern, Type})`  
-
--
-  **EqualityCheck**  
-  `description   `: Tests if an expression is equal to some value.  
-  `nameshortcut `: `(:equals)`\`(:EQ)`\`(:E)`  
-  `pattern usage `: `(:EQ{val})` or `(:EQ{pattern, val})` or use a literal (`10`,`'a'`,etc.)  
-
--
-  **PredicateCheck**  
-  `description   `: Tests if an expression fulfills some predicate.  
-  `nameshortcut `: `(:predicate)`\`(:P)`  
-  `pattern usage `: `(:P{func})` or `(:P{pattern, func})`
+- [`TypeCheck`](./PatternStructure.md#typecheck)  
+- [`EqualityCheck`](./PatternStructure.md#equalitycheck)  
+- [`PredicateCheck`](./PatternStructure.md#predicatecheck)
 
 ---
 #### PatternStep
@@ -119,15 +106,10 @@ the children of the node.
 
 Types of step:
 
-[`ArgsStep`](./PatternStructure.md#argsstep): takes the args of the expression without modification.
-
-[`QuoteStep`](./PatternStructure.md#quotestep): if the expression is a QuoteNode, take its value,
-if the expression is a :quote Expr, take its argument.
-
-[`BlockStep`](./PatternStructure.md#blockstep): Filter out the LineNumberNodes and :line Exprs.
-
-[`SlurpStep`](./PatternStructure.md#slurpstep): Only exists because slurps are just pattern nodes
-with special names. This step is not used.
+- [`ArgsStep`](./PatternStructure.md#argsstep)
+- [`QuoteStep`](./PatternStructure.md#quotestep)
+- [`BlockStep`](./PatternStructure.md#blockstep)
+- [`SlurpStep`](./PatternStructure.md#slurpstep)
 
 ---
 #### PatternHead
@@ -258,7 +240,8 @@ from a `:quote` expression.
 
 Since slurps already work with extracted
 arguments, there is no need for a step for
-them. Calling `SlurpStep` causes an error.
+them, this being a placeholder.
+Calling `SlurpStep` causes an error.
 
 ---
 
@@ -276,6 +259,7 @@ Subtypes:
 - [[`GreedySlurp`](./PatternStructure.md#greedyslurp)](./PatternStructure.md#greedyslurp)
 - [`GenericLazySlurp`](./PatternStructure.md#genericlazyslurp)
 - [`GenericGreedySlurp`](./PatternStructure.md#genericgreedyslurp)
+- [`SimpleLastSlurp`](./PatternStructure.md#simplelastslurp)
 
 ---
 #### LazySlurp
@@ -299,6 +283,13 @@ Slowest version of a [`LazySlurp`](./PatternStructure.md#lazyslurp), but works f
 #### GenericGreedySlurp
 
 Slowest version of a [`GreedySlurp`](./PatternStructure.md#greedyslurp), but works for any pattern.
+
+---
+#### SimpleLastSlurp
+
+Assumes the slurp is the last one, and its match a single symbol.
+If the expression is of the form `*{s}, a₁,...,aₙ`, capture
+everything minus the last `n` arguments.
 
 ---
 

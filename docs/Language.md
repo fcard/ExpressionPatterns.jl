@@ -31,7 +31,7 @@ Special syntax
 x = :symbol; :(EQ{x})  # matches :symbol. Note that equals\E\EQ calls eval on its argument.
                        # Same with predicate\P and type\T.
 
-:(:I{a,b,*{xs}})        # matches [1,2,3,4], (:a,:b,:c,:d,:e)
+:(:I{a,b,*{xs}})       # matches [1,2,3,4], (:a,:b,:c,:d,:e)
 
 ```
 
