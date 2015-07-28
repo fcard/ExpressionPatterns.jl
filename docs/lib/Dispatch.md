@@ -110,7 +110,7 @@ Dispatch.TopMetaTables
 #### TopMetaTable
 
 `TopMetaTable`s keeps track of a collection of [`MetaMethodTable`](./Dispatch.md#metamethodtable)s for each module.
-They are used to implement [`@macromethod`](./Dispatch.md#@macromethod) and [`@metafunction`](./Dispatch.md#@metafunction).
+They are used to implement [`@macromethod`](./Dispatch.md#macromethod) and [`@metafunction`](./Dispatch.md#metafunction).
 
 ---
 #### init_module_table!
@@ -179,10 +179,10 @@ For examples see the [`/examples`](../../examples) directory or the [dispatch te
 Adds expression destructuring to its parameter.
 
 Related:
-- [`@letds`](./Destructuring.md#@letds)
-- [`@macrods`](./Destructuring.md#@macrods)
-- [`@anonds`](./Destructuring.md#@anonds)
-- [`@funds`](./Destructuring.md#@funds)
+- [`@letds`](./Destructuring.md#letds)
+- [`@macrods`](./Destructuring.md#macrods)
+- [`@anonds`](./Destructuring.md#anonds)
+- [`@funds`](./Destructuring.md#funds)
 
 ---
 #### @metadispatch
@@ -194,8 +194,8 @@ Related:
 Adds expression destructuring and dispatch to its parameter.
 
 Related:
-- [`@macromethod`](./Dispatch.md#@macromethod)
-- [`@metafunction`](./Dispatch.md#@metafunction)
+- [`@macromethod`](./Dispatch.md#macromethod)
+- [`@metafunction`](./Dispatch.md#metafunction)
 
 ---
 
