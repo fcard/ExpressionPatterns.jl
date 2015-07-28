@@ -51,11 +51,11 @@ can be accessed with `table.labels[label]`.
 ---
 #### removemethod!
 
-`removemethod(table, label)`
+`removemethod!(table, label)`
 
 Removes the method associated with `label` from `table`.
 
-`removemethod(table, pattern)`
+`removemethod!(table, pattern)`
 
 Same as above, but associates the method with a pattern instead.
 
@@ -75,7 +75,7 @@ Same as above, but associates the methods with the patterns instead.
 ---
 #### whichmethod
 
-`whichmethod(table, parameters)
+`whichmethod(table, parameters)`
 
 Same as `getmethod`, but doesn't throw an error if no method is found.
 
