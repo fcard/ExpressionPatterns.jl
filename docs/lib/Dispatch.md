@@ -17,7 +17,6 @@ Relevant functions:
 - [`newmethod!`](./Dispatch.md#newmethod!)
 - [`removemethod!`](./Dispatch.md#removemethod!)
 - [`prefermethod!`](./Dispatch.md#prefermethod!)
-- `prefermethod_over!`
 
 ---
 #### MetaMethodError

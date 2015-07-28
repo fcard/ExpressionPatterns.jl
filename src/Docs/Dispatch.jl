@@ -19,7 +19,6 @@ Relevant functions:
 - `newmethod!`
 - `removemethod!`
 - `prefermethod!`
-- `prefermethod_over!`
 
 """
 MetaMethodTable;
