@@ -70,7 +70,7 @@ methods passed don't conflict.
 
 `prefermethod!(table, pattern1, pattern2)`
 
-Same as above, but associates the methods with the patterns instead.
+Same as above, but associates the methods with the given patterns instead.
 
 ---
 #### whichmethod
@@ -109,7 +109,7 @@ Dispatch.TopMetaTables
 
 #### TopMetaTable
 
-`TopMetaTable`s keep track of a collection of [`MetaMethodTable`](./Dispatch.md#metamethodtable)s for each module.
+`TopMetaTable`s keeps track of a collection of [`MetaMethodTable`](./Dispatch.md#metamethodtable)s for each module.
 They are used to implement [`@macromethod`](./Dispatch.md#@macromethod) and [`@metafunction`](./Dispatch.md#@metafunction).
 
 ---

@@ -1,9 +1,6 @@
 #! /usr/bin/env julia
 module MakeDocs
 
-const REPO_URL = "https://github.com/fcard/ExpressionPatterns/"
-const DOCS_DIR  = "/Docs/MD/"
-
 #-----------------------------------------------------------------------------------
 # Type definitions
 #-----------------------------------------------------------------------------------

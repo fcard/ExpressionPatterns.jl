@@ -79,7 +79,7 @@ methods passed don't conflict.
 
 `prefermethod!(table, pattern1, pattern2)`
 
-Same as above, but associates the methods with the patterns instead.
+Same as above, but associates the methods with the given patterns instead.
 
 """
 prefermethod!;
@@ -122,7 +122,7 @@ set_conflict_warnings;
 import ..Dispatch.TopMetaTables: TopMetaTable,  init_module_table!, init_metatable!, get_metatable, import_metatable!
 
 """
-`TopMetaTable`s keep track of a collection of `MetaMethodTable`s for each module.
+`TopMetaTable`s keeps track of a collection of `MetaMethodTable`s for each module.
 They are used to implement `@macromethod` and `@metafunction`.
 
 """
