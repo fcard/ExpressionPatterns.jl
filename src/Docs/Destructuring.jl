@@ -310,7 +310,7 @@ destructure;
 #----------------------------------------------------------------------------
 # Destructuring.Applications;
 #----------------------------------------------------------------------------
-import ..Destructuring.Applications: @letds, @macrods, @anonds
+import ..Destructuring.Applications: @letds, @macrods, @anonds, @funds
 
 """
 ```julia

@@ -111,6 +111,7 @@ AnalysisState;
 #-----------------------------------------------------------------------------------
 # Analyzer.SlurpOptimizations;
 #-----------------------------------------------------------------------------------
+import ..Analyzer.SlurpOptimizations: optimize_slurps!
 
 """
 `optimize_slurps!(node, i)`
