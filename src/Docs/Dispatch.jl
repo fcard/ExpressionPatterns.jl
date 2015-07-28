@@ -169,7 +169,7 @@ import_metatable;
 import ..Dispatch.Applications: @macromethod, @metafunction, @metadestruct, @metadispatch
 
 """
-`@macromethod name(patterns...) body`
+`@macromethod name(patterns...) body`  
 `@macromethod name(patterns...) = body`
 
 Creates a extensible macro that matches and destructures the given patterns.
@@ -179,7 +179,7 @@ For examples see the [`/examples`](../../examples) directory or the [dispatch te
 :@macromethod;
 
 """
-`@metafunction name(patterns...) body`
+`@metafunction name(patterns...) body`  
 `@metafunction name(patterns...) = body`
 
 Creates a function that dispatches on expression patterns.
@@ -190,10 +190,10 @@ For examples see the [`/examples`](../../examples) directory or the [dispatch te
 :@metafunction;
 
 """
-`@metadestruct let ...;  ... end`
-`@metadestruct macro m(...) ... end`
-`@metadestruct (...,) -> ...`
-`@metadestruct f(...) = ...`
+`@metadestruct let ...;  ... end`  
+`@metadestruct macro m(...) ... end`  
+`@metadestruct (...,) -> ...`  
+`@metadestruct f(...) = ...`  
 `@metadestruct function f(...) ... end`
 
 Adds expression destructuring to its parameter.
@@ -208,8 +208,8 @@ Related:
 :@metadestruct;
 
 """
-`@metadispatch macro m(...) ... end`
-`@metadispatch function f(...) ... end`
+`@metadispatch macro m(...) ... end`  
+`@metadispatch function f(...) ... end`  
 `@metadispatch f(...) = ...`
 
 Adds expression destructuring and dispatch to its parameter.
