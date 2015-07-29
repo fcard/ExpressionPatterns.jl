@@ -28,4 +28,20 @@ using  Base.Test
 
 @test @t3(1,2,3,4,5,6,7) == [3,4,5]
 
+# simple, until, greedy
+
+@test isa(analyze(:(*{a},3,*{b})).child.children[1].head, SimpleGreedySlurpUntil)
+
+@macrods t4(*{a},3,*{b}) a
+
+@test @t4(0,1,2,3,4,5,6) == [0,1,2]
+
+# simple, until, lazy
+
+@test isa(analyze(:(?{a},3,*{b})).child.children[1].head, SimpleLazySlurpUntil)
+
+@macrods t5(?{a},3,*{b}) a
+
+@test @t5(0,1,2,3,4,5,6) == [0,1,2]
+
 end

@@ -137,6 +137,27 @@ end
     return length(args)>=h.post, length(args)-h.post+1
   end
 #----------------------------------------------------------------------------
+  function slurp_until(found, node, sp, args, i, pos)
+    found      = filter(x->x>=pos+i-1, found)
+    matches(f) = match_children(node, args, sp+1, f[1]-i+1)
+
+    while !isempty(found) &&
+          !matches(found)
+      found = found[2:end]
+    end
+    return !isempty(found), isempty(found)? 0 : found[1]-i+1
+  end
+
+  function match_slurp_impl(h::SimpleGreedySlurpUntil, node, slurp, sp, args, pos)
+    slurp_until(reverse(findin(args, h.until)), node, sp, args, h.index, pos)
+  end
+
+
+  function match_slurp_impl(h::SimpleLazySlurpUntil, node, slurp, sp, args, pos)
+    slurp_until(findin(args, h.until), node, sp, args, h.index, pos)
+  end
+#----------------------------------------------------------------------------
+
 end
 
 match_nested_slurp(node) =
