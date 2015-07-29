@@ -101,7 +101,7 @@ V = VectorObject()
 V.push(1).push(2).push(3)
 
 
-abstract Shape
+abstract Shape <: Object
 
 @class Square <: Shape begin
   a::Point
