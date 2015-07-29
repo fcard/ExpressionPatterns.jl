@@ -6,7 +6,7 @@
 @macromethod d(:C{x} -> x^(:T{n, Number})) esc(:($x -> $n*($x^($n-1))))
 
 @macromethod d(x -> a+b) esc(:($x -> @d($x -> $a)($x) + @d($x -> $b)($x)))
-@macromethod d(x -> a-b) esc(:($x -> @d($x -> $a)($x) - @derivative($x -> $b)))
+@macromethod d(x -> a-b) esc(:($x -> @d($x -> $a)($x) - @d($x -> $b)))
 
 @macromethod d(x -> a*b) esc(:($x -> $a * @d($x -> $b)($x) +
                                      $b * @d($x -> $a)($x)))
