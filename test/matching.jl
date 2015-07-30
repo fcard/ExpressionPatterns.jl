@@ -169,4 +169,11 @@ end
  :[a,b,c] => false
 end
 
+# raw
+
+@testmatch :(:R{:export, x, y, z}) begin
+  :(export a,b,c) => true
+  :(import a.b.c) => false
+end
+
 end
