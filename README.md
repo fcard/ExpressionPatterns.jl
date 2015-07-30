@@ -64,6 +64,20 @@ getname(:(M1.M2.m)) == :m
 @inverse_op(10/20) == 200
 
 
+# macros created with @macromethod can be extended in other modules
+
+module M
+using ExpressionPatterns.Dispatch
+  @macromethod f(x+y) 1
+end
+
+@importmeta M.@f
+@macromethod f(x-y) 2
+
+@f(1+2) == 1
+@f(1-2) == 2
+
+
 ```
 
 Dispatch Utilities
