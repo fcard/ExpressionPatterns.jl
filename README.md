@@ -90,7 +90,7 @@ using ExpressionPatterns.Dispatch.MetaUtilities
 
 @metaconflicts @f #> <<z> <x+y>> | <<x+y> <y>>
 
-@remove @f(z,x+y)
+@removemeta @f(z,x+y)
 
 @metaconflicts @f #> nothing
 

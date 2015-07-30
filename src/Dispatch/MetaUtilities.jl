@@ -5,7 +5,7 @@ using  ...Dispatch.TopMetaTables
 import ...Dispatch.Applications: MACROMETHODS, METAFUNCTIONS
 import  ...Dispatch.TableManipulation: print_conflicts
 import Base.Meta: quot
-export @prefer, @whichmeta, @remove, @importmeta, @metamethods, @metaconflicts
+export @prefer, @whichmeta, @removemeta, @importmeta, @metamethods, @metaconflicts
 
 const MU = MetaUtilities
 const MM = MACROMETHODS
@@ -75,15 +75,15 @@ conflictscode(m, typ, M=current_module()) =
 # remove
 #----------------------------------------------------------------------------
 
-@macromethod remove(   m(*{patterns})) = esc(removecode(m, patterns, :fun))
-@macromethod remove( M.m(*{patterns})) = esc(removecode(m, patterns, :fun, M))
-@macromethod remove(  @m(*{patterns})) = esc(removecode(m, patterns, :macro))
-@macromethod remove(M.@m(*{patterns})) = esc(removecode(m, patterns, :macro, M))
+@macromethod removemeta(   m(*{patterns})) = esc(removecode(m, patterns, :fun))
+@macromethod removemeta( M.m(*{patterns})) = esc(removecode(m, patterns, :fun, M))
+@macromethod removemeta(  @m(*{patterns})) = esc(removecode(m, patterns, :macro))
+@macromethod removemeta(M.@m(*{patterns})) = esc(removecode(m, patterns, :macro, M))
 
-@macromethod remove(label, :L{from},    m) = esc(removecode(m, label, :fun))
-@macromethod remove(label, :L{from},  M.m) = esc(removecode(m, label, :fun, M))
-@macromethod remove(label, :L{from},   @m) = esc(removecode(m, label, :macro))
-@macromethod remove(label, :L{from}, M.@m) = esc(removecode(m, label, :macro, M))
+@macromethod removemeta(label, :L{from},    m) = esc(removecode(m, label, :fun))
+@macromethod removemeta(label, :L{from},  M.m) = esc(removecode(m, label, :fun, M))
+@macromethod removemeta(label, :L{from},   @m) = esc(removecode(m, label, :macro))
+@macromethod removemeta(label, :L{from}, M.@m) = esc(removecode(m, label, :macro, M))
 
 
 #----------------------------------------------------------------------------
