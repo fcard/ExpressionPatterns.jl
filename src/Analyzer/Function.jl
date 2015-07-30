@@ -144,6 +144,10 @@ function analyze_special!(ex, state)
 
       push!(state.consts, args[1])
       analyze!(args[1], state)
+
+    elseif head == :raw
+      analyze!(Expr(QuoteStep()(args[1])[1], args[2:end]...), state)
+
     end
   end
 

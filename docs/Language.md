@@ -13,6 +13,7 @@ Special syntax
 | `:L{p}` <br> `:literal{p}`     | Turns autobinding off in `p`, meaning no symbol is automatically considered a binding. |
 | `:A{p}` <br> `:autobiding{p}`  | Turns autobinding on in `P`. |
 | `:I{xs}` <br> `:iterable{xs}`  | Matches a non-expr iterable object |
+| `:R{:h, args}` <br> `:raw{:h, args}` | Matches `Expr(:h, args)`. |
 
 **examples**:
 ```julia
@@ -32,6 +33,8 @@ x = :symbol; :(EQ{x})  # matches :symbol. Note that equals\E\EQ calls eval on it
                        # Same with predicate\P and type\T.
 
 :(:I{a,b,*{xs}})       # matches [1,2,3,4], (:a,:b,:c,:d,:e)
+
+:(:R{:import, *{ms}})  # matches :(import M.m), :(import ..M.N.m)
 
 ```
 

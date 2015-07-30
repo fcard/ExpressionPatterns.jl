@@ -7,7 +7,7 @@ export special_heads, special_shortcuts, is_slurp, is_special,
        slurptype, patterntype, special_name, is_special_expr
 
 const special_heads =
-  [:literal, :autobinding, :binding, :type, :consistent, :predicate, :equals, :iterable]
+  [:literal, :autobinding, :binding, :type, :consistent, :predicate, :equals, :iterable, :raw]
 
 const special_shortcuts =
   Dict(:(:A) => :(:autobinding),
@@ -18,7 +18,8 @@ const special_shortcuts =
        :(:P) => :(:predicate),
        :(:I) => :(:iterable),
        :(:E) => :(:equals),
-       :(:EQ)=> :(:equals)
+       :(:EQ)=> :(:equals),
+       :(:R) => :(:raw)
        )
 
 is_slurp(node::PatternNode) = isa(node.head, SlurpHead)
