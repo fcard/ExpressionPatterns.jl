@@ -27,6 +27,11 @@ gettable(typ, m) =
 preparg(x::Symbol) = quot(x)
 preparg(x::Vector) = :(Expr(:tuple, $x...))
 
+@metafunction getpath(M.m) [getpath(M); m]
+getpath(M::Symbol) = [M]
+
+@metafunction separate_module(M.m) = M,m
+
 prefercode(m, arg1, arg2, typ, M=current_module()) =
   :($(prefermethod!)($(gettable(typ, m))($M), $(preparg(arg1)), $(preparg(arg2))))
 
@@ -36,9 +41,13 @@ whichcode(m, patterns, typ, M=current_module()) =
 removecode(m, arg, typ, M=current_module()) =
   :($(removemethod!)($(gettable(typ, m))($M), $(preparg(arg))))
 
-importcode(M, m, typ) = quote
-   import .$M.$m
-   $(import_metatable!)($(typ == :macro? MM : MF), $(quot(m)), $M)
+importcode(M, typ) = begin
+  path  = getpath(M)
+  mod,m = separate_module(M)
+  quote
+    import $(path...)
+    $(import_metatable!)($(typ == :macro? MM : MF), $(quot(m)), $mod)
+  end
 end
 
 methodscode(m, typ, M=current_module()) =
@@ -90,8 +99,8 @@ conflictscode(m, typ, M=current_module()) =
 # import
 #----------------------------------------------------------------------------
 
-@macromethod importmeta(M.m)  = esc(importcode(M, m, :fun))
-@macromethod importmeta(M.@m) = esc(importcode(M, m, :macro))
+@macromethod importmeta(M)  = esc(importcode(M, :fun))
+@macromethod importmeta(@M) = esc(importcode(M, :macro))
 
 @macromethod importmeta((M:m)) = esc(:($MU.@importmeta $M.$m))
 
