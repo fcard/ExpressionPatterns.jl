@@ -111,9 +111,8 @@ end
 module B
 using  ExpressionPatterns.Dispatch
 using  ExpressionPatterns.Dispatch.MetaUtilities
-import ..A.A
 
-  @importmeta A.@f
+  @importmeta Main.Tests.ReflectionTests.A.@f
 
   @macromethod f(x+y) (x,y)
   @macromethod g(x+y) (x,y)
