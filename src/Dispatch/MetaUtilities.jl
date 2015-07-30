@@ -8,8 +8,6 @@ import Base.Meta: quot
 export @prefer, @whichmeta, @remove, @importmeta, @metamethods, @metaconflicts
 
 const MU = MetaUtilities
-const MM = MACROMETHODS
-const MF = METAFUNCTIONS
 
 name(macroname) = symbol(string(macroname)[1:end])
 
@@ -27,11 +25,6 @@ gettable(typ, m) =
 preparg(x::Symbol) = quot(x)
 preparg(x::Vector) = :(Expr(:tuple, $x...))
 
-@metafunction getpath(M.m) [getpath(M); m]
-getpath(M::Symbol) = [M]
-
-@metafunction separate_module(M.m) = M,m
-
 prefercode(m, arg1, arg2, typ, M=current_module()) =
   :($(prefermethod!)($(gettable(typ, m))($M), $(preparg(arg1)), $(preparg(arg2))))
 
@@ -40,15 +33,6 @@ whichcode(m, patterns, typ, M=current_module()) =
 
 removecode(m, arg, typ, M=current_module()) =
   :($(removemethod!)($(gettable(typ, m))($M), $(preparg(arg))))
-
-importcode(M, typ) = begin
-  path  = getpath(M)
-  mod,m = separate_module(M)
-  quote
-    import $(path...)
-    $(import_metatable!)($(typ == :macro? MM : MF), $(quot(m)), $mod)
-  end
-end
 
 methodscode(m, typ, M=current_module()) =
   :($(gettable(typ, m))($M).methods)
@@ -94,21 +78,6 @@ conflictscode(m, typ, M=current_module()) =
 @macromethod remove(label, :L{from},   @m) = esc(removecode(m, label, :macro))
 @macromethod remove(label, :L{from}, M.@m) = esc(removecode(m, label, :macro, M))
 
-
-#----------------------------------------------------------------------------
-# import
-#----------------------------------------------------------------------------
-
-@macromethod importmeta(M)  = esc(importcode(M, :fun))
-@macromethod importmeta(@M) = esc(importcode(M, :macro))
-
-@macromethod importmeta((M:m)) = esc(:($MU.@importmeta $M.$m))
-
-@macromethod importmeta((M:m1,m2,*{ms})) =
-  esc(quote
-        $MU.@importmeta $M.$m1
-        $MU.@importmeta $M.$m2 $(ms...)
-      end)
 
 #----------------------------------------------------------------------------
 # metamethods
