@@ -200,3 +200,43 @@ Related:
 ---
 
 
+Dispatch.MetaModule
+==========
+
+#### @metamodule
+
+`@metamodule import Module.Path.name`
+
+Import the metatable `name` from `Module.Path`. This allows the metatable to
+be extended with new metamethods.
+
+example:
+```
+module A
+using ExpressionPatterns.Dispatch
+  @macromethod f(x) 1
+end
+
+module B
+using ExpressionPatterns.Dispatch
+  @metamodule import ..A.@f
+  @macromethod f(x,y) 2
+end
+
+A.@f(x)   == 1
+A.@f(x,y) == 2
+
+```
+
+`@metamodule export name`
+
+Exports the metatable `name` from the current module M so that `@metamodule importall M` will import it.
+
+
+`@metamodule importall Module.Path`
+
+Import all exported metatables from `Module.Path`.
+
+---
+
+

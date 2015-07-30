@@ -71,7 +71,7 @@ using ExpressionPatterns.Dispatch
   @macromethod f(x+y) 1
 end
 
-@importmeta M.@f
+@metamodule import .M.@f
 @macromethod f(x-y) 2
 
 @f(1+2) == 1
