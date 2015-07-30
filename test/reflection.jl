@@ -112,7 +112,7 @@ module B
 using  ExpressionPatterns.Dispatch
 using  ExpressionPatterns.Dispatch.MetaUtilities
 
-  @importmeta Main.Tests.ReflectionTests.A.@f
+  @metamodule import ..A.@f
 
   @macromethod f(x+y) (x,y)
   @macromethod g(x+y) (x,y)
