@@ -2,8 +2,8 @@ module Comparison
 using  ...Matching.Consistency
 using  ...PatternStructure.Trees
 using  ...PatternStructure.Checks
-import Base: ==
-export compare_trees, ⊆, ⊇, conflicts;
+import Base: ==, ⊆
+export compare_trees, conflicts, ⊇;
 
 ==(a::PatternTree, b::PatternTree) = compare_trees(a,b) == :equal
  ⊇(a::PatternTree, b::PatternTree) = compare_trees(a,b) in [:equal, :superset]
