@@ -10,7 +10,7 @@ Variables(vars::Set{Symbol}) creates an environment that
 ---
 #### match_variable!
 
-match_variable!(vars::Variables, name::Symbol, val) -> Bool
+`match_variable!(vars::Variables, name::Symbol, val) -> Bool`
 
 Tries to match the pattern variable `name`
 (as defined in `vars`) with `val`.  

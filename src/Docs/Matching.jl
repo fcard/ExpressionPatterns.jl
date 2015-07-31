@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------------------
 # Matching.Consistency;
 #-----------------------------------------------------------------------------------
-import ..Matching.Consistency: Consistency, Variables, match_variable!, unmatch_variable!
+import ..Matching.Consistency: Variables, match_variable!, unmatch_variable!
 
 """
   Variables(vars::Set{Symbol}) creates an environment that
@@ -12,7 +12,7 @@ import ..Matching.Consistency: Consistency, Variables, match_variable!, unmatch_
 Variables;
 
 """
-match_variable!(vars::Variables, name::Symbol, val) -> Bool
+`match_variable!(vars::Variables, name::Symbol, val) -> Bool`
 
 Tries to match the pattern variable `name`
 (as defined in `vars`) with `val`.  
