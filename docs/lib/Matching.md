@@ -78,29 +78,20 @@ Compare two pattern trees `a` and `b` and return
 a symbol that describes their relationship.
 
 `:equal` means `a` and `b` match the exact same set of expressions.
+can be checked with `a == b`.
+
 
 `:unequal` means `a` and `b` matches disjoint sets of expressions.
+Can be checked with `a != b`.
 
 `:superset` means `a` matches all expressions that `b` match.
+Can be checked with `a ⊇ b`.
 
 `:subset` means `b` matches all expressions that `a` match.
+Can be checked with `a ⊆ b`.
 
 `:conflicts` means that there is a intersection between the sets of expressions `a` and `b` match,
-but `a` also matches some expressions that `b` don't, and virce versa.
-
----
-#### ⊆
-
-`(a::PatternTree ⊆ b::PatternTree) -> Bool`
-
-Uses [`compare_trees`](./Matching.md#compare_trees) to check if `a` is a subset of `b`.
-
----
-#### ⊇
-
-`(a::PatternTree ⊇ b::PatternTree) -> Bool`
-
-Uses [`compare_trees`](./Matching.md#compare_trees) to check if `a` is a superset of `b`.
+but `a` also matches some expressions that `b` don't, and virce versa. Can be checked with `conflicts(a,b)`.
 
 ---
 #### conflicts
