@@ -47,10 +47,10 @@ Dispatch
 ```julia
 using ExpressionPatterns.Dispatch
 
-@metafunction getname(M.m) = getname(m)
-getname(m::Symbol) = m
+@metafunction getpath(M.m) = [getpath(M); m] # this defines the getpath(args...) method
+getpath(M::Symbol) = [M]
 
-getname(:(M1.M2.m)) == :m
+getpath(:(M1.M2.m)) == [:M1, :M2, :m]
 
 
 @macromethod inverse_op(x+y) :($x-$y)
