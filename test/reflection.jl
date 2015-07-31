@@ -65,14 +65,14 @@ ypx = :(y+x)
 @test @h(x+y)    == [:x, :y]
 @test  h(:(x+y)) == [:x, :y]
 
-@remove plus from @h
-@remove plus from  h
+@removemeta plus from @h
+@removemeta plus from  h
 
 @test @h(x+y)    == [:(x+y)]
 @test  h(:(x+y)) == [:(x+y)]
 
-@remove @h(x)
-@remove  h(x)
+@removemeta @h(x)
+@removemeta  h(x)
 
 @test_throws MetaMethodError @eval @h(x)
 @test_throws MetaMethodError h(:x)
