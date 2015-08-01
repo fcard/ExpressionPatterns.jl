@@ -141,6 +141,11 @@ end
   :(1,2) => false
 end
 
+@testmatch :(*{:C{x}},) begin
+  :(1,1,1,1,1) => true
+  :(1,1,1,1,2) => false
+end
+
 # equality
 
 @testmatch :(:EQ{x, 10}) begin
