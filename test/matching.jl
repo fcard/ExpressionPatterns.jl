@@ -167,6 +167,8 @@ end
   1 => false
 end
 
+# iterable
+
 @testmatch :(:I{x,y,z}) begin
   (1,2,3) => true
   [4,5,6] => true
