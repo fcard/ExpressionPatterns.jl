@@ -37,9 +37,9 @@ function optimize_slurps!(node, slurps, after, state)
       if is_simple_slurp(slurp, state)
         until, index = eqvalues[1]
         node.children[i] = make_simple_slurp_until_one(slurp, node, until, index-i)
-        
+
       elseif is_simple_alternating_slurp(slurp, state)
-	# alternating slurp until X | (..., *{a,b,c...}, X, ...)
+      	# alternating slurp until X | (..., *{a,b,c...}, X, ...)
       end
     end
   end
