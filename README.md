@@ -66,16 +66,19 @@ getpath(:(M1.M2.m)) == [:M1, :M2, :m]
 
 # macros created with @macromethod can be extended in other modules
 
-module M
+module M1
 using ExpressionPatterns.Dispatch
-  @macromethod f(x+y) 1
+@macromethod f(x+y) 1
 end
 
-@metamodule import .M.@f
+module M2
+using ExpressionPatterns.Dispatch
+@metamodule import ..M1.@f
 @macromethod f(x-y) 2
+end
 
-@f(1+2) == 1
-@f(1-2) == 2
+M1.@f(1+2) == 1
+M1.@f(1-2) == 2
 
 
 ```
