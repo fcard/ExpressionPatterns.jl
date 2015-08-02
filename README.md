@@ -83,11 +83,11 @@ M1.@f(1-2) == 2
 
 ```
 
-Dispatch Utilities
+Dispatch Reflection
 ------------------
 ```julia
 using ExpressionPatterns.Dispatch
-using ExpressionPatterns.Dispatch.MetaUtilities
+using ExpressionPatterns.Dispatch.Reflection
 
 @macromethod f(x+y, z)[lab1]  = [x,y]
 @macromethod f(z, x+y)[lab2]  = [x,y]
