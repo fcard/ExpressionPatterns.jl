@@ -1,4 +1,4 @@
-module MetaUtilities
+module Reflection
 using  ...Dispatch.Applications
 using  ...Dispatch.TableManipulation
 using  ...Dispatch.TopMetaTables
@@ -6,8 +6,6 @@ import ...Dispatch.Applications: MACROMETHODS, METAFUNCTIONS
 import  ...Dispatch.TableManipulation: print_conflicts
 import Base.Meta: quot
 export @prefer, @whichmeta, @remove, @importmeta, @metamethods, @metaconflicts
-
-const MU = MetaUtilities
 
 name(macroname) = symbol(string(macroname)[1:end])
 

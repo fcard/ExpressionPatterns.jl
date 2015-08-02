@@ -1,7 +1,7 @@
 module ReflectionTests
 using  Base.Test
 using  ExpressionPatterns.Dispatch
-using  ExpressionPatterns.Dispatch.MetaUtilities
+using  ExpressionPatterns.Dispatch.Reflection
 
 # pattern preference
 
@@ -110,7 +110,7 @@ end
 
 module B
 using  ExpressionPatterns.Dispatch
-using  ExpressionPatterns.Dispatch.MetaUtilities
+using  ExpressionPatterns.Dispatch.Reflection
 
   @metamodule import ..A.@f
 
