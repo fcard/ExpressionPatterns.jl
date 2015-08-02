@@ -52,7 +52,7 @@ end
 #-----------------------------------------------------------------------------------
 
 make_slurp(slurp, head) =
-  PatternNode(head, SlurpStep(), slurp.children, slurp.consts)
+  PatternNode(head, SlurpStep(), slurp.children, slurp.bindings, slurp.depth)
 
 make_simple_last_slurp(slurp, node, i) =
   make_slurp(slurp, SimpleLastSlurp(length(node.children) - i))

@@ -1,9 +1,12 @@
 module Trees
 export PatternTree, PatternStep, PatternCheck,
        PatternLeaf, PatternNode, PatternGate,
-       PatternRoot, PatternHead, ExprHead,
-       nodehead, constants, insert!, newnode!,
-       newleaf!, slicenode
+       PatternRoot, PatternHead, Binding,
+
+       ExprHead, SlurpHead,
+
+       nodehead, bindings, insert!, newnode!,
+       newleaf!, slicenode, depth
 
 #-----------------------------------------------------------------------------------
 # Type definitions
@@ -14,6 +17,7 @@ abstract PatternStep
 abstract PatternCheck
 abstract PatternHead
 
+
 type PatternRoot <: PatternTree
   child::PatternTree
   PatternRoot() = new()
@@ -23,19 +27,28 @@ immutable PatternNode <: PatternTree
   head     :: PatternHead
   step     :: PatternStep
   children :: Vector{PatternTree}
-  consts   :: Set{Symbol}
+  bindings :: Set{Symbol}
+  depth    :: Int
 end
 
 immutable PatternLeaf <: PatternTree
 end
 
-type PatternGate <: PatternTree
-  check  :: PatternCheck
-  consts :: Set{Symbol}
-  child  :: PatternTree
-
-  PatternGate(check) = new(check, Set{Symbol}())
+immutable Binding <: PatternCheck
+  name::Symbol
 end
+
+type PatternGate <: PatternTree
+  check    :: PatternCheck
+  bindings :: Set{Symbol}
+  depth    :: Int
+  child    :: PatternTree
+
+  PatternGate(check::Any,     depth) = new(check, Set{Symbol}(), depth)
+  PatternGate(check::Binding, depth) = new(check, Set{Symbol}([check.name]), depth)
+end
+
+abstract SlurpHead <: PatternHead
 
 immutable ExprHead <: PatternHead
   sym::Symbol
@@ -51,25 +64,33 @@ function nodehead(node::PatternNode)
   isa(node.head, ExprHead)? node.head.sym : (:slurp)
 end
 
-constants(leaf::PatternLeaf) = Set{Symbol}()
-constants(root::PatternRoot) = constants(root.child)
-constants(gate::PatternGate) = gate.consts
-constants(node::PatternNode) = node.consts
+bindings(leaf::PatternLeaf) = Set{Symbol}()
+bindings(root::PatternRoot) = bindings(root.child)
+bindings(gate::PatternGate) = gate.bindings
+bindings(node::PatternNode) = node.bindings
 
-function makenode(head, step)
-  children = PatternTree[]
-  consts   = Set{Symbol}()
-  PatternNode(head, step, children, consts)
+depth(root::PatternRoot) = 0
+depth(gate::PatternGate) = gate.depth
+depth(node::PatternNode) = node.depth
+
+function makenode(head, step, depth)
+  children   = PatternTree[]
+  bindings   = Set{Symbol}()
+  slurpdepth = isa(head, SlurpHead)? depth+1 : depth
+
+  PatternNode(head, step, children, bindings, slurpdepth)
 end
 
 import Base: insert!
 
 function insert!(parent::PatternNode, child)
   push!(parent.children, child)
+  union!(parent.bindings, bindings(child))
 end
 
-function insert!(parent::SingleChildNode, child)
+function insert!(parent::PatternGate, child)
   parent.child = child
+  union!(parent.bindings, bindings(child))
 end
 
 function insert!(parent::PatternRoot, child)
@@ -77,14 +98,14 @@ function insert!(parent::PatternRoot, child)
 end
 
 function newnode!(head, step, parent::PatternTree)
-  node = makenode(head, step)
+  node = makenode(head, step, depth(parent))
   insert!(parent, node)
   return node
 end
 
 function newnode!(check, head, step, parent::PatternTree)
-  node = makenode(head, step)
-  gate = PatternGate(check)
+  node = makenode(head, step, depth(parent))
+  gate = PatternGate(check, depth(parent))
   insert!(gate, node)
   insert!(parent, gate)
   return node
@@ -98,7 +119,7 @@ end
 
 function newleaf!(check, parent::PatternTree)
   leaf = PatternLeaf()
-  gate = PatternGate(check)
+  gate = PatternGate(check, depth(parent))
   insert!(gate, leaf)
   insert!(parent, gate)
   return leaf
@@ -109,9 +130,9 @@ function slicenode(node::PatternNode, range)
   head = node.head
   step = node.step
   children = node.children[fst:lst]
-  consts   = mapreduce(constants, union, Set{Symbol}(), children)
+  binds    = mapreduce(bindings, union, Set{Symbol}(), children)
 
-  PatternNode(head, step, children, consts)
+  PatternNode(head, step, children, binds, node.depth)
 end
 
 #-----------------------------------------------------------------------------------

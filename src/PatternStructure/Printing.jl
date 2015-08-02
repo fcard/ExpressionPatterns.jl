@@ -6,11 +6,7 @@ import ...Helper: clean_code
 import Base: show
 
 function show(io::IO, p::PatternTree)
-  cons = sort(["$x," for x in constants(p)])
-  cons = isempty(cons)?
-    "{}" : "{const: $(cons[1:end-1]...)$(cons[end][1:end-1])}"
-
-  print(io, "pattern$cons<<$(clean_code(expr(p)))>>")
+  print(io, "pattern`$(clean_code(expr(p)))`")
 end
 
 function expr(p::PatternRoot)
