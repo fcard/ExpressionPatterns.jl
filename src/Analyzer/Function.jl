@@ -106,50 +106,50 @@ function analyze_special!(ex, state)
   elseif head == :autobinding
     @assert state.literal "Invalid :autobinding pattern. Only use it inside a :literal pattern."
     @assert length(args) == 1 "the :autobinding pattern only accepts one argument."
-      analyze!(args[1], newstate(state, false))
+    analyze!(args[1], newstate(state, false))
 
-    elseif head == :literal
-      @assert !state.literal "Invalid :literal pattern. Don't use it inside another :literal pattern."
-      @assert length(args) == 1 "the :literal pattern only accepts one argument."
-      analyze!(args[1], newstate(state, true))
+  elseif head == :literal
+    @assert !state.literal "Invalid :literal pattern. Don't use it inside another :literal pattern."
+    @assert length(args) == 1 "the :literal pattern only accepts one argument."
+    analyze!(args[1], newstate(state, true))
 
-    elseif head == :predicate
-      args = assertation_args(args)
-      pred = eval(state.mod, args[2])
-      gate = PatternGate(PredicateCheck(pred))
-      insert!(state.tree, gate)
-      analyze!(args[1], newstate(state, gate))
+  elseif head == :predicate
+    args = assertation_args(args)
+    pred = eval(state.mod, args[2])
+    gate = PatternGate(PredicateCheck(pred))
+    insert!(state.tree, gate)
+    analyze!(args[1], newstate(state, gate))
 
-    elseif head == :type
-      args = assertation_args(args)
-      typ  = eval(state.mod, args[2])
-      gate = PatternGate(TypeCheck{typ}())
-      insert!(state.tree, gate)
-      analyze!(args[1], newstate(state, gate))
+  elseif head == :type
+    args = assertation_args(args)
+    typ  = eval(state.mod, args[2])
+    gate = PatternGate(TypeCheck{typ}())
+    insert!(state.tree, gate)
+    analyze!(args[1], newstate(state, gate))
 
-    elseif head == :equals
-      args = assertation_args(args)
-      val  = eval(state.mod, args[2])
-      gate = PatternGate(EqualityCheck(val))
-      insert!(state.tree, gate)
-      analyze!(args[1], newstate(state, gate))
+  elseif head == :equals
+    args = assertation_args(args)
+    val  = eval(state.mod, args[2])
+    gate = PatternGate(EqualityCheck(val))
+    insert!(state.tree, gate)
+    analyze!(args[1], newstate(state, gate))
 
-    elseif head == :iterable
-      node = newnode!(ExprHead(:iterable), IterStep(), state.tree)
-      analyze_args!(args, node, state)
+  elseif head == :iterable
+    node = newnode!(ExprHead(:iterable), IterStep(), state.tree)
+    analyze_args!(args, node, state)
 
-    elseif head == :consistent
-      @assert length(args) == 1              ":C{...} only accepts one argument."
-      @assert is_binding_name(args[1])       ":C{...} only accepts a binding name."
+  elseif head == :consistent
+    @assert length(args) == 1              ":C{...} only accepts one argument."
+    @assert is_binding_name(args[1])       ":C{...} only accepts a binding name."
 
-      push!(state.consts, args[1])
-      analyze!(args[1], state)
+    push!(state.consts, args[1])
+    analyze!(args[1], state)
 
-    elseif head == :raw
-      analyze!(Expr(QuoteStep()(args[1])[1], args[2:end]...), state)
+  elseif head == :raw
+    analyze!(Expr(QuoteStep()(args[1])[1], args[2:end]...), state)
 
-    end
   end
+end
 
 #-----------------------------------------------------------------------------------
 # addconsts!: Find constant variables in pattern trees
