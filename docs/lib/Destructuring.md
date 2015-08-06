@@ -19,8 +19,8 @@ Relevant functions
 ---
 #### DestructureNode
 
-Created from a [[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode). Can have any number of children
-(each corresponding to a child of the [[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)). It doesn't
+Created from a [`PatternNode`](./PatternStructure.md#patternnode). Can have any number of children
+(each corresponding to a child of the [`PatternNode`](./PatternStructure.md#patternnode)). It doesn't
 have a head value, since it's irrelevant to destructuring. It retains
 the step, however. Has a slurp [`depth`](./Destructuring.md#depth), and a `name` that is used
 to name a temporary variable containing the arguments of the expression

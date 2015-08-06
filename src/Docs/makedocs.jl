@@ -94,7 +94,7 @@ function add_references!(docdb)
 end
 
 function get_mentions(text)
-  mentions = String[]
+  mentions = Set{String}()
   while text != ""
     mention, text = capture(text, from="`", until="`")
     mention != "" && push!(mentions, mention)

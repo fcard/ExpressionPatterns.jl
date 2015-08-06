@@ -125,10 +125,10 @@ Subtypes:
 
 `makenode(head, step) -> PatternNode`
 
-Creates a [[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode) with the provided `head` and `step`.
+Creates a [`PatternNode`](./PatternStructure.md#patternnode) with the provided `head` and `step`.
 
 Related:
-- [[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)
+- [`PatternNode`](./PatternStructure.md#patternnode)
 - [`PatternStep`](./PatternStructure.md#patternstep)
 
 ---
@@ -136,38 +136,38 @@ Related:
 
 `newnode!(head, step, parent) -> PatternNode`
 
-Creates a [[[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode) from the provided `head` and `step`
+Creates a [`PatternNode`](./PatternStructure.md#patternnode) from the provided `head` and `step`
 and inserts the node into `parent`.
 (returns the new node)
 
 `newnode!(check, head, step, parent) -> PatternNode`
 
-Creates a [[[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode) with `head` and `step`, inserts
-it into a [[`PatternGate`](./PatternStructure.md#patterngate)](./PatternStructure.md#patterngate) along with the check, and inserts
+Creates a [`PatternNode`](./PatternStructure.md#patternnode) with `head` and `step`, inserts
+it into a [`PatternGate`](./PatternStructure.md#patterngate) along with the check, and inserts
 the gate into `parent`.
 
 Related:
-- [[[`PatternNode`](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)](./PatternStructure.md#patternnode)
+- [`PatternNode`](./PatternStructure.md#patternnode)
 - [`PatternStep`](./PatternStructure.md#patternstep)
-- [[`PatternGate`](./PatternStructure.md#patterngate)](./PatternStructure.md#patterngate)
+- [`PatternGate`](./PatternStructure.md#patterngate)
 
 ---
 #### newleaf!
 
 `newleaf!(parent) -> PatternLeaf`
 
-Creates a [[[`PatternLeaf`](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf) and inserts it into `parent`.
+Creates a [`PatternLeaf`](./PatternStructure.md#patternleaf) and inserts it into `parent`.
 (returns the new leaf)
 
 `newleaf!(check, parent) -> PatternLeaf`
 
-Creates a [[[`PatternLeaf`](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf), inserts it into a [[`PatternGate`](./PatternStructure.md#patterngate)](./PatternStructure.md#patterngate)
+Creates a [`PatternLeaf`](./PatternStructure.md#patternleaf), inserts it into a [`PatternGate`](./PatternStructure.md#patterngate)
 along with the check, and then inserts the gate into `parent`.
 
 Related:
-- [[[`PatternLeaf`](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf)](./PatternStructure.md#patternleaf)
+- [`PatternLeaf`](./PatternStructure.md#patternleaf)
 - [`PatternStep`](./PatternStructure.md#patternstep)
-- [[`PatternGate`](./PatternStructure.md#patterngate)](./PatternStructure.md#patterngate)
+- [`PatternGate`](./PatternStructure.md#patterngate)
 
 ---
 #### slicenode
@@ -251,12 +251,12 @@ PatternStructure.SlurpTypes
 
 #### SlurpHead
 
-Represents a slurp algorithm. Can be a [[`LazySlurp`](./PatternStructure.md#lazyslurp)](./PatternStructure.md#lazyslurp) or a [[`GreedySlurp`](./PatternStructure.md#greedyslurp)](./PatternStructure.md#greedyslurp), and
+Represents a slurp algorithm. Can be a [`LazySlurp`](./PatternStructure.md#lazyslurp) or a [`GreedySlurp`](./PatternStructure.md#greedyslurp), and
 many variations of each.
 
 Subtypes:
-- [[`LazySlurp`](./PatternStructure.md#lazyslurp)](./PatternStructure.md#lazyslurp)
-- [[`GreedySlurp`](./PatternStructure.md#greedyslurp)](./PatternStructure.md#greedyslurp)
+- [`LazySlurp`](./PatternStructure.md#lazyslurp)
+- [`GreedySlurp`](./PatternStructure.md#greedyslurp)
 - [`GenericLazySlurp`](./PatternStructure.md#genericlazyslurp)
 - [`GenericGreedySlurp`](./PatternStructure.md#genericgreedyslurp)
 - [`SimpleLastSlurp`](./PatternStructure.md#simplelastslurp)
