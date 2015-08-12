@@ -1,9 +1,9 @@
 
 
-@macromethod d(:C{x} -> x) esc(:($x -> 1))
-@macromethod d(:C{x} -> y) esc(:($x -> 0))
+@macromethod d(x -> x) esc(:($x -> 1))
+@macromethod d(x -> y) esc(:($x -> 0))
 
-@macromethod d(:C{x} -> x^(:T{n, Number})) esc(:($x -> $n*($x^($n-1))))
+@macromethod d(x -> x^(:T{n, Number})) esc(:($x -> $n*($x^($n-1))))
 
 @macromethod d(x -> a+b) esc(:($x -> @d($x -> $a)($x) + @d($x -> $b)($x)))
 @macromethod d(x -> a-b) esc(:($x -> @d($x -> $a)($x) - @d($x -> $b)))
