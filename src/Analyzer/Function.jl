@@ -31,7 +31,7 @@ function analyze(ex, mod=current_module())
   root   = PatternRoot()
   consts = Set{Symbol}()
   analyze!(ex, newstate(root, false, mod, consts))
-  isempty(consts) || addconsts!(root.child, consts)
+  addbindings!(root)
 
   return root
 end
@@ -76,6 +76,7 @@ function analyze_args!(args, node, state)
   nstate = newstate(state, node)
   for i in eachindex(args)
     analyze!(args[i], nstate)
+    union!(node.bindings, bindings(node.children[i]))
   end
   optimize_slurps!(node, state)
 end
@@ -114,34 +115,27 @@ function analyze_special!(ex, state)
   elseif head == :predicate
     args = assertation_args(args)
     pred = eval(state.mod, args[2])
-    gate = PatternGate(PredicateCheck(pred))
+    gate = PatternGate(PredicateCheck(pred), depth(state.tree))
     insert!(state.tree, gate)
     analyze!(args[1], newstate(state, gate))
 
   elseif head == :type
     args = assertation_args(args)
     typ  = eval(state.mod, args[2])
-    gate = PatternGate(TypeCheck{typ}())
+    gate = PatternGate(TypeCheck{typ}(), depth(state.tree))
     insert!(state.tree, gate)
     analyze!(args[1], newstate(state, gate))
 
   elseif head == :equals
     args = assertation_args(args)
     val  = eval(state.mod, args[2])
-    gate = PatternGate(EqualityCheck(val))
+    gate = PatternGate(EqualityCheck(val), depth(state.tree))
     insert!(state.tree, gate)
     analyze!(args[1], newstate(state, gate))
 
   elseif head == :iterable
     node = newnode!(ExprHead(:iterable), IterStep(), state.tree)
     analyze_args!(args, node, state)
-
-  elseif head == :consistent
-    @assert length(args) == 1              ":C{...} only accepts one argument."
-    @assert is_binding_name(args[1])       ":C{...} only accepts a binding name."
-
-    push!(state.consts, args[1])
-    analyze!(args[1], state)
 
   elseif head == :raw
     analyze!(Expr(QuoteStep()(args[1])[1], args[2:end]...), state)
@@ -150,26 +144,27 @@ function analyze_special!(ex, state)
 end
 
 #-----------------------------------------------------------------------------------
-# addconsts!: Find constant variables in pattern trees
-#             and add them to their .consts parameters.
+# Find and add bindings
 #-----------------------------------------------------------------------------------
 
-function addconsts!(tree::PatternNode, consts)
+function addbindings!(tree::PatternGate)
+  addbindings!(tree.child)
+  union!(tree.bindings, bindings(tree.child))
+end
+
+function addbindings!(tree::PatternNode)
   for child in tree.children
-    addconsts!(child, consts)
-    union!(tree.consts, constants(child))
+    addbindings!(child)
+    union!(tree.bindings, bindings(child))
   end
 end
 
-function addconsts!(tree::PatternGate, consts)
-  if isa(tree.check, Binding) && tree.check.name in consts
-     push!(tree.consts, tree.check.name)
-  end
-  addconsts!(tree.child, consts)
-  union!(tree.consts, constants(tree.child))
+function addbindings!(tree::PatternRoot)
+  addbindings!(tree.child)
 end
 
-addconsts!(tree::PatternLeaf, consts) = nothing
+function addbindings!(tree::PatternLeaf)
+end
 
 #-----------------------------------------------------------------------------------
 # Utility functions

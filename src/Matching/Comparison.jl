@@ -1,5 +1,5 @@
 module Comparison
-using  ...Matching.Consistency
+using  ...Matching.Environment
 using  ...PatternStructure.Trees
 using  ...PatternStructure.Checks
 import Base: ==, ⊆
@@ -11,7 +11,7 @@ export compare_trees, conflicts, ⊇;
 
 conflicts(a::PatternTree, b::PatternTree) = compare_trees(a,b) == :conflicts
 
-newvars() = Variables(Set{Symbol}())
+newvars() = Variables()
 
 function compare_trees(a::PatternTree, b::PatternTree)
   compare_trees(a, b, newvars(), newvars())
@@ -62,19 +62,15 @@ function compare_trees(a, b::PatternGate, vars1, vars2)
 end
 
 function compare_checks(a::Binding, b::Binding, vars1, vars2)
-  a.name in vars1.names || push!(vars1.names, a.name)
-  b.name in vars2.names || push!(vars2.names, b.name)
   match_variable!(vars1, a.name, b.name) &&
   match_variable!(vars2, b.name, a.name)  ? :equal : :unequal
 end
 
 function compare_checks(a::Binding, b, vars1, vars2)
-  a.name in vars1.names || push!(vars1.names, a.name)
   match_variable!(vars1, a.name, b)? :superset : :unequal
 end
 
 function compare_checks(a, b::Binding, vars1, vars2)
-  b.name in vars2.names || push!(vars2.names, b.name)
   match_variable!(vars2, b.name, a)? :subset : :unequal
 end
 

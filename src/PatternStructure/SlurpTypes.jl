@@ -1,9 +1,8 @@
 module SlurpTypes
-import ...PatternStructure.Trees: PatternHead
+import ...PatternStructure.Trees: SlurpHead
 export SlurpHead, LazySlurp, GreedySlurp, GenericGreedySlurp, GenericLazySlurp,
-       SimpleLastSlurp, SimpleGreedySlurpUntil, SimpleLazySlurpUntil
+       SimpleLastSlurp, SimpleGreedySlurpUntil, SimpleLazySlurpUntil, SimpleSlurp
 
-abstract SlurpHead   <: PatternHead
 abstract LazySlurp   <: SlurpHead
 abstract GreedySlurp <: SlurpHead
 
@@ -31,4 +30,5 @@ immutable SimpleLazySlurpUntil <: SimpleLazySlurp
   index::Int
 end
 
+typealias SimpleSlurp Union{SimpleGreedySlurp, SimpleLazySlurp}
 end

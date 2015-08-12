@@ -92,16 +92,14 @@ end
 
 # while loop / lazy slurps
 
-@testmatch :(while :C{x} < t; ?{p(?{args}, x)}; x+=1 end) begin
+@testmatch :(while x < t; ?{p(?{args})}; x+=1 end) begin
 
   :(while i <   10; println(io, i);             i+=1 end) => true
   :(while k < t-10; splice!(A,2,k); push!(B,k); k+=1 end) => true
   :(while x < g(x); println(x);     push!(B,x); x+=1 end) => true
-  :(while x < g(x); println(i);     push!(B,x); x+=1 end) => false
-  :(while x < g(x); println(x);     push!(B,i); x+=1 end) => false
-  :(while x < g(x); println(x,y);   push!(B,x); x+=1 end) => false
-  :(while x < g(x); println(x);     push!(B,x); x+=2 end) => false
-  :(while x < g(x); println(x);     x=1+x;      x+=1 end) => false
+  :(while x < g(x); println(i);     push!(B,x); x+=1 end) => true
+  :(while x < g(x); println(x,y);   push!(B,x); i+=1 end) => false
+  :(while x > g(x); println(x);     push!(B,x); x+=2 end) => false
 
 end
 
@@ -136,14 +134,9 @@ end
 
 # consistency
 
-@testmatch :(:C{x}, x) begin
+@testmatch :(x, x) begin
   :(1,1) => true
   :(1,2) => false
-end
-
-@testmatch :(*{:C{x}},) begin
-  :(1,1,1,1,1) => true
-  :(1,1,1,1,2) => false
 end
 
 # equality

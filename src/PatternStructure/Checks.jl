@@ -1,14 +1,10 @@
 module Checks
 using  ...PatternStructure.Trees
 import ...Helper: linesof
-export EqualityCheck, TypeCheck, PredicateCheck, Binding,
+export EqualityCheck, TypeCheck, PredicateCheck,
        ArgsStep, QuoteStep, BlockStep,
        IterStep, SlurpStep
 
-
-immutable Binding <: PatternCheck
-  name::Symbol
-end
 
 immutable EqualityCheck{T} <: PatternCheck
   value::T

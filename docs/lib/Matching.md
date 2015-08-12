@@ -1,4 +1,4 @@
-Matching.Consistency
+Matching.Environment
 ==========
 
 #### Variables
@@ -22,13 +22,21 @@ If the variable has a value `val`, then the match is true
 if and only if `val` is that value.
 
 ---
-#### unmatch_variable!
+#### extract!
 
-`unmatch_variable!(vars::Variables, name::Symbol)`
+extract!(v::Variables, tree::PatternNode, args, from, to, ranges)
 
-Undoes a match. If the variable was matched `n` times with
-a value `val`, unmatching `n` times will remove `val` from
-the variable, allowing it to be matched by another value.
+Given a pattern `tree`, extracts from `args[from:to]` the values corresponding
+to the bindings found in `tree`, and assign them in `v`, e.g. 
+```
+extract(v, pattern`(*{x,y},)`, [1,2,3,4], 1, 2, ranges) ->
+  v[:x] = [1,3];
+  v[:y] = [2,4]
+
+```
+
+`ranges` is a mapping of [`PatternNode`](./PatternStructure.md#patternnode)s to ranges, used to determine which
+arguments to extract when reaching a slurp.
 
 ---
 
