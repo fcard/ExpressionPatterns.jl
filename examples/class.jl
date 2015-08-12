@@ -43,7 +43,7 @@ end
     info.constructor.arguments  = args
     info.constructor.statements = statements
   else
-   error("This class implementations only accepts one inner constructor!")
+    error("This class implementations only accepts one inner constructor!")
   end
 end
 
