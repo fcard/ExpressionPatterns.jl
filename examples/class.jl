@@ -34,11 +34,11 @@ function classinfo(name, exprs)
 end
 
 
-@metafunction interpret_expr!(:C{name}, info, (name(*{args}) = expr)) =
+@metafunction interpret_expr!(name, info, (name(*{args}) = expr)) =
   interpret_expr!(info, :(function constructor($(args...)) $expr end))
 
 
-@metafunction interpret_expr!(:C{name}, info, function name(*{args}) *{statements} end) begin
+@metafunction interpret_expr!(name, info, function name(*{args}) *{statements} end) begin
   if info.constructor.arguments == :undef
     info.constructor.arguments  = args
     info.constructor.statements = statements
