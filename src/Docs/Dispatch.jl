@@ -166,7 +166,7 @@ import_metatable;
 #-----------------------------------------------------------------------------------
 # Dispatch.Applications;
 #-----------------------------------------------------------------------------------
-import ..Dispatch.Applications: @macromethod, @metafunction, @metadestruct, @metadispatch, Applications
+import ..Dispatch.Applications: @macromethod, @metafunction, @metadestruct, @metadispatch
 
 """
 `@macromethod name(patterns...) body`  
@@ -176,7 +176,7 @@ Creates a extensible macro that matches and destructures the given patterns.
 
 For examples see the [`/examples`](../../examples) directory or the [dispatch tests](../../test/dispatch.jl).
 """
-:(Applications.@macromethod);
+:@macromethod;
 
 """
 `@metafunction name(patterns...) body`  
@@ -187,7 +187,7 @@ Creates a function that dispatches on expression patterns.
 For examples see the [`/examples`](../../examples) directory or the [dispatch tests](../../test/dispatch.jl).
 
 """
-:(Applications.@metafunction);
+:@metafunction;
 
 """
 `@metadestruct let ...;  ... end`  
@@ -205,7 +205,7 @@ Related:
 - `@funds`
 
 """
-:(Applications.@metadestruct);
+:@metadestruct;
 
 """
 `@metadispatch macro m(...) ... end`  
@@ -219,12 +219,12 @@ Related:
 - `@metafunction`
 
 """
-:(Applications.@metadispatch);
+:@metadispatch;
 
 #-----------------------------------------------------------------------------------
 # Dispatch.MetaModule;
 #-----------------------------------------------------------------------------------
-import ..Dispatch.MetaModule: @metamodule, MetaModule
+import ..Dispatch.MetaModule: @metamodule
 
 """
 `@metamodule import Module.Path.name`
@@ -260,4 +260,4 @@ Exports the metatable `name` from the current module M so that `@metamodule impo
 Import all exported metatables from `Module.Path`.
 
 """
-:(MetaModule.@metamodule);
+:@metamodule;

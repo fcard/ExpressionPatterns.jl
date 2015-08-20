@@ -71,8 +71,7 @@ function make_file_doc(filename)
     while modtext != ""
       fhelp, modtext = capture(modtext, from="\"\"\"", until="\"\"\"")
       fname, modtext = capture(modtext, from="", until=";")
-      fname  = replace(strip(fname), r":\(.*@", "@")
-      fname  = replace(strip(fname), ")", "")
+      fname  = replace(strip(fname), ":@", "@")
       fname != "" && push!(fdocs, FuncDoc(fname, fhelp, strip(mname), filename[1:end-3]))
     end
     push!(mods, ModDoc(strip(mname), fdocs, filename[1:end-3]))
