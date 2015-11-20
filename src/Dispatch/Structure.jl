@@ -10,7 +10,7 @@ immutable MetaMethod
 end
 
 immutable MetaMethodTable
-  name    :: String
+  name    :: AbstractString
   labels  :: Dict{Symbol, MetaMethod}
   methods :: Vector{MetaMethod}
 
@@ -19,7 +19,7 @@ immutable MetaMethodTable
 end
 
 immutable MetaMethodError <: Exception
-  name :: String
+  name :: AbstractString
   expr :: Any
 end
 
