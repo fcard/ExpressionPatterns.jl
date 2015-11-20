@@ -114,3 +114,5 @@ using ExpressionPatterns.Dispatch.Reflection
 ```
 
 See [Language.md](./docs/Language.md) for information on the pattern language.
+
+See [the examples](./examples/) or [the tests](./test/) for more uses.
