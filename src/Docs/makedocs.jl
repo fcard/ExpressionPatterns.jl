@@ -6,27 +6,27 @@ module MakeDocs
 #-----------------------------------------------------------------------------------
 
 type FuncDoc
-  name :: String
-  text :: String
-  modn :: String
-  file :: String
+  name :: AbstractString
+  text :: AbstractString
+  modn :: AbstractString
+  file :: AbstractString
 end
 
 type ModDoc
-  name  :: String
+  name  :: AbstractString
   fdocs :: Vector{FuncDoc}
-  file  :: String
+  file  :: AbstractString
 end
 
 type DocFile
-  name :: String
+  name :: AbstractString
   mods :: Vector{ModDoc}
 end
 
 type DocDatabase
   files :: Vector{DocFile}
-  fdocs :: Dict{String, FuncDoc}
-  mods  :: Dict{String, ModDoc}
+  fdocs :: Dict{AbstractString, FuncDoc}
+  mods  :: Dict{AbstractString, ModDoc}
 end
 
 #-----------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ end
 
 function DocDatabase(filelist)
   files = read_files(filelist)
-  docdb = DocDatabase(files, Dict{String, ModDoc}(), Dict{String, FuncDoc}())
+  docdb = DocDatabase(files, Dict{AbstractString, ModDoc}(), Dict{AbstractString, FuncDoc}())
   for file in docdb.files
     for mod in file.mods
       docdb.mods[mod.name] = mod
@@ -95,7 +95,7 @@ function add_references!(docdb)
 end
 
 function get_mentions(text)
-  mentions = Set{String}()
+  mentions = Set{AbstractString}()
   while text != ""
     mention, text = capture(text, from="`", until="`")
     mention != "" && push!(mentions, mention)
