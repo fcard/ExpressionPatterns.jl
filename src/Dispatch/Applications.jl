@@ -136,7 +136,7 @@ const DE = ExpressionPatterns.Destructuring.Applications
 @macromethod metadispatch(name(*{patterns}) = body)[metafun_short] =
   esc(:($DI.@metafunction $name($(patterns...)) $body))
 
-@macromethod metadispatch(function name(*{patterns}); *{body} end)[funds_long] =
+@macromethod metadispatch(function name(*{patterns}); *{body} end)[metafun_long] =
   esc(:($DI.@metafunction $name($(patterns...)) begin $(body...) end))
 
 end
