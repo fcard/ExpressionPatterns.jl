@@ -24,7 +24,7 @@ newstate(state, mod::Module)       = newstate(state.tree, state.literal, mod, st
 
 
 #-----------------------------------------------------------------------------------
-# analyse function: transform expressions into patterns
+# analyze function: transform expressions into patterns
 #-----------------------------------------------------------------------------------
 
 function analyze(ex, mod=current_module())
@@ -37,7 +37,7 @@ function analyze(ex, mod=current_module())
 end
 
 #-----------------------------------------------------------------------------------
-# analyse!: constructs patterns from expression and inserts them in a pattern tree
+# analyze!: constructs patterns from expression and inserts them in a pattern tree
 #-----------------------------------------------------------------------------------
 
 function analyze!(ex::Symbol, state)
@@ -69,7 +69,7 @@ function analyze!(ex, state)
 end
 
 #-----------------------------------------------------------------------------------
-# analyse_args!: creates patterns from a vector of expressions
+# analyze_args!: creates patterns from a vector of expressions
 #-----------------------------------------------------------------------------------
 
 function analyze_args!(args, node, state)
@@ -82,7 +82,7 @@ function analyze_args!(args, node, state)
 end
 
 #-----------------------------------------------------------------------------------
-# analyse_special: patterns of the form :X{ys...} have special meaning
+# analyze_special: patterns of the form :X{ys...} have special meaning
 #-----------------------------------------------------------------------------------
 
 function analyze_special!(ex, state)
