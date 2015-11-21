@@ -105,7 +105,7 @@ using ExpressionPatterns.Dispatch.Reflection
 @whichmeta @f(x+y,y+x) #> f(x+y, z)
 
 
-@metaconflicts @f #> <<z> <x+y>> | <<x+y> <y>>
+@metaconflicts @f #> <<z> <x+y>> | <<x+y> <z>>
 
 @remove @f(z,x+y)
 
