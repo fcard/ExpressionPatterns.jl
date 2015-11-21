@@ -8,7 +8,7 @@ Special syntax
 | `:B{x}` <br> `:binding{x}`    | Represents a name binding; matches anything. Symbols that start with a letter, `#` or `@` are automaticaly considered to be bindings.|
 | `:E{v}` <br> `:EQ{v}` <br> `:equals{v}` | Matches if the expression is equal to `v`.|
 | `:T{t}` <br> `:type{t}` <br> `:T{p,x}` <br> `:type{p,x}` | Tests if a expression is of the given type `t`. If a pattern `p` is supplied along with the type, this tries to match the expression with `p` after the type check.
-| `:P{f}` <br> `:predicate{f}` <br> `:P{p,f}` <br> `:predicate{p,f}` | Matches by calling the given predicate on the expression.|
+| `:P{f}` <br> `:predicate{f}` <br> `:P{p,f}` <br> `:predicate{p,f}` | Matches by calling the given predicate `f` on the expression. If a pattern `p` is supplied, this tries to match the expression with `p` after the predicate check|
 | `:L{p}` <br> `:literal{p}`     | Turns autobinding off in `p`, meaning no symbol is automatically considered a binding. |
 | `:A{p}` <br> `:autobiding{p}`  | Turns autobinding on in `P`. |
 | `:I{xs}` <br> `:iterable{xs}`  | Matches a non-expr iterable object |
