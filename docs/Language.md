@@ -11,7 +11,7 @@ Special syntax
 | `:P{f}` <br> `:predicate{f}` <br> `:P{p,f}` <br> `:predicate{p,f}` | Matches by calling the given predicate `f` on the expression. If a pattern `p` is supplied, this tries to match the expression with `p` after the predicate check.|
 | `:L{p}` <br> `:literal{p}`     | Turns autobinding off in `p`, meaning no symbol is automatically considered a binding. |
 | `:A{p}` <br> `:autobiding{p}`  | Turns autobinding on in `P`. |
-| `:I{xs}` <br> `:iterable{xs}`  | Matches a non-expr iterable object |
+| `:I{xs}` <br> `:iterable{xs}`  | Matches a non-expr iterable object. |
 | `:R{:h, args}` <br> `:raw{:h, args}` | Matches `Expr(:h, args)`. |
 
 **examples**:
