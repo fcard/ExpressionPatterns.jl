@@ -5,7 +5,7 @@ macro switch(value, block)
   @gensym value_sym
 
   :(for i in 1:1
-  	  let $(esc(value_sym)) = $value
+      let $(esc(value_sym)) = $value
           $(esc(switch(value_sym, block)))
       end
     end)
