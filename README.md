@@ -1,3 +1,10 @@
+Installing
+--------
+For now, use:
+```julia
+Pkg.clone("https://github.com/fcard/ExpressionPatterns.jl")
+```
+
 Matching
 --------
 ```julia
@@ -89,8 +96,8 @@ Dispatch Reflection
 using ExpressionPatterns.Dispatch
 using ExpressionPatterns.Dispatch.Reflection
 
-@macromethod f(x+y, z)[lab1]  = [x,y]
-@macromethod f(z, x+y)[lab2]  = [x,y]
+@macromethod f(x+y, z)[method1] = [x,y]
+@macromethod f(z, x+y)[method2] = [x,y]
 
 @whichmeta @f(x+y,y+x) #> f(x+y, z)
 
@@ -100,7 +107,7 @@ using ExpressionPatterns.Dispatch.Reflection
 @whichmeta @f(x+y,y+x) #> f(z, x+y)
 
 
-@prefer lab1 over lab2 in @f
+@prefer method1 over method2 in @f
 
 @whichmeta @f(x+y,y+x) #> f(x+y, z)
 
@@ -116,3 +123,5 @@ using ExpressionPatterns.Dispatch.Reflection
 See [Language.md](./docs/Language.md) for information on the pattern language.
 
 See [the examples](./examples/) or [the tests](./test/) for more uses.
+
+Once `julia 0.5` comes out, I will update this and see if it's worth to make it a registered package. Y'all should also check [MacroTools](https://github.com/MikeInnes/MacroTools.jl), which inspired me to remake and publicize this in the first place!
