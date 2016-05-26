@@ -5,12 +5,12 @@ Special syntax
 --------------
 | Syntax                     | Description                                               |
 |----------------------------|-----------------------------------------------------------|
-| `:B{x}` <br> `:binding{x}`    | Represents a name binding; matches anything. Symbols that start with a letter, `#` or `@` are automaticaly considered to be bindings.|
+| `:B{x}` <br> `:binding{x}`    | Represents a name binding; matches anything. Symbols that start with a letter, `#` or `@` are automatically considered to be bindings.|
 | `:E{v}` <br> `:EQ{v}` <br> `:equals{v}` | Matches if the expression is equal to `v`.|
 | `:T{t}` <br> `:type{t}` <br> `:T{p,x}` <br> `:type{p,x}` | Tests if a expression is of the given type `t`. If a pattern `p` is supplied along with the type, this tries to match the expression with `p` after the type check.
 | `:P{f}` <br> `:predicate{f}` <br> `:P{p,f}` <br> `:predicate{p,f}` | Matches by calling the given predicate `f` on the expression. If a pattern `p` is supplied, this tries to match the expression with `p` after the predicate check.|
 | `:L{p}` <br> `:literal{p}`     | Turns autobinding off in `p`, meaning no symbol is automatically considered a binding. |
-| `:A{p}` <br> `:autobiding{p}`  | Turns autobinding on in `P`. |
+| `:A{p}` <br> `:autobinding{p}` | Turns autobinding on in `P`. |
 | `:I{xs}` <br> `:iterable{xs}`  | Matches a non-expr iterable object. |
 | `:R{:h, args}` <br> `:raw{:h, args}` | Matches `Expr(:h, args)`. |
 
@@ -46,6 +46,8 @@ Slurps can be nested: `[*{[*{1,2}]}]` matches expressions like `:[[1,2,1,2], [1,
 ```julia
 
 :(*{1},)             # matches :(1,1,1,1), :(1,1,1,1,1,1), :()
+
+:[*{odd,even}]       # matches :[1,2,3,4,5,6], x=[1,3,5], y=[2,4,6]
 
 :[*{x},?{y}]         # matches :[1,2,3,4], x=[1,2,3,4], y=[]
 
