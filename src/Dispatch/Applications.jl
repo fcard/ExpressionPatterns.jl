@@ -19,8 +19,8 @@ const MACROMETHODS = TopMetaTable()
 end
 
 function macromet(name, patterns, label, body, mod)
-  init_metatable!(MACROMETHODS, mod, symbol("@$name"), "macromethod $name")
-  macrotable = get_metatable(MACROMETHODS, mod, symbol("@$name"))
+  init_metatable!(MACROMETHODS, mod, Symbol("@$name"), "macromethod $name")
+  macrotable = get_metatable(MACROMETHODS, mod, Symbol("@$name"))
   undefined  = isempty(macrotable.methods)
 
   code =

@@ -181,7 +181,7 @@ function is_macro_name(x::Symbol)
 end
 
 function newbinding(ex)
-  name = is_macro_name(ex)? symbol(string(ex)[2:end]) : ex
+  name = is_macro_name(ex)? Symbol(string(ex)[2:end]) : ex
   Binding(name)
 end
 

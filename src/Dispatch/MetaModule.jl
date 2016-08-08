@@ -57,7 +57,7 @@ function importallcode(path)
 
     for exp in $union(metafun_exports, macromet_exports)
       imp = Expr(:import, $vcat($path, exp)...)
-      eval(Expr(:macrocall, symbol("@metamodule"), imp))
+      eval(Expr(:macrocall, Symbol("@metamodule"), imp))
     end
   end
 end

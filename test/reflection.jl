@@ -88,7 +88,7 @@ MF = Dispatch.Applications.METAFUNCTIONS[ReflectionTests]
 @metafunction m(x)   = [x]
 @metafunction m(x+y) = [x,y]
 
-const mmac = symbol("@m")
+const mmac = Symbol("@m")
 const mfun = :m
 
 @test MM[mmac].methods[1] == @whichmeta @m(x+y)

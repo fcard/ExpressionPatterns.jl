@@ -7,7 +7,7 @@ import  ...Dispatch.TableManipulation: print_conflicts
 import Base.Meta: quot
 export @prefer, @whichmeta, @remove, @importmeta, @metamethods, @metaconflicts
 
-name(macroname) = symbol(string(macroname)[1:end])
+name(macroname) = Symbol(string(macroname)[1:end])
 
 macrotable(macroname,M) =
   get_metatable(MACROMETHODS, M, name(macroname))

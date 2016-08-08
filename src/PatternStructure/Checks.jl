@@ -24,15 +24,13 @@ immutable QuoteStep <: PatternStep end
 immutable IterStep  <: PatternStep end
 immutable SlurpStep <: PatternStep end
 
-import Base: call
+(::ArgsStep)(ex)  = ex.args
+(::BlockStep)(ex) = linesof(ex)
 
-call(::ArgsStep, ex)  = ex.args
-call(::BlockStep, ex) = linesof(ex)
+(::QuoteStep)(ex::Expr) = ex.args
+(::QuoteStep)(ex::QuoteNode) = [ex.value]
 
-call(::QuoteStep, ex::Expr) = ex.args
-call(::QuoteStep, ex::QuoteNode) = [ex.value]
-
-call(::IterStep, ex)  = ex
-call(::SlurpStep, ex) = error("Called the step of slurp.")
+(::IterStep)(ex)  = ex
+(::SlurpStep)(ex) = error("Called the step of slurp.")
 
 end
