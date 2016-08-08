@@ -129,7 +129,7 @@ example:
 
 ```julia
 ex = :("a10",("Bc", "cd"))
-alphastr(x) = isa(x, String) && isalpha(x)
+alphastr(x) = isa(x, AbstractString) && isalpha(x)
 exprmodify(uppercase, ex, on=alphastr) == :("a10", ("BC", "CD"))
 ```
 
