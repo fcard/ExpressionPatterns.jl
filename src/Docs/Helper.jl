@@ -2,7 +2,7 @@
 # Helper;
 #-----------------------------------------------------------------------------------
 import ..Helper: Looping, current, next!, restart!, @implicit,
-         unzip, remove, is_line_number, linesof, exprmodify, Helper
+         unzip, remove, is_line_number, linesof, exprmodify
 
 
 """
@@ -92,7 +92,7 @@ end
 ```
 
 """
-:(Helper.@implicit);
+:@implicit;
 
 
 """

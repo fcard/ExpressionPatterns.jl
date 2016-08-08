@@ -36,7 +36,7 @@ code;
 #----------------------------------------------------------------------------
 # Destructuring.Applications;
 #----------------------------------------------------------------------------
-import ..Destructuring.Applications: @letds, @macrods, @anonds, @funds, Applications
+import ..Destructuring.Applications: @letds, @macrods, @anonds, @funds
 
 """
 ```julia
@@ -64,7 +64,7 @@ end
 ```
 
 """
-:(Applications.@letds);
+:@letds;
 
 """
 ```julia
@@ -86,7 +86,7 @@ examples:
 ```
 
 """
-:(Applications.@macrods);
+:@macrods;
 
 """
 ```julia
@@ -110,7 +110,7 @@ last_index(ex)  == 7
 ```
 
 """
-:(Applications.@anonds);
+:@anonds;
 
 """
 ```julia
@@ -130,4 +130,4 @@ extract_int(:[a,b,4,d,e,f,g]) == 4
 ```
 
 """
-:(Applications.@funds);
+:@funds;
