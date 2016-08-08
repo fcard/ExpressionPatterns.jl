@@ -79,27 +79,6 @@ examples:
 ```
 
 ---
-#### @macrods
-
-```julia
-@macrods name(p1,p2,...,pn) begin
-  ...
-end
-```
-
-Defines a macro with destructuring properties.
-
-examples:
-```julia
-@macrods swap((x,y)) :($y,$x)
-@macrods split(:C{at} => [*{a}, at, *{b}]) (a,b)
-
-@swap((1,2)) == (2,1)
-@split(3 => [1,2,3,4,5]) == (Any[1,2], Any[4,5])
-
-```
-
----
 #### @anonds
 
 ```julia
