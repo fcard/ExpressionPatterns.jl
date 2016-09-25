@@ -45,7 +45,7 @@ abstract Object
 immutable Method{T <: Object}
   func  :: Function
 end
-Base.call(m::Method, args...) = m.func(args...)
+(m::Method)(args...) = m.func(args...)
 
 class_field_values(obj) =
   filter(x->!isa(x, Method), map(x->getfield(obj, x), fieldnames(obj)))

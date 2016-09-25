@@ -17,7 +17,7 @@ function expr(p::PatternNode)
   children::Vector{Any} = map(expr, p.children)
 
   if is_macrocall(p.head)
-     children[1] = symbol("@$(children[1])")
+     children[1] = Symbol("@$(children[1])")
   end
 
   is_special(p)?

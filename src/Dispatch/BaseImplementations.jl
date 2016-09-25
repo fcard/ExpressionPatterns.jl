@@ -1,9 +1,9 @@
 module BaseImplementation
 using  ...Dispatch.Structure
-import Base: showerror, ==, call, show, display
+import Base: showerror, ==, show, display
 
 
-call(met::MetaMethod, exprs...) = met.method(exprs...)
+(met::MetaMethod)(exprs...) = met.method(exprs...)
 
 function show(io::IO, met::MetaMethod)
   args = map(met.tree.child.children) do tree
