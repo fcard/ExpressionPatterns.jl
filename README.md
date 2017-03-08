@@ -1,9 +1,13 @@
 Installing
 --------
+julia 0.6:
 ```julia
 Pkg.add("ExpressionPatterns")
 ```
-If you're not on julia 0.6:
+
+---
+
+Otherwise:
 ```julia
 Pkg.clone("https://github.com/fcard/ExpressionPatterns.jl")
 
