@@ -15,7 +15,7 @@ function matcher(pattern, mod=current_module())
     matchtree(pattern_tree, ex, newstate(variables))
 end
 
-immutable MatchState
+struct MatchState
   inslurp     :: Bool
   variables   :: Variables
   slurpranges :: SlurpRanges
@@ -23,7 +23,7 @@ end
 newstate(vars)    = MatchState(false, vars, SlurpRanges())
 enterslurp(state) = MatchState(true, state.variables, SlurpRanges())
 
-immutable SlurpInfo
+struct SlurpInfo
   node        :: PatternNode
   parent      :: PatternTree
   children    :: Vector
@@ -221,7 +221,7 @@ match_nested_slurp(node) =
 # Utility functions
 #----------------------------------------------------------------------------
 
-typealias Iterable Union{Vector, Tuple}
+const Iterable = Union{Vector, Tuple}
 
 exprhead(ex::Expr)      = ex.head in [:kw, :(=)]? :assign : ex.head
 exprhead(ex::QuoteNode) = :quote

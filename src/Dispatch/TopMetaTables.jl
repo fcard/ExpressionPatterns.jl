@@ -4,12 +4,12 @@ using  ...Dispatch.TableManipulation
 export TopMetaTable, MetaTableNotFoundError, init_module_table!, init_metatable!, get_metatable,
        import_metatable!, export_metatable!, metatable_exports
 
-immutable TopMetaTable
+struct TopMetaTable
   values::ObjectIdDict
   TopMetaTable() = new(ObjectIdDict())
 end
 
-immutable MetaModuleTable
+struct MetaModuleTable
   values  :: Dict{Symbol, MetaMethodTable}
   exports :: Set{Symbol}
   MetaModuleTable() = new(Dict{Symbol, MetaMethodTable}(), Set{Symbol}())
@@ -25,7 +25,7 @@ Base.haskey(A::TopMetaTable,    mod::Module) = haskey(A.values, mod)
 Base.haskey(A::MetaModuleTable, sym::Symbol) = haskey(A.values, sym)
 
 
-immutable MetaTableNotFoundError <: Exception
+struct MetaTableNotFoundError <: Exception
   key::Symbol
   mod::Module
 end

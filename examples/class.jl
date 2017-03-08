@@ -11,7 +11,7 @@ include("classprep.jl")
 
   esc(
   quote
-    type $name <: $superclass
+    mutable struct $name <: $superclass
       $(parameters...)
 
       $name(::$ClassId) = new()
@@ -101,7 +101,7 @@ V = VectorObject()
 V.push(1).push(2).push(3)
 
 
-abstract Shape <: Object
+abstract type Shape <: Object end
 
 @class Square <: Shape begin
   a::Point

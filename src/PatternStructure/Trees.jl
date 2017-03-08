@@ -12,18 +12,18 @@ export PatternTree, PatternStep, PatternCheck,
 # Type definitions
 #-----------------------------------------------------------------------------------
 
-abstract PatternTree
-abstract PatternStep
-abstract PatternCheck
-abstract PatternHead
+abstract type PatternTree  end
+abstract type PatternStep  end
+abstract type PatternCheck end
+abstract type PatternHead  end
 
 
-type PatternRoot <: PatternTree
+mutable struct PatternRoot <: PatternTree
   child::PatternTree
   PatternRoot() = new()
 end
 
-immutable PatternNode <: PatternTree
+struct PatternNode <: PatternTree
   head     :: PatternHead
   step     :: PatternStep
   children :: Vector{PatternTree}
@@ -31,14 +31,14 @@ immutable PatternNode <: PatternTree
   depth    :: Int
 end
 
-immutable PatternLeaf <: PatternTree
+struct PatternLeaf <: PatternTree
 end
 
-immutable Binding <: PatternCheck
+struct Binding <: PatternCheck
   name::Symbol
 end
 
-type PatternGate <: PatternTree
+mutable struct PatternGate <: PatternTree
   check    :: PatternCheck
   bindings :: Set{Symbol}
   depth    :: Int
@@ -48,13 +48,13 @@ type PatternGate <: PatternTree
   PatternGate(check::Binding, depth) = new(check, Set{Symbol}([check.name]), depth)
 end
 
-abstract SlurpHead <: PatternHead
+abstract type SlurpHead <: PatternHead end
 
-immutable ExprHead <: PatternHead
+struct ExprHead <: PatternHead
   sym::Symbol
 end
 
-typealias SingleChildNode Union{PatternGate, PatternRoot}
+const SingleChildNode = Union{PatternGate, PatternRoot}
 
 #-----------------------------------------------------------------------------------
 # Functions

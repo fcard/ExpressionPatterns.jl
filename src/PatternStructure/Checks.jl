@@ -6,23 +6,23 @@ export EqualityCheck, TypeCheck, PredicateCheck,
        IterStep, SlurpStep
 
 
-immutable EqualityCheck{T} <: PatternCheck
+struct EqualityCheck{T} <: PatternCheck
   value::T
 end
 
-immutable TypeCheck{T} <: PatternCheck
+struct TypeCheck{T} <: PatternCheck
 end
 
-immutable PredicateCheck <: PatternCheck
+struct PredicateCheck <: PatternCheck
   predicate :: Function
 end
 
 
-immutable ArgsStep  <: PatternStep end
-immutable BlockStep <: PatternStep end
-immutable QuoteStep <: PatternStep end
-immutable IterStep  <: PatternStep end
-immutable SlurpStep <: PatternStep end
+struct ArgsStep  <: PatternStep end
+struct BlockStep <: PatternStep end
+struct QuoteStep <: PatternStep end
+struct IterStep  <: PatternStep end
+struct SlurpStep <: PatternStep end
 
 (::ArgsStep)(ex)  = ex.args
 (::BlockStep)(ex) = linesof(ex)
