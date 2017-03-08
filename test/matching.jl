@@ -8,10 +8,10 @@ matchval(exval) = :(@test match($(exval[1])) == $(exval[2]))
 
 macro testmatch(pattern, block)
 
-  arg_statements = map(x->x.args, linesof(block))
-  res_statements = map(matchval, arg_statements)
+  arg_statements = (x->esc.(x.args[2:end])).(linesof(block))
+  res_statements = matchval.(arg_statements)
 
-  :(let match = $matcher($pattern)
+  :(let match = $matcher($(esc(pattern)))
       $(res_statements...)
     end)
 end
