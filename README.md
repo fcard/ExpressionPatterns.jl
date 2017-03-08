@@ -2,7 +2,7 @@ Installing
 --------
 For now, use:
 ```julia
-Pkg.clone("https://github.com/fcard/ExpressionPatterns.jl")
+Pkg.add("ExpressionPatterns")
 ```
 
 Matching
@@ -124,4 +124,4 @@ See [Language.md](./docs/Language.md) for information on the pattern language.
 
 See [the examples](./examples/) or [the tests](./test/) for more uses.
 
-Once `julia 0.5` comes out, I will update this and see if it's worth to make it a registered package. Y'all should also check [MacroTools](https://github.com/MikeInnes/MacroTools.jl), which inspired me to remake and publicize this in the first place!
+Y'all should also check [MacroTools](https://github.com/MikeInnes/MacroTools.jl), which inspired me to remake and publicize this in the first place!
