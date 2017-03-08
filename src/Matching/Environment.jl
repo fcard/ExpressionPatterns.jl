@@ -7,8 +7,8 @@ using  ...Analyzer.SlurpOptimizations
 using  ...Helper
 export Variables, SlurpRanges, match_variable!, unmatch_variable!, extract!, add_slurp_range!
 
-typealias Variables   Dict{Symbol, Any}
-typealias SlurpRanges Dict{PatternNode, Vector{Range}}
+const Variables   = Dict{Symbol, Any}
+const SlurpRanges = Dict{PatternNode, Vector{Range}}
 
 function match_variable!(v::Variables, name::Symbol, value)
   haskey(v, name)?

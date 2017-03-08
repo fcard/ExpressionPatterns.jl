@@ -8,7 +8,7 @@ export @implicit,
 # Looping
 #-----------------------------------------------------------------------------------
 
-type Looping
+mutable struct Looping
   iter
   state
 

@@ -3,32 +3,32 @@ import ...PatternStructure.Trees: SlurpHead
 export SlurpHead, LazySlurp, GreedySlurp, GenericGreedySlurp, GenericLazySlurp,
        SimpleLastSlurp, SimpleGreedySlurpUntil, SimpleLazySlurpUntil, SimpleSlurp
 
-abstract LazySlurp   <: SlurpHead
-abstract GreedySlurp <: SlurpHead
+abstract type LazySlurp   <: SlurpHead end
+abstract type GreedySlurp <: SlurpHead end
 
-immutable GenericLazySlurp   <: LazySlurp end
-immutable GenericGreedySlurp <: GreedySlurp end
+struct GenericLazySlurp   <: LazySlurp end
+struct GenericGreedySlurp <: GreedySlurp end
 
 #-----------------------------------------------------------------------------------
 # Simple: slurp is composed of one single binding name, e.g. *{a}
 #-----------------------------------------------------------------------------------
 
-abstract SimpleGreedySlurp <: GreedySlurp
-abstract SimpleLazySlurp   <: LazySlurp
+abstract type SimpleGreedySlurp <: GreedySlurp end
+abstract type SimpleLazySlurp   <: LazySlurp end
 
-immutable SimpleLastSlurp <: SimpleGreedySlurp
+struct SimpleLastSlurp <: SimpleGreedySlurp
   post::Int
 end
 
-immutable SimpleGreedySlurpUntil <: SimpleGreedySlurp
+struct SimpleGreedySlurpUntil <: SimpleGreedySlurp
   until::Vector
   index::Int
 end
 
-immutable SimpleLazySlurpUntil <: SimpleLazySlurp
+struct SimpleLazySlurpUntil <: SimpleLazySlurp
   until::Vector
   index::Int
 end
 
-typealias SimpleSlurp Union{SimpleGreedySlurp, SimpleLazySlurp}
+const SimpleSlurp = Union{SimpleGreedySlurp, SimpleLazySlurp}
 end

@@ -5,25 +5,25 @@ module MakeDocs
 # Type definitions
 #-----------------------------------------------------------------------------------
 
-type FuncDoc
+mutable struct FuncDoc
   name :: AbstractString
   text :: AbstractString
   modn :: AbstractString
   file :: AbstractString
 end
 
-type ModDoc
+mutable struct ModDoc
   name  :: AbstractString
   fdocs :: Vector{FuncDoc}
   file  :: AbstractString
 end
 
-type DocFile
+mutable struct DocFile
   name :: AbstractString
   mods :: Vector{ModDoc}
 end
 
-type DocDatabase
+mutable struct DocDatabase
   files :: Vector{DocFile}
   fdocs :: Dict{AbstractString, FuncDoc}
   mods  :: Dict{AbstractString, ModDoc}
@@ -60,7 +60,7 @@ end
 
 function make_file_doc(filename)
   file = open(filename)
-  text = unescape_string(readall(file))
+  text = unescape_string(readstring(file))
   mods = ModDoc[]
   while text != ""
     mname, text   = capture(text, from="# ", until=";")

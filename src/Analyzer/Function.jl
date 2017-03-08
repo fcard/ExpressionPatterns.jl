@@ -11,16 +11,16 @@ export analyze
 # Analysis state
 #-----------------------------------------------------------------------------------
 
-immutable AnalysisState
+struct AnalysisState
   tree    :: PatternTree
   literal :: Bool
   mod     :: Module
   consts  :: Set{Symbol}
 end
-typealias newstate AnalysisState
-newstate(state, tree::PatternTree) = newstate(tree, state.literal, state.mod, state.consts)
-newstate(state, literal::Bool)     = newstate(state.tree, literal, state.mod, state.consts)
-newstate(state, mod::Module)       = newstate(state.tree, state.literal, mod, state.consts)
+const newstate = AnalysisState
+AnalysisState(state, tree::PatternTree) = newstate(tree, state.literal, state.mod, state.consts)
+AnalysisState(state, literal::Bool)     = newstate(state.tree, literal, state.mod, state.consts)
+AnalysisState(state, mod::Module)       = newstate(state.tree, state.literal, mod, state.consts)
 
 
 #-----------------------------------------------------------------------------------

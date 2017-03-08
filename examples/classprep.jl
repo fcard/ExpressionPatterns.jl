@@ -1,7 +1,7 @@
 # Helpers to aid in constructing class definitions
-immutable ClassId end
+struct ClassId end
 
-type ClassConstructor
+mutable struct ClassConstructor
   statements
   param_defs
   method_defs
@@ -10,7 +10,7 @@ type ClassConstructor
   ClassConstructor() = new([],[],[],[],:undef)
 end
 
-type ClassInfo
+mutable struct ClassInfo
   constructor::ClassConstructor
   parameters
   undefined
@@ -40,9 +40,9 @@ end
 
 # unrelated to the metadispatch part of the definition
 
-abstract Object
+abstract type Object end
 
-immutable Method{T <: Object}
+struct Method{T <: Object}
   func  :: Function
 end
 (m::Method)(args...) = m.func(args...)

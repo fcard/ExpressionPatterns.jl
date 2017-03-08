@@ -12,7 +12,7 @@ export getmethod, newmethod!, removemethod!,
        prefermethod!, whichmethod, methodconflicts,
        set_conflict_warnings
 
-typealias Iterable Union{Tuple, Vector, Set}
+const Iterable = Union{Tuple, Vector, Set}
 
 WARN_CONFLICTS = :interactive
 
