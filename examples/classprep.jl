@@ -50,7 +50,7 @@ end
 class_field_values(obj) =
   filter(x->!isa(x, Method), map(x->getfield(obj, x), fieldnames(obj)))
 
-function Base.show{T <: Object}(io::IO, obj::T)
+function Base.show(io::IO, obj::T) where T<:Object
   print("$T(")
 
   fields = class_field_values(obj)

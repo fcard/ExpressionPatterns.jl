@@ -82,7 +82,7 @@ function compare_checks(a::PredicateCheck, b::PredicateCheck, vars1, vars2)
   a.predicate == b.predicate? :equal : :unequal
 end
 
-function compare_checks{T1,T2}(a::TypeCheck{T1}, b::TypeCheck{T2}, vars1, vars2)
+function compare_checks(a::TypeCheck{T1}, b::TypeCheck{T2}, vars1, vars2) where T1 where T2
   T1 == T2? :equal    :
   T2 <: T1? :superset :
   T1 <: T2? :subset   :

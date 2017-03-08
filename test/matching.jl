@@ -74,7 +74,7 @@ end
 
 # block
 
-@testmatch (quote *{:T{:P{islower}, AbstractString}} end) begin
+@testmatch (quote *{:T{:P{s->all(islower,s)}, AbstractString}} end) begin
   (quote "abc"; "onetwothree"; "solami" end) => true
   (quote "abc";     "123";     "solami" end) => false
   (quote "abc"; "onetwothree"; "solami" end) => true

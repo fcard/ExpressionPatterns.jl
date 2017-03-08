@@ -59,9 +59,9 @@ function match_check(bd::Binding, ex, st)
   st.inslurp? true :  match_variable!(st.variables, bd.name, ex)
 end
 
-match_check{T}(check::EqualityCheck{T}, ex::T, st) = check.value == ex
-match_check{T}(check::TypeCheck{T},     ex::T, st) = true
-match_check(check::PredicateCheck,      ex,    st) = check.predicate(ex)
+match_check(check::EqualityCheck{T}, ex::T, st) where T = check.value == ex
+match_check(check::TypeCheck{T},     ex::T, st) where T = true
+match_check(check::PredicateCheck,   ex,    st) = check.predicate(ex)
 
 match_check(check, ex, st) = false
 
