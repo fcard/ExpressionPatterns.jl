@@ -1,8 +1,17 @@
 Installing
 --------
-For now, use:
 ```julia
 Pkg.add("ExpressionPatterns")
+```
+If you're not on julia 0.6:
+```julia
+Pkg.clone("https://github.com/fcard/ExpressionPatterns.jl")
+
+# julia 0.5
+Pkg.checkout("ExpressionPatterns", "julia-v0.5")
+
+# julia 0.4
+Pkg.checkout("ExpressionPatterns", "julia-v0.4")
 ```
 
 Matching
