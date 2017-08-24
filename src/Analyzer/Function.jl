@@ -193,7 +193,7 @@ end
 function is_binding_name(x::Symbol)
   firstchar = string(x)[1]
 
-  isalpha(firstchar) || firstchar in ['#', '@']
+  isalpha(firstchar) || firstchar in ['#', '@', '_']
 end
 
 equalsto(x) = EqualityCheck(x)
