@@ -48,7 +48,8 @@ function analyze!(ex::Symbol, state)
 end
 
 function analyze!(ex::Expr, state)
-  is_special_expr(ex) && (analyze_special!(ex, state); return)
+  is_special_expr(ex) && (return analyze_special!(ex, state))
+  ex.head == :line && (return analyze!(LineNumberNode(0), state))
 
   step = getstep(ex.head)
   head = ex.head in [:kw, :(=)]? :assign : ex.head
@@ -62,6 +63,10 @@ function analyze!(ex::QuoteNode, state)
   step = QuoteStep()
   node = newnode!(ExprHead(:quote), step, state.tree)
   analyze!(ex.value, newstate(state, node))
+end
+
+function analyze!(ex::LineNumberNode, state)
+  analyze_special!(:(:P{$Helper.is_line_number}), state)
 end
 
 function analyze!(ex, state)
