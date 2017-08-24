@@ -10,11 +10,29 @@ import ...Helper: clean_code
 import Base.Meta: quot
 export getmethod, newmethod!, removemethod!,
        prefermethod!, whichmethod, methodconflicts,
-       set_conflict_warnings
+       set_conflict_warnings, callmethod
 
 const Iterable = Union{Tuple, Vector, Set}
 
 WARN_CONFLICTS = :interactive
+
+#----------------------------------------------------------------------------
+# Dispatch to and call method
+#----------------------------------------------------------------------------
+
+function callmethod(table, args, __source__, __module__)
+  m = getmethod(table, :($(args...),))
+  m(__source__, __module__, args...)
+end
+
+#----------------------------------------------------------------------------
+# Format patterns to be used as arguments
+#----------------------------------------------------------------------------
+
+function formatpatterns(patterns; for_matcher=false)
+  Expr(:tuple, (for_matcher ? [] : [:__source__, :__module__])..., patterns...)
+end
+
 
 #----------------------------------------------------------------------------
 # get methods from table
@@ -31,10 +49,13 @@ end
 # Insert methods in the table
 #----------------------------------------------------------------------------
 
-function newmethod!(table, pattern, body, mod, label=unlabeled)
-  match  = matcher(pattern)
-  method = eval(mod, anonds(Expr(:tuple, pattern), body))
-  tree   = analyze(pattern)
+function newmethod!(table, patterns, body, mod, label=unlabeled)
+  mpattern = formatpatterns(patterns, for_matcher=true)
+  fpattern = formatpatterns(patterns)
+
+  match  = matcher(mpattern, mod)
+  method = eval(mod, anonds(fpattern, body))
+  tree   = analyze(mpattern, mod)
 
   metamethod = MetaMethod(label, match, method, tree)
   addmethod!(table, metamethod)
@@ -72,8 +93,8 @@ end
 # Remove methods from the table
 #----------------------------------------------------------------------------
 
-function removemethod!(table, pattern)
-  tree    = analyze(pattern)
+function removemethod!(table, pattern, mod)
+  tree    = analyze(pattern, mod)
   methods = table.methods
 
   for i in eachindex(methods)
@@ -86,7 +107,7 @@ function removemethod!(table, pattern)
   warn("Couldn't remove the method $(tree) from the $(table.name)")
 end
 
-function removemethod!(table, label::Symbol)
+function removemethod!(table, label::Symbol, mod)
   if haskey(table.labels, label)
     method  = table.labels[label]
     methods = table.methods
@@ -105,13 +126,13 @@ end
 # Manipulate preference of methods
 #----------------------------------------------------------------------------
 
-function prefermethod!(table, pattern1, pattern2)
-  tree1  = analyze(pattern1)
-  tree2  = analyze(pattern2)
+function prefermethod!(table, pattern1, pattern2, mod)
+  tree1  = analyze(pattern1, mod)
+  tree2  = analyze(pattern2, mod)
   prefermethod_impl!(table, tree1, tree2)
 end
 
-function prefermethod!(table, label1::Symbol, label2::Symbol)
+function prefermethod!(table, label1::Symbol, label2::Symbol, mod)
   haskey(table.labels, label1) || notfounderror(table, "label $label1")
   haskey(table.labels, label2) || notfounderror(table, "label $label2")
 

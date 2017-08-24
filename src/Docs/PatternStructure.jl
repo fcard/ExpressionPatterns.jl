@@ -57,7 +57,7 @@ test.
 
 example:
 ```julia
-  tree = analyze(:(x+y)).child
+  tree = analyze(:(x+y), @__MODULE__).child
   vars = Variables(constants(tree))
   test = PredicateCheck(ex->all(iseven, ex.args[2:end]))
   gate = PatternGate(test)

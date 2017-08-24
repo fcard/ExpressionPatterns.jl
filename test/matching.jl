@@ -11,7 +11,7 @@ macro testmatch(pattern, block)
   arg_statements = (x->esc.(x.args[2:end])).(linesof(block))
   res_statements = matchval.(arg_statements)
 
-  :(let match = $matcher($(esc(pattern)))
+  :(let match = $matcher($(esc(pattern)), @__MODULE__)
       $(res_statements...)
     end)
 end

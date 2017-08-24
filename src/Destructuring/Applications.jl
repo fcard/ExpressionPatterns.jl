@@ -10,8 +10,8 @@ DA = Applications
 # Utilities
 #----------------------------------------------------------------------------
 
-function destructure_all(patterns, values, body)
-  destructure(:($(patterns...),), :(Expr(:tuple, $(values...))), body)
+function destructure_all(patterns, mod, values, body)
+  destructure(:($(patterns...),), mod, :(Expr(:tuple, $(values...))), body)
 end
 
 #----------------------------------------------------------------------------
@@ -19,12 +19,12 @@ end
 #----------------------------------------------------------------------------
 
 macro letds(lets...)
-  esc(letds(lets[1:end-1], lets[end]))
+  esc(letds(__module__, lets[1:end-1], lets[end]))
 end
 
-function letds(lets, body)
+function letds(mod, lets, body)
   patterns, values = unzip(map(x->x.args, lets))
-  destructure_all(patterns, values, body)
+  destructure_all(patterns, mod, values, body)
 end
 
 #----------------------------------------------------------------------------

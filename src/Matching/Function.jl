@@ -6,9 +6,20 @@ using  ...PatternStructure.SlurpTypes
 using  ...PatternStructure.Special
 using  ...Matching.Environment
 using  ...Helper
-export matcher
+export @matcher, matcher
 
-function matcher(pattern, mod=current_module())
+macro matcher(pattern)
+  matcher(pattern, __module__)
+end
+
+module Dep end
+
+function matcher(pattern, mod=Dep)
+  if mod == Dep
+    warn("Single argument `matcher` is deprecated, use @matcher(pattern) or matcher(:(pattern), @__MODULE__) instead.")
+    mod = current_module()
+  end
+
   const pattern_tree = analyze(pattern, mod).child
 
   return match!(ex, variables=Variables()) =
