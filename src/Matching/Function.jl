@@ -16,21 +16,16 @@ function matcher(pattern, mod=current_module())
 end
 
 struct MatchState
-  inslurp     :: Bool
-  variables   :: Variables
-  slurpranges :: SlurpRanges
+  variables::Variables
 end
-newstate(vars)    = MatchState(false, vars, SlurpRanges())
-enterslurp(state) = MatchState(true, state.variables, SlurpRanges())
+newstate(vars) = MatchState(vars)
 
-struct SlurpInfo
-  node        :: PatternNode
-  parent      :: PatternTree
-  children    :: Vector
-  position    :: Int
-  starting_ai :: Int
-  parentstate :: MatchState
-  state       :: MatchState
+struct ChildrenState{T}
+  variables::Variables
+  depths::Dict{Symbol, Int}
+  depth::Int
+  exprs::Vector{Any}
+  tree_children::Vector{T}
 end
 
 #----------------------------------------------------------------------------
@@ -47,16 +42,30 @@ end
 function matchtree(node::PatternNode, ex, st)
   exprhead(ex) == nodehead(node) || return false
 
-  args = node.step(ex)
-  match_children(node, args, 1, 1, st)
+  children = node.step(ex)
+  match_children(node, children, st)
 end
 
 #----------------------------------------------------------------------------
 # match_check: matches a pattern check with an expression.
 #----------------------------------------------------------------------------
 
-function match_check(bd::Binding, ex, st)
-  st.inslurp? true :  match_variable!(st.variables, bd.name, ex)
+function match_check(bd::Binding, ex, st::MatchState)
+  if haskey(st.variables, bd.name)
+    st.variables[bd.name] == ex
+  else
+    st.variables[bd.name] = ex
+    true
+  end
+end
+
+function match_check(bd::Binding, ex, st::ChildrenState)
+  if haskey(st.depths, bd.name)
+    st.depths[bd.name] == st.depth
+  else
+    st.depths[bd.name] = st.depth
+    true
+  end
 end
 
 match_check(check::EqualityCheck{T}, ex::T, st) where T = check.value == ex
@@ -65,21 +74,83 @@ match_check(check::PredicateCheck,   ex,    st) = check.predicate(ex)
 
 match_check(check, ex, st) = false
 
-
 #----------------------------------------------------------------------------
 # match_children: matches a vector of patterns with a vector of expressions.
 #----------------------------------------------------------------------------
 
-function match_children(node, args, ci, ai, st)
-  matches = true
-
-  for cj in ci:endof(node.children)
-    matches  || return false
-    matches, ai = match_child(node, args, cj, ai, false, st)
-  end
-  return matches && ai > length(args)
+function match_children(node, exprs, st)
+  s = PatternStream(st, node.children, exprs)
+  match_ranges!(s) && match_with_ranges(s)
 end
 
+#-------------------------------------------------------------------------------------------
+# find_matching_indexes: Map the indexes of the children of a pattern tree and a expression
+#-------------------------------------------------------------------------------------------
+
+const SLURP_MATCHING_FUNCTIONS = Dict{DataType, Function}()
+
+function match_ranges(s)
+  if next_pattern_type(s) <: SlurpHead
+    SLURP_MATCHING_FUNCTIONS[next_pattern_type(s)](s)
+  else
+    match_nonslurp_child(s)
+  end
+end
+
+function match_nonslurp_child(s)
+  matchtree(get_pattern!(s), get_expr!(s), state(s))
+end
+
+SLURP_MATCHING_FUNCTIONS[GenericGreedySlurp] = function(s)
+  endpoint = expr_length(s)
+  while !done(s) && 
+
+
+end
+
+function find_matching_indexes(node::PatternNode{S}, cst) where S <: LazySlurp
+  
+end
+
+function find_matching_indexes(tree_index, expr_index, cst)
+  find_matching_indexes(cst.tree_children[tree_index], tree_index, expr_index, cst)
+end
+
+function find_matching_indexes(node::PatternNode{S}, tree_index, expr_index, cst) where S <: LazySlurp
+  endpoint = expr_index
+  while endpoint <= length(cst.exprs) && !find_matching_indexes(tree_index+1, endpoint, cst)
+    match_slurp(node, endpoint, cst) || return false
+    endpoint += length(tree.children)
+  end
+  endpoint <= length(cst.exprs)
+end
+
+function find_matching_indexes(node::PatternNode{S}, tree_index, expr_index, cst) where S <: GreedySlurp
+  endpoint = lentgh(cst.exprs)
+  while endpoint >= expr_index && find_matching_indexes(tree_index+1, endpoint, cst)
+    all(cst.exprs[expr_index:length(node.children):endpoint]) do i
+      match_slurp(
+
+    match_slurp(tree, endpoint, cst) || return false
+    endpoint += 1
+  end
+  endpoint <= length(cst.exprs)
+end
+
+function match_slurp(tree, i, cst)
+  all(eachindex(tree.children)) do j
+    match_check(tree.children[j], cst.exprs[i+j-1], cst)
+  end
+end
+
+function find_matching_indexes(tree::PatternNode{S}, tree_index, expr_index, cst) where S <: LazySlurp
+  next_expr_index = expr_index
+  while match_slurp(tree, cst) && !find_matching_indexes(tree_index+1, next_expr_index, cst)
+    next_expr_index += 1
+  end
+end
+
+function find_matching_indexes(tree
 function match_child(node, args, ci, ai, slurpchild, st)
   is_slurp(node.children[ci])?
     (match_slurp(node, args, ci, ai, slurpchild, st)) :
@@ -96,7 +167,7 @@ end
 # slurps: Patterns of the form (P...). Can be matched greedily or lazily.
 #----------------------------------------------------------------------------
 
-function match_slurp(node, args, ci, ai, slurpchild, st)
+jfunction match_slurp(node, args, ci, ai, slurpchild, st)
   slurpchild && match_directly_nested_slurp(node)
 
   local matches, mi
