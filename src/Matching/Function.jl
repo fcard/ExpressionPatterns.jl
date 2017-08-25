@@ -9,7 +9,7 @@ using  ...Helper
 export matcher
 
 function matcher(pattern, mod=current_module())
-  const pattern_tree = analyze(pattern, mod).child
+  pattern_tree = analyze(pattern, mod).child
 
   return match!(ex, variables=Variables()) =
     matchtree(pattern_tree, ex, newstate(variables))
