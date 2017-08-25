@@ -7,8 +7,8 @@ import ...Helper: clean_code
 import Base.Meta: quot
 export destructure
 
-function destructure(pattern, ex, body)
-  ptree = analyze(pattern).child
+function destructure(pattern, mod, ex, body)
+  ptree = analyze(pattern, mod).child
   @gensym vars
   quote
     $vars = $Variables()

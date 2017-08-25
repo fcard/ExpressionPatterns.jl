@@ -48,7 +48,7 @@ function init_metatable!(toptable, mod, key, name)
   end
 end
 
-function import_metatable!(toptable, tablekey, from, to=current_module())
+function import_metatable!(toptable, tablekey, from, to)
   init_module_table!(toptable, from)
   init_module_table!(toptable, to)
   !haskey(toptable[from], tablekey) && return warn("Unable to find metatable $(tablekey) in $(from).")
@@ -57,7 +57,7 @@ function import_metatable!(toptable, tablekey, from, to=current_module())
   toptable[to][tablekey] = toptable[from][tablekey]
 end
 
-function export_metatable!(toptable, tablekey, from=current_module())
+function export_metatable!(toptable, tablekey, from)
   init_module_table!(toptable, from)
   push!(toptable[from].exports, tablekey)
 end

@@ -27,7 +27,7 @@ AnalysisState(state, mod::Module)       = newstate(state.tree, state.literal, mo
 # analyze function: transform expressions into patterns
 #-----------------------------------------------------------------------------------
 
-function analyze(ex, mod=current_module())
+function analyze(ex, mod)
   root   = PatternRoot()
   consts = Set{Symbol}()
   analyze!(ex, newstate(root, false, mod, consts))

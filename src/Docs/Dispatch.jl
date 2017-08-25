@@ -156,7 +156,7 @@ If no table is found, throw a `MetaTableNotFoundError`.
 get_metatable;
 
 """
-`import_metatable(toptable, key, from[, to=current_module()])`
+`import_metatable(toptable, key, from, to)`
 
 Associates a metatable to a new module.
 

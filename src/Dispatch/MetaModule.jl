@@ -12,9 +12,9 @@ const MF = Dispatch.Applications.METAFUNCTIONS
 # @metamodule
 #-----------------------------------------------------------------------------------
 
-@macromethod metamodule(:R{:import,    *{path}})  esc(importcode(path))
+@macromethod metamodule(:R{:import,    *{path}})  esc(importcode(path, __module__))
 @macromethod metamodule(:R{:importall, *{path}})  esc(importallcode(path))
-@macromethod metamodule(:R{:export,    *{names}}) esc(exportcode(names))
+@macromethod metamodule(:R{:export,    *{names}}) esc(exportcode(names, __module__))
 
 @macromethod metamodule(:R{:toplevel}) nothing
 @macromethod metamodule(:R{:toplevel,x,*{xs}}) esc(quote
@@ -26,22 +26,22 @@ end)
 # Code generation.
 #-----------------------------------------------------------------------------------
 
-function importcode(path)
+function importcode(path, mod)
   name = last(path)
   top  = gettable(path[end])
   quote
     import $(path...)
     import $(path[1:end-1]...).($(path[end-1]))
-    $(import_metatable!)($top, $(quot(name)), $(path[end-1]))
+    $(import_metatable!)($top, $(quot(name)), $(path[end-1]), $mod)
   end
 end
 
-exportcode(names) = quote
+exportcode(names, mod) = quote
 
   eval(:(export $($names...)))
   for name in $names
     top = $gettable(name)
-    $(export_metatable!)(top, name)
+    $(export_metatable!)(top, name, $mod)
   end
 end
 

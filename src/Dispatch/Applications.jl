@@ -15,7 +15,7 @@ const DI = ExpressionPatterns.Dispatch.Applications
 const MACROMETHODS = TopMetaTable()
 
 @macrods macromet(name(*{patterns})[label], body) begin
-  esc(macromet(name, patterns, label, body, current_module()))
+  esc(macromet(name, patterns, label, body, __module__))
 end
 
 function macromet(name, patterns, label, body, mod)
@@ -25,14 +25,13 @@ function macromet(name, patterns, label, body, mod)
 
   code =
     quote
-      $newmethod!($macrotable, Expr(:tuple, $patterns...), $(quot(body)), $mod, $(quot(label)))
+      $newmethod!($macrotable, $patterns, $(quot(body)), $mod, $(quot(label)))
     end
 
   if undefined
     push!(code.args,
       :(macro $name(args...)
-           parameters = Expr(:tuple, args...)
-          $getmethod($macrotable, parameters)(parameters)
+          $callmethod($macrotable, args, __source__, __module__)
         end))
   end
   return code
@@ -43,21 +42,21 @@ end
 
 
 @macromet macromethod(name(*{patterns})[label], body)[with_label] begin
-  esc(macromet(name, patterns, label, body, current_module()))
+  esc(macromet(name, patterns, label, body, __module__))
 end
 
 @macromet macromethod(name(*{patterns}), body)[no_label] begin
-  esc(macromet(name, patterns, unlabeled, body, current_module()))
+  esc(macromet(name, patterns, unlabeled, body, __module__))
 end
 
 # assignment, to be used as @macromethod name(patterns...)[label] = expr
 
 @macromet macromethod(name(*{patterns})[label] = body)[eq_with_label] begin
-  esc(macromet(name, patterns, label, body, current_module()))
+  esc(macromet(name, patterns, label, body, __module__))
 end
 
 @macromet macromethod(name(*{patterns}) = body)[eq_no_label] begin
-  esc(macromet(name, patterns, unlabeled, body, current_module()))
+  esc(macromet(name, patterns, unlabeled, body, __module__))
 end
 
 # the [label] is optional in all definitions
@@ -71,18 +70,18 @@ const METAFUNCTIONS = TopMetaTable()
 # normal
 
 @macromethod metafunction(name(*{patterns})[label], body)[with_label] =
-  esc(metafunction(name, patterns, label, body, current_module()))
+  esc(metafunction(name, patterns, label, body, __module__))
 
 @macromethod metafunction(name(*{patterns}), body)[no_label] =
-  esc(metafunction(name, patterns, unlabeled, body, current_module()))
+  esc(metafunction(name, patterns, unlabeled, body, __module__))
 
 # assignment
 
 @macromethod metafunction(name(*{patterns})[label] = body)[eq_with_label] =
-  esc(metafunction(name, patterns, label, body, current_module()))
+  esc(metafunction(name, patterns, label, body, __module__))
 
 @macromethod metafunction(name(*{patterns}) = body)[eq_no_label] =
-  esc(metafunction(name, patterns, unlabeled, body, current_module()))
+  esc(metafunction(name, patterns, unlabeled, body, __module__))
 
 
 function metafunction(name, patterns, label, body, mod)
@@ -92,14 +91,13 @@ function metafunction(name, patterns, label, body, mod)
 
   code =
     quote
-      $newmethod!($metatable, Expr(:tuple, $patterns...), $(quot(body)), $mod, $(quot(label)))
+      $newmethod!($metatable, $patterns, $(quot(body)), $mod, $(quot(label)))
     end
 
   if undefined
     push!(code.args,
-      :(function $name(args...)
-           parameters = Expr(:tuple, args...)
-          $getmethod($metatable, parameters)(parameters)
+      :(function $name(args...; __module__=nothing, __source__=nothing)
+          $callmethod($metatable, args, __source__, __module__)
         end))
   end
   return code

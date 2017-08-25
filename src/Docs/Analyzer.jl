@@ -5,7 +5,7 @@ import ..Analyzer.Function: getstep, is_binding_name, is_special_expr, assertati
                             AnalysisState, analyze, analyze!, analyze_args!
 
 """
-`analyze(ex[, module]) -> PatternRoot`
+`analyze(ex, module) -> PatternRoot`
 
 Parses a julia code expression into a `PatternTree`, which
 can be used in matching, destructuring and dispatch.
@@ -21,7 +21,6 @@ analyze(:(:T{MyType}), MyModule)
 ```
 
 `MyType` will be looked for in `MyModule`.
-If no module is specified, `current_module` is used.
 
 """
 analyze;

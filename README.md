@@ -23,12 +23,12 @@ Matching
 ```julia
 using ExpressionPatterns.Matching
 
-m1 = matcher(:(x+y))
+m1 = @matcher(x+y)
 
 m1(:(1+2)) == true
 m1(:(1-2)) == false
 
-m2 = matcher(:(f(*{args})))
+m2 = @matcher(f(*{args}))
 
 m2(:(g(1,2))) == true
 m2(:(h()))    == true
@@ -137,4 +137,4 @@ See [Language.md](./docs/Language.md) for information on the pattern language.
 
 See [the examples](./examples/) or [the tests](./test/) for more uses.
 
-Y'all should also check [MacroTools](https://github.com/MikeInnes/MacroTools.jl), which inspired me to remake and publicize this in the first place!
+Y'all should also check [MacroTools](https://github.com/MikeInnes/MacroTools.jl), which inspired me to remake and publish this in the first place!
