@@ -96,8 +96,8 @@ function analyze_special!(ex, state)
   head = special_name(ex.args[1])
   args = ex.args[2:end]
 
-  if head in [:(?), :(*)]
-    slurptype = head == :(?)? GenericLazySlurp() : GenericGreedySlurp()
+  if head in [:?, :*]
+    slurptype = head == :? ? GenericLazySlurp() : GenericGreedySlurp()
 
     node = newnode!(slurptype, SlurpStep(), state.tree)
     analyze_args!(args, node, state)

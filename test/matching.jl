@@ -92,7 +92,7 @@ end
 
 # while loop / lazy slurps
 
-@testmatch :(while x < t; ?{p(?{args})}; x+=1 end) begin
+@testmatch :(while x < t; :?{p(:?{args})}; x+=1 end) begin
 
   :(while i <   10; println(io, i);             i+=1 end) => true
   :(while k < t-10; splice!(A,2,k); push!(B,k); k+=1 end) => true
