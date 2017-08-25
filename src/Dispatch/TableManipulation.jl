@@ -135,7 +135,7 @@ function prefermethod_impl!(table, tree1, tree2)
     insert!(methods, j, method)
     table
   else
-    sig = i == 0? tree1 : tree2
+    sig = i == 0 ? tree1 : tree2
     notfounderror(table, "signature $(sig)")
   end
 end
@@ -149,7 +149,7 @@ notfounderror(table, key) =
 
 function whichmethod(table, parameters)
   i = findnext(met->met.matcher(parameters), table.methods, 1)
-  i == 0? nothing : table.methods[i]
+  i == 0 ? nothing : table.methods[i]
 end
 
 #----------------------------------------------------------------------------

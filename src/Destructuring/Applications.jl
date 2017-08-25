@@ -48,7 +48,7 @@ end
 end
 
 anonds(p::Symbol, body) = anonds_impl(:($p,), body)
-anonds(p::Expr,  body)  = anonds_impl(p.head == :tuple? p : :($p,), body)
+anonds(p::Expr,  body)  = anonds_impl(p.head == :tuple ? p : :($p,), body)
 
 function anonds_impl(patterns, body)
   :((args...) ->

@@ -11,7 +11,7 @@ const Variables   = Dict{Symbol, Any}
 const SlurpRanges = Dict{PatternNode, Vector{Range}}
 
 function match_variable!(v::Variables, name::Symbol, value)
-  haskey(v, name)?
+  haskey(v, name) ?
     (v[name] == value) :
     (v[name] =  value; true)
 end

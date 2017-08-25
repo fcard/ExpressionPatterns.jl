@@ -67,7 +67,7 @@ end
 #-----------------------------------------------------------------------------------
 
 gettable(name) =
-  startswith(string(name), "@")? MM : MF
+  startswith(string(name), "@") ? MM : MF
 
 function macrocall_ex(name, args...)
   ex = :(@x $(args...))

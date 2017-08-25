@@ -61,7 +61,7 @@ const SingleChildNode = Union{PatternGate, PatternRoot}
 #-----------------------------------------------------------------------------------
 
 function nodehead(node::PatternNode)
-  isa(node.head, ExprHead)? node.head.sym : (:slurp)
+  isa(node.head, ExprHead) ? node.head.sym : (:slurp)
 end
 
 bindings(leaf::PatternLeaf) = Set{Symbol}()
@@ -76,7 +76,7 @@ depth(node::PatternNode) = node.depth
 function makenode(head, step, depth)
   children   = PatternTree[]
   bindings   = Set{Symbol}()
-  slurpdepth = isa(head, SlurpHead)? depth+1 : depth
+  slurpdepth = isa(head, SlurpHead) ? depth+1 : depth
 
   PatternNode(head, step, children, bindings, slurpdepth)
 end

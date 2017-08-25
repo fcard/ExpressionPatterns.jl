@@ -11,8 +11,8 @@ function show(io::IO, met::MetaMethod)
     s = replace(s, r"pattern{.*?}<", "", 1)[1:end-1]
   end
   consts  = match(r"pattern{consts: (.*?)}", sprint(show, met.tree))
-  consts  = isa(consts, Void)? "" : consts[1]
-  label   = met.label == unlabeled? "[---]" : "[$(met.label)]"
+  consts  = isa(consts, Void) ? "" : consts[1]
+  label   = met.label == unlabeled ? "[---]" : "[$(met.label)]"
 
   (print(io, label, "{$consts}<"))
   [print(io, arg,   " ") for arg in args[1:end-1]]

@@ -20,17 +20,17 @@ function expr(p::PatternNode)
      children[1] = Symbol("@$(children[1])")
   end
 
-  is_special(p)?
+  is_special(p) ?
      Expr(:curly, QuoteNode(patterntype(p)), children...) :
      Expr(p.head.sym, children...)
 
 end
 
 function expr(p::PatternGate)
-  isa(p.check, Binding)?        p.check.name  :
-  isa(p.check, EqualityCheck)?  p.check.value :
-  isa(p.check, TypeCheck)?      :(:type{$(expr(p.child)), $(typeof(p.check).parameters[1])}) :
-  isa(p.check, PredicateCheck)? :(:predicate{$(expr(p.child)), $(p.check.predicate)}) :
+  isa(p.check, Binding) ?        p.check.name  :
+  isa(p.check, EqualityCheck) ?  p.check.value :
+  isa(p.check, TypeCheck) ?      :(:type{$(expr(p.child)), $(typeof(p.check).parameters[1])}) :
+  isa(p.check, PredicateCheck) ? :(:predicate{$(expr(p.child)), $(p.check.predicate)}) :
   throw(ArgumentError("invalid check type in PatternGate: $(p.check)"))
 end
 

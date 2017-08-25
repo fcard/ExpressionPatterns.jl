@@ -56,7 +56,7 @@ end
 #----------------------------------------------------------------------------
 
 function match_check(bd::Binding, ex, st)
-  st.inslurp? true :  match_variable!(st.variables, bd.name, ex)
+  st.inslurp ? true :  match_variable!(st.variables, bd.name, ex)
 end
 
 match_check(check::EqualityCheck{T}, ex::T, st) where T = check.value == ex
@@ -81,7 +81,7 @@ function match_children(node, args, ci, ai, st)
 end
 
 function match_child(node, args, ci, ai, slurpchild, st)
-  is_slurp(node.children[ci])?
+  is_slurp(node.children[ci]) ?
     (match_slurp(node, args, ci, ai, slurpchild, st)) :
     (match_nonslurp_child(node, args, ci, ai, st), ai+1)
   #end
@@ -102,7 +102,7 @@ function match_slurp(node, args, ci, ai, slurpchild, st)
   local matches, mi
 
   slurp  = node.children[ci]
-  mstate = st.inslurp? st : enterslurp(st)
+  mstate = st.inslurp ? st : enterslurp(st)
 
   if ai <= length(args)
      s_info = SlurpInfo(slurp, node, slurp.children, ci, ai, st, mstate)
@@ -200,7 +200,7 @@ function slurp_until(found, slurp, args, si)
         !matches(found)
     found = found[2:end]
   end
-  return !isempty(found), isempty(found)? 0 : found[1]-si+1
+  return !isempty(found), isempty(found) ? 0 : found[1]-si+1
 end
 
 function match_slurp_impl(h::SimpleGreedySlurpUntil, slurp, args)
@@ -223,7 +223,7 @@ match_nested_slurp(node) =
 
 const Iterable = Union{Vector, Tuple}
 
-exprhead(ex::Expr)      = ex.head in [:kw, :(=)]? :assign : ex.head
+exprhead(ex::Expr)      = ex.head in [:kw, :(=)] ? :assign : ex.head
 exprhead(ex::QuoteNode) = :quote
 exprhead(ex::Iterable)  = :iterable
 exprhead(ex::Any)       = :notexpr

@@ -146,7 +146,7 @@ function prepare_text(text)
 end
 
 filepath(filedoc, dir) =
-  dir == pwd()?
+  dir == pwd() ?
     joinpath("lib", "$(filedoc.name).md") :
     joinpath(dir, "lib", "$(filedoc.name).md")
 
