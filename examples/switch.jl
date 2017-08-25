@@ -11,7 +11,7 @@ macro switch(value, block)
     end)
 end
 
-@metafunction switch(value, begin :L{:case}(x); ?{xs}; :L{:case}(y); *{ys} end) begin
+@metafunction switch(value, begin :L{:case}(x); :?{xs}; :L{:case}(y); *{ys} end) begin
   next = switch(value, quote :case($y); $(ys...) end)
   switch_clause(value, x, xs, next)
 end

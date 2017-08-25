@@ -14,9 +14,9 @@ using  Base.Test
 
 # generic lazy
 
-@test isa(analyze(:(?{x+y,z},1+1,1,*{b})).child.children[1].head, GenericLazySlurp)
+@test isa(analyze(:(:?{x+y,z},1+1,1,*{b})).child.children[1].head, GenericLazySlurp)
 
-@macrods t2(?{x+y,z},1+1,1,*{b}) (x,y,z)
+@macrods t2(:?{x+y,z},1+1,1,*{b}) (x,y,z)
 
 @test @t2(10+2, a, 30+54, b, 53+1, c, 1+1, 1, 1+1, 1) == ([10,30,53], [2,54,1], [:a,:b,:c])
 
@@ -38,9 +38,9 @@ using  Base.Test
 
 # simple, until, lazy
 
-@test isa(analyze(:(?{a},3,*{b})).child.children[1].head, SimpleLazySlurpUntil)
+@test isa(analyze(:(:?{a},3,*{b})).child.children[1].head, SimpleLazySlurpUntil)
 
-@macrods t5(?{a},3,*{b}) a
+@macrods t5(:?{a},3,*{b}) a
 
 @test @t5(0,1,2,3,4,5,6) == [0,1,2]
 

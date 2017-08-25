@@ -38,7 +38,7 @@ x = :symbol; :(EQ{x})  # matches :symbol. Note that equals\E\EQ calls eval on it
 Slurps
 -------
 
-A slurp works like `*` quantifiers in regular expressions, matching 0 or more of the pattern with the arguments of an expression. They are created with `*{p}` (greedy, matches as much as possible) or `?{p}` (lazy, match as little as possible). Slurps can have multiple arguments, e.g. `*{a,b,c}`, and in this case each argument is matched in a looping sequence, e.g. when matching `[*{a,b,c}]` with       `:[1,2,3,4,5,6]`, `a` is matched with `1`, b with `2`, `c` with `3`, then `a` with `4`, `b` with `5` and `c` with `6`. Note that if the expression had been `:[1,2,3,4,5]` the match would fail, since every subpattern must match for a loop to count.  
+A slurp works like `*` quantifiers in regular expressions, matching 0 or more of the pattern with the arguments of an expression. They are created with `*{p}` (greedy, matches as much as possible) or `:?{p}` (lazy, match as little as possible). Slurps can have multiple arguments, e.g. `*{a,b,c}`, and in this case each argument is matched in a looping sequence, e.g. when matching `[*{a,b,c}]` with       `:[1,2,3,4,5,6]`, `a` is matched with `1`, b with `2`, `c` with `3`, then `a` with `4`, `b` with `5` and `c` with `6`. Note that if the expression had been `:[1,2,3,4,5]` the match would fail, since every subpattern must match for a loop to count.  
 
 Slurps can be nested: `[*{[*{1,2}]}]` matches expressions like `:[[1,2,1,2], [1,2], [1,2,1,2,1,2]]`. In destructuring, `[*{[*{x,y}]}]` will have `x` and `y` be vectors of vectors, e.g. `[*{[*{x,y}]}] = :[[1,2,1,2], [1,2], [1,2,1,2,1,2]] -> x=[[1,1], [1], [1,1,1,1], y=[[2,2], [2], [2,2,2,2]]`. If `x` was within three slurps, it would have been a vector of vectors of vectors, etc.
 
@@ -49,9 +49,9 @@ Slurps can be nested: `[*{[*{1,2}]}]` matches expressions like `:[[1,2,1,2], [1,
 
 :[*{odd,even}]       # matches :[1,2,3,4,5,6], x=[1,3,5], y=[2,4,6]
 
-:[*{x},?{y}]         # matches :[1,2,3,4], x=[1,2,3,4], y=[]
+:[*{x},:?{y}]        # matches :[1,2,3,4], x=[1,2,3,4], y=[]
 
-:[?{x},*{y}]         # matches :[1,2,3,4], x=[], y=[1,2,3,4]
+:[:?{x},*{y}]        # matches :[1,2,3,4], x=[], y=[1,2,3,4]
 
 :(f(*{:T{Symbol}}))  # matches :(f(x,y)), :("g"(a,b,c)), but not :(f(1,2)) or :(g(a,b,3))
 

@@ -11,7 +11,7 @@ macro switch(value, block)
     end)
 end
 
-@metafunction switch(value, begin :L{:case}(x); ?{xs}; :L{:case}(y); *{ys} end) begin
+@metafunction switch(value, begin :L{:case}(x); :?{xs}; :L{:case}(y); *{ys} end) begin
   @gensym label
   nextclauses, nextstatements = switch(value, quote :case($y); $(ys...) end)
   clauses    = switch_clause(value, x, label, nextclauses)

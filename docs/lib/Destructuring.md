@@ -92,8 +92,8 @@ examples:
 extremes = @anonds [first, *{middle}, last] -> (first, last)
 extremes(:[1,2,3,4]) == (1,4)
 
-first_index = @anonds (:C{i} => [?{x}, i, *{a}]) -> length(x)+1
-last_index  = @anonds (:C{i} => [*{x}, i, *{a}]) -> length(x)+1
+first_index = @anonds (:C{i} => [:?{x}, i, *{a}]) -> length(x)+1
+last_index  = @anonds (:C{i} => [*{x},  i, *{a}]) -> length(x)+1
 
 ex = :(0 => [1,1,1,0,1,1,0])
 first_index(ex) == 4
