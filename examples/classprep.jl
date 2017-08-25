@@ -22,8 +22,8 @@ function make_constructor(name, info, constructor_info::ClassConstructor)
   args  = constructor_info.arguments
   stats = constructor_info.statements
 
-  statements  = args == :undef? map(make_def, info.undefined) : stats
-  arguments   = args == :undef? info.undefined : args
+  statements  = args == :undef ? map(make_def, info.undefined) : stats
+  arguments   = args == :undef ? info.undefined : args
   param_defs  = constructor_info.param_defs
   method_defs = constructor_info.method_defs
   new_args    = constructor_info.new_args

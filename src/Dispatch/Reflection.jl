@@ -16,7 +16,7 @@ metafuntable(funname,M) =
   get_metatable(METAFUNCTIONS, M, funname)
 
 gettable(typ, m) =
-  typ == :macro?
+  typ == :macro ?
     M -> macrotable(m, M) :
     M -> metafuntable(m, M)
 

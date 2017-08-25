@@ -109,10 +109,10 @@ exprmodify(modify; on=always) =
   ex -> exprmodify(modify, ex, on=on)
 
 exprmodify(modify, ex; on=always) =
-  on(ex)? modify(ex) : ex
+  on(ex) ? modify(ex) : ex
 
 exprmodify(modify, ex::Expr; on=always) =
-  on(ex)? modify(ex) : Expr(ex.head, map(exprmodify(modify, on=on), ex.args)...)
+  on(ex) ? modify(ex) : Expr(ex.head, map(exprmodify(modify, on=on), ex.args)...)
 
 function clean_code(ex::Expr)
   nex = Expr(ex.head, map(clean_code, ex.args)...)

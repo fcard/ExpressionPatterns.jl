@@ -41,7 +41,7 @@ end
 #-----------------------------------------------------------------------------------
 
 function analyze!(ex::Symbol, state)
-  is_binding_name(ex) && !state.literal?
+  is_binding_name(ex) && !state.literal ?
      newleaf!(newbinding(ex), state.tree) :
      newleaf!(equalsto(ex),   state.tree)
   #--
@@ -52,7 +52,7 @@ function analyze!(ex::Expr, state)
   ex.head == :line && (return analyze!(LineNumberNode(0), state))
 
   step = getstep(ex.head)
-  head = ex.head in [:kw, :(=)]? :assign : ex.head
+  head = ex.head in [:kw, :(=)] ? :assign : ex.head
   node = newnode!(ExprHead(head), step, state.tree)
   args = step(ex)
 
@@ -176,8 +176,8 @@ end
 #-----------------------------------------------------------------------------------
 
 function getstep(head)
-  head == :quote? QuoteStep() :
-  head == :block? BlockStep() :
+  head == :quote ? QuoteStep() :
+  head == :block ? BlockStep() :
                   ArgsStep()
 end
 
@@ -186,7 +186,7 @@ function is_macro_name(x::Symbol)
 end
 
 function newbinding(ex)
-  name = is_macro_name(ex)? Symbol(string(ex)[2:end]) : ex
+  name = is_macro_name(ex) ? Symbol(string(ex)[2:end]) : ex
   Binding(name)
 end
 
@@ -199,7 +199,7 @@ end
 equalsto(x) = EqualityCheck(x)
 
 assertation_args(args) =
-  length(args) == 1? [gensym("x"), args[1]] : args
+  length(args) == 1 ? [gensym("x"), args[1]] : args
 
 #-----------------------------------------------------------------------------------
 

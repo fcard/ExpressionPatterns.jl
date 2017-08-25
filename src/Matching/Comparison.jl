@@ -47,18 +47,18 @@ end
 
 function compare_trees(a::PatternGate, b::PatternGate, vars1, vars2)
   checks =  compare_checks(a.check, b.check, vars1, vars2)
-  checks == :equal?
+  checks == :equal ?
      compare_trees(a.child, b.child, vars1, vars2) : checks
 end
 
 function compare_trees(a::PatternGate, b, vars1, vars2)
   checks =  compare_checks(a.check, b, vars1, vars2)
-  checks == :superset? :superset : :unequal
+  checks == :superset ? :superset : :unequal
 end
 
 function compare_trees(a, b::PatternGate, vars1, vars2)
   checks =  compare_checks(a, b.check, vars1, vars2)
-  checks == :subset? :subset : :unequal
+  checks == :subset ? :subset : :unequal
 end
 
 function compare_checks(a::Binding, b::Binding, vars1, vars2)
@@ -67,25 +67,25 @@ function compare_checks(a::Binding, b::Binding, vars1, vars2)
 end
 
 function compare_checks(a::Binding, b, vars1, vars2)
-  match_variable!(vars1, a.name, b)? :superset : :unequal
+  match_variable!(vars1, a.name, b) ? :superset : :unequal
 end
 
 function compare_checks(a, b::Binding, vars1, vars2)
-  match_variable!(vars2, b.name, a)? :subset : :unequal
+  match_variable!(vars2, b.name, a) ? :subset : :unequal
 end
 
 function compare_checks(a::EqualityCheck, b::EqualityCheck, vars1, vars2)
-  a.value == b.value? :equal : :unequal
+  a.value == b.value ? :equal : :unequal
 end
 
 function compare_checks(a::PredicateCheck, b::PredicateCheck, vars1, vars2)
-  a.predicate == b.predicate? :equal : :unequal
+  a.predicate == b.predicate ? :equal : :unequal
 end
 
 function compare_checks(a::TypeCheck{T1}, b::TypeCheck{T2}, vars1, vars2) where T1 where T2
-  T1 == T2? :equal    :
-  T2 <: T1? :superset :
-  T1 <: T2? :subset   :
+  T1 == T2 ? :equal    :
+  T2 <: T1 ? :superset :
+  T1 <: T2 ? :subset   :
             :unequal
 end
 compare_checks(a, b, vars1, vars2) = :unequal

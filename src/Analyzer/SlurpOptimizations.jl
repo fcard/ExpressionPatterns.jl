@@ -59,7 +59,7 @@ make_simple_last_slurp(slurp, node, i) =
 
 make_simple_slurp_until_one(slurp, node, until, index) =
   make_slurp(slurp,
-              isa(slurp.head, GreedySlurp)?
+              isa(slurp.head, GreedySlurp) ?
                 SimpleGreedySlurpUntil([until], index) :
                 SimpleLazySlurpUntil([until], index))
 

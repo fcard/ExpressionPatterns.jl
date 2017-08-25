@@ -35,7 +35,7 @@ slurptype(node::PatternNode) =
     "Couldn't determine the slurp type of the pattern node $(node.head)"))
 
 patterntype(node::PatternNode) =
-  is_slurp(node)? slurptype(node) : node.head
+  is_slurp(node) ? slurptype(node) : node.head
 
 extract_name(x::QuoteNode) = x.value
 extract_name(x) = x
