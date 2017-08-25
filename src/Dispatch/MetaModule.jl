@@ -57,7 +57,7 @@ function importallcode(path)
 
     for exp in $union(metafun_exports, macromet_exports)
       imp = Expr(:import, $vcat($path, exp)...)
-      eval(Expr(:macrocall, Symbol("@metamodule"), imp))
+      eval($macrocall_ex("@metamodule", imp))
     end
   end
 end
@@ -69,5 +69,10 @@ end
 gettable(name) =
   startswith(string(name), "@")? MM : MF
 
+function macrocall_ex(name, args...)
+  ex = :(@x $(args...))
+  ex.args[1] = Symbol(name)
+  ex
+end
 
 end
