@@ -23,8 +23,8 @@ mutable struct PatternRoot <: PatternTree
   PatternRoot() = new()
 end
 
-struct PatternNode <: PatternTree
-  head     :: PatternHead
+struct PatternNode{PH <: PatternHead} <: PatternTree
+  head     :: PH
   step     :: PatternStep
   children :: Vector{PatternTree}
   bindings :: Set{Symbol}
