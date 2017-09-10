@@ -2,6 +2,8 @@ module Comparison
 using  ...Matching.Environment
 using  ...PatternStructure.Trees
 using  ...PatternStructure.Checks
+using  ...PatternStructure.Special
+using  ...PatternStructure.SlurpTypes
 import Base: ==, ⊆
 export compare_trees, conflicts, ⊇;
 
@@ -11,86 +13,261 @@ export compare_trees, conflicts, ⊇;
 
 conflicts(a::PatternTree, b::PatternTree) = compare_trees(a,b) == :conflicts
 
-newvars() = Variables()
+abstract type PatternData{P} end
 
-function compare_trees(a::PatternTree, b::PatternTree)
-  compare_trees(a, b, newvars(), newvars())
+mutable struct PatternNodeData{P,N} <: PatternData{P}
+  pattern::P
+  index::Int
+  repeats::N
+  real_length::Int
 end
 
-function compare_trees(a::PatternRoot, b::PatternRoot, vars1, vars2)
-  compare_trees(a.child, b.child, vars1, vars2)
+struct PatternGenericData{P} <: PatternData{P}
+  pattern::P
 end
 
-function compare_trees(a::PatternNode, b::PatternNode, vars1, vars2)
-  (a.head != b.head || length(a.children) != length(b.children)) && return :unequal
+PatternData(p::PatternNode, args...) = PatternNodeData(p, args...)
+PatternData(p) = PatternGenericData(p)
 
+struct PatternCmp{P<:Union{PatternTree, PatternCheck}}
+  data::PatternData{P}
+  vars::Variables
 
-  results = compare_children(a,b,vars1, vars2)
-  all(x->x==:equal,   results) && return :equal
-  all(x->x==:unequal, results) && return :unequal
-
-  if (:conflicts in results) ||
-     (:superset  in results  && :subset in results)
-
-    return :conflicts
+  function PatternCmp(p::P, vars=Variables(), repeats=1) where P <: PatternNode
+    new{P}(PatternNodeData(p, 1, repeats, length(p.children)), vars)
   end
 
-  :superset in results && return :superset
-  :subset   in results && return :subset
+  function PatternCmp(p::P, vars=Variables()) where P
+    new{P}(PatternGenericData(p), vars)
+  end
 
-  return :unequal
+  function PatternCmp(d::PatternData{P}, vars) where P
+    new{P}(d, vars)
+  end
 end
 
-function compare_children(a, b, vars1, vars2)
-  map(c->compare_trees(c..., vars1, vars2), zip(a.children, b.children))
+pattern(p::PatternCmp) = p.data.pattern
+
+macro cmp(a::Union{Expr,Symbol})
+  @assert a isa Symbol || a.head == :.
+
+  let root, fields_f
+    dotroot(x::Expr, f=identity)   = dotroot(x.args[1], y->(Expr(:., y, f(x.args[2]))))
+    dotroot(x::Symbol, f=identity) = x, y->f(:($x.data.pattern))
+
+    root, fields_f = dotroot(a)
+
+    esc(:($PatternCmp($(fields_f(root)), $root.vars)))
+  end
 end
 
-function compare_trees(a::PatternGate, b::PatternGate, vars1, vars2)
-  checks =  compare_checks(a.check, b.check, vars1, vars2)
+const PC = PatternCmp
+
+Base.isempty(p::PC{PatternNode{H}}) where H =
+  isempty(pattern(p).children)
+
+real_length(p::PC{P}) where P <: PatternNode =
+  length(pattern(p).children)
+
+Base.length(p::PC{P}) where P <: PatternNode =
+  real_length(p)*p.data.repeats
+
+finished(p::PC{P}) where P <: PatternNode =
+  p.data.index > length(p)
+
+getchild(p::PC{P}) where P <: PatternNode =
+  finished(p) ?
+    throw(BoundsError(pattern(p).children, p.data.index)) :
+    PatternCmp(pattern(p).children[max(1, p.data.index%(p.data.real_length+1))], p.vars)
+
+function setchild!(p::PC{P}, i) where P <: PatternNode
+  p.data.index = i
+end
+
+function next_child!(p::PC{P}) where P <: PatternNode
+  p.data.index += 1
+end
+
+repeat(p::PatternCmp, repeats::Union{Int, Float64}) =
+  PatternCmp(PatternData(pattern(p), p.data.index, repeats, real_length(p)), p.vars)
+
+
+compare_trees(a::PatternTree, b::PatternTree) =
+  compare_trees(PatternCmp(a), PatternCmp(b))
+
+compare_trees(a::PC{PatternRoot}, b::PC{PatternRoot}) =
+  compare_trees(@cmp(a.child), @cmp(b.child))
+
+compare_trees(a::PC{PatternNode{H1}}, b::PC{PatternNode{H2}}) where {H1,H2} =
+  compatible_heads(pattern(a).head, pattern(b).head) ?
+    compare_children(a, b) : :unequal
+
+function compare_children(a, b)
+  if isempty(a)
+    if isempty(b)
+      return :equal
+    else
+      reverse_comparison_result(compare_children(b, a))
+    end
+  else
+    let result=:equal, onfailure=Tuple{Int,Int}[]
+      while !finished(a) && !finished(b)
+        result = update_result(result, compare_child(a, b, onfailure))
+        if result in (:conflicts, :unequal)
+          if isempty(onfailure)
+            return result
+          else
+            indexes = pop!(onfailure)
+            setchild!(a, indexes[1])
+            setchild!(b, indexes[2])
+          end
+        end
+      end
+
+      if !finished(a)
+        is_slurp(pattern(getchild(a))) ? update_result(result, :superset) : :unequal
+      elseif !finished(b)
+        is_slurp(pattern(getchild(b))) ? update_result(result, :subset) : :unequal
+      else
+        result
+      end
+    end
+  end
+end
+
+function compare_child(a, b, onfailure)
+  ca = getchild(a)
+  cb = getchild(b)
+
+  isla, islb = is_slurp(pattern(ca)), is_slurp(pattern(cb))
+
+  if isla && islb
+    let result = compare_slurps(ca, cb)
+      if result in (:equal, :subset, :superset)
+        push!(onfailure, (a.data.index, b.data.index+1))
+        push!(onfailure, (a.data.index+1, b.data.index))
+        next_child!(a)
+        next_child!(b)
+        return result
+      else
+        return :unequal
+      end
+    end
+  elseif isla
+    ca = repeat(ca, Inf)
+    while !finished(b) && compare_trees(getchild(ca), cb) in (:superset, :equal)
+      cb = getchild(b)
+      push!(onfailure, (a.data.index+1, b.data.index))
+      next_child!(ca)
+      next_child!(b)
+    end
+    next_child!(a)
+    return :superset
+
+  elseif islb
+    let rev_onfailure=Tuple{Int,Int}[]
+      compare_child(b, a, rev_onfailure)
+      for onf in rev_onfailure
+        push!(onfailure, (onf[2], onf[1]))
+      end
+      return :subset
+    end
+  else
+    next_child!(a)
+    next_child!(b)
+    compare_trees(ca, cb)
+  end
+end
+
+function compare_slurps(a, b)
+  if compatible_heads(pattern(a).head, pattern(b).head)
+    if real_length(a) == real_length(b)
+      compare_children(a, b)
+
+    elseif (real_length(a) % real_length(b)) == 0
+      res = compare_children(a, repeat(b, div(real_length(a), real_length(b))))
+      res == :equal ? :superset : res
+
+    elseif (real_length(b) % real_length(a)) == 0
+      reverse_comparison_result(compare_slurps(b, a))
+
+    else
+      return :unequal
+    end
+  else
+    return :unequal
+  end
+end
+
+function compare_child(a, b, pa, pb)
+  next_child!(pa)
+  next_child!(pb)
+  compare_trees(a, b)
+end
+
+function compare_trees(a::PC{PatternGate}, b::PC{PatternGate})
+  checks =  compare_checks(@cmp(a.check), @cmp(b.check))
   checks == :equal ?
-     compare_trees(a.child, b.child, vars1, vars2) : checks
+    compare_trees(@cmp(a.child), @cmp(b.child)) : checks
 end
 
-function compare_trees(a::PatternGate, b, vars1, vars2)
-  checks =  compare_checks(a.check, b, vars1, vars2)
+function compare_trees(a::PC{PatternGate}, b)
+  checks =  compare_checks(@cmp(a.check), b)
   checks == :superset ? :superset : :unequal
 end
 
-function compare_trees(a, b::PatternGate, vars1, vars2)
-  checks =  compare_checks(a, b.check, vars1, vars2)
+function compare_trees(a, b::PC{PatternGate})
+  checks =  compare_checks(a, @cmp(b.check))
   checks == :subset ? :subset : :unequal
 end
 
-function compare_checks(a::Binding, b::Binding, vars1, vars2)
-  match_variable!(vars1, a.name, b.name) &&
-  match_variable!(vars2, b.name, a.name)  ? :equal : :unequal
+function compare_checks(a::PC{Binding}, b::PC{Binding})
+  match_variable!(a.vars, pattern(a).name, pattern(b).name) &&
+  match_variable!(b.vars, pattern(b).name, pattern(a).name)  ? :equal : :unequal
 end
 
-function compare_checks(a::Binding, b, vars1, vars2)
-  match_variable!(vars1, a.name, b) ? :superset : :unequal
-end
+compare_checks(a::PC{Binding}, b) =
+  match_variable!(a.vars, pattern(a).name, pattern(b)) ? :superset : :unequal
 
-function compare_checks(a, b::Binding, vars1, vars2)
-  match_variable!(vars2, b.name, a) ? :subset : :unequal
-end
+compare_checks(a, b::PC{Binding}) =
+  match_variable!(b.vars, pattern(b).name, pattern(a)) ? :subset : :unequal
 
-function compare_checks(a::EqualityCheck, b::EqualityCheck, vars1, vars2)
-  a.value == b.value ? :equal : :unequal
-end
+compare_checks(a::PC{EqualityCheck{T}}, b::PC{EqualityCheck{T}}) where T =
+  pattern(a).value == pattern(b).value ? :equal : :unequal
 
-function compare_checks(a::PredicateCheck, b::PredicateCheck, vars1, vars2)
-  a.predicate == b.predicate ? :equal : :unequal
-end
+compare_checks(a::PC{PredicateCheck}, b::PC{PredicateCheck}) =
+  pattern(a).predicate == pattern(b).predicate ? :equal : :unequal
 
-function compare_checks(a::TypeCheck{T1}, b::TypeCheck{T2}, vars1, vars2) where T1 where T2
+compare_checks(a::PC{TypeCheck{T1}}, b::PC{TypeCheck{T2}}) where {T1, T2} =
   T1 == T2 ? :equal    :
   T2 <: T1 ? :superset :
   T1 <: T2 ? :subset   :
-            :unequal
-end
-compare_checks(a, b, vars1, vars2) = :unequal
+             :unequal
 
-compare_trees(a::PatternLeaf, b::PatternLeaf, vars1, vars2) = :equal
-compare_trees(a, b, vars1, vars2) = :unequal
+compare_checks(a, b) = :unequal
+
+compare_trees(a::PC{PatternLeaf}, b::PC{PatternLeaf}) = :equal
+compare_trees(a, b) = :unequal
+
+process_result_list(list) =
+  :subset in list && :superset in list ?
+    :conflicts : reduce(update_result, :equal, list)
+
+update_result(final, result) =
+  result == :equal   ? final    :
+  final  == :equal   ? result   :
+  final  == :unequal ? :unequal :
+  (result == :subset   && final == :superset) ||
+  (result == :superset && final == :subset)   ?
+    :conflicts : result
+
+
+reverse_comparison_result(res) = res == :superset ? :subset : res == :subset ? :superset : res
+
+compatible_heads(x::H, y::H) where H = x == y
+compatible_heads(::S1, ::S2) where {S1 <: LazySlurp,   S2 <: LazySlurp}   = true
+compatible_heads(::S1, ::S2) where {S1 <: GreedySlurp, S2 <: GreedySlurp} = true
+compatible_heads(a,b) = false
+
 
 end

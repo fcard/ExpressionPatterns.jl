@@ -56,4 +56,27 @@ using  Base.Test
 @test intdisp4(10.0) == Number
 @test intdisp4(1000) == Integer
 
+# dispatch on slurps
+
+@macromethod sdisp1(x)     '1'
+@macromethod sdisp1(x,y)   '2'
+@macromethod sdisp1(*{xs}) 'n'
+
+@test @sdisp1(x)     == '1'
+@test @sdisp1(x,y)   == '2'
+@test @sdisp1(x,y,z) == 'n'
+
+@macromethod sdisp2(*{xs}) 'n'
+@macromethod sdisp2(x)     '1'
+
+@test @sdisp2(x)   == '1'
+@test @sdisp2(x,y) == 'n'
+
+@macromethod sdisp3(f(*{as}))        (f,as...)
+@macromethod sdisp3(f(*{as}; *{ks})) (f,as...,ks...)
+
+@test @sdisp3(f(x,y))     == (:f, :x, :y)
+@test @sdisp3(f(x,y;k=1)) == (:f, :x, :y, Expr(:kw, :k, 1))
+
 end
+
