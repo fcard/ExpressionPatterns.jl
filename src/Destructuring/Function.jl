@@ -21,7 +21,7 @@ function destructure(pattern, ex, body)
 end
 
 code(vars, ptree, body) =
-  Expr(:let, body, declarations(vars, ptree)...)
+  :(let $(declarations(vars, ptree)...); $body end)
 
 declarations(vars, ptree) =
   map(x->declare(vars, x), bindings(ptree))
