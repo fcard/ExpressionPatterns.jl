@@ -1,3 +1,6 @@
+<sub>**Release**/**Master**</sub></br>
+![Build (Release & Master)](https://travis-ci.org/fcard/ExpressionPatterns.jl.svg?branch=master)
+
 Installing
 --------
 julia 0.6:
