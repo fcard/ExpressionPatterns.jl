@@ -74,7 +74,7 @@ ypx = :(y+x)
 @remove @h(x)
 @remove  h(x)
 
-@test_throws MetaMethodError @eval @h(x)
+@test_throws MetaMethodError try @eval @h(x) catch err throw(err isa LoadError ? err.error : err) end
 @test_throws MetaMethodError h(:x)
 
 # which
