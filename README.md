@@ -1,5 +1,6 @@
 <sub>**Release**/**Master**</sub></br>
 ![Build (Release & Master)](https://travis-ci.org/fcard/ExpressionPatterns.jl.svg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/fcard/ExpressionPatterns.jl/badge.svg)](https://coveralls.io/github/fcard/ExpressionPatterns.jl)
 
 Installing
 --------
