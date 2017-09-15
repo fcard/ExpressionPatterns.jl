@@ -4,7 +4,8 @@ using  ...PatternStructure.Checks
 using  ...PatternStructure.SlurpTypes
 import Base.Meta.isexpr
 export special_heads, special_shortcuts, is_slurp, is_special,
-       slurptype, patterntype, special_name, is_special_expr
+       slurptype, patterntype, special_name, is_special_expr,
+       is_binding_name
 
 const special_heads =
   [:literal, :autobinding, :binding, :type, :consistent, :predicate, :equals, :iterable, :raw]
@@ -42,6 +43,13 @@ extract_name(x) = x
 
 special_name(x)       = extract_name(get(special_shortcuts, x, x))
 special_name(x::Expr) = special_name(QuoteNode(x.args[1]))
+
+function is_binding_name(x::Symbol)
+  firstchar = string(x)[1]
+
+  isalpha(firstchar) || firstchar in ['#', '@', '_']
+end
+is_binding_name(x) = false
 
 function is_special_expr(ex::Expr)
   if ex.head == :curly && ex.args[1] == :?

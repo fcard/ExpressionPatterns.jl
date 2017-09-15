@@ -328,3 +328,19 @@ everything minus the last `n` arguments.
 """
 SimpleLastSlurp
 
+
+#-----------------------------------------------------------------------------------
+# PatternStructure.Special;
+#-----------------------------------------------------------------------------------
+import ..PatternStructure.Special: is_binding_name
+
+"""
+`is_binding_name(sym) -> Bool`
+
+Determines if `sym` is to be automatically considered
+a binding name. Returns `true` if `sym` starts with a
+letter, `_`, `#` or `@`.
+
+"""
+is_binding_name;
+
