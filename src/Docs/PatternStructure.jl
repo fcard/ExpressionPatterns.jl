@@ -3,7 +3,7 @@
 #-----------------------------------------------------------------------------------
 import ..PatternStructure.Trees: PatternTree, PatternRoot, PatternNode,  PatternLeaf,
                                  PatternGate, PatternStep, PatternCheck, PatternHead,
-                                 ExprHead, makenode, newnode!, newleaf!, slicenode
+                                 ExprHead, makenode, newnode!, newleaf!
 """
 PatternTree is an expression pattern represented as a tree
 data structure. It can be a root, check, node or leaf.
@@ -100,8 +100,8 @@ if it passes the test.
 
 Types of test:
 
-- `TypeCheck`  
-- `EqualityCheck`  
+- `TypeCheck`
+- `EqualityCheck`
 - `PredicateCheck`
 
 """
@@ -183,19 +183,6 @@ Related:
 
 """
 newleaf!;
-
-"""
-`slicenode(node, first:last)`
-
-Creates a pattern node that matches the children of `node` at
-the given interval.
-
-Related:
-- `PatternNode`
-
-"""
-slicenode;
-
 
 #-----------------------------------------------------------------------------------
 # PatternStructure.Checks;

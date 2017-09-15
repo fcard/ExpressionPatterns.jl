@@ -3,7 +3,11 @@ module ExtraTests
 module UtilityTests
 using Base.Test
 using ExpressionPatterns
+using ExpressionPatterns.Helper
+
 @test ExpressionPatterns.path("x") == "x/x.jl"
+@test clean_code(quote x end).args == [:x]
+
 
 end
 

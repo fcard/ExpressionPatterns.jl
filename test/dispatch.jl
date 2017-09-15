@@ -78,5 +78,27 @@ using  Base.Test
 @test @sdisp3(f(x,y))     == (:f, :x, :y)
 @test @sdisp3(f(x,y;k=1)) == (:f, :x, :y, Expr(:kw, :k, 1))
 
+# generic dispatch
+
+@metadispatch metad_mfs() = 0
+@metadispatch function metad_mfl() 0 end
+@metadispatch macro metad_mm() 0 end
+
+
+@metadestruct metad_fs() = 0
+@metadestruct function metad_fl() 0 end
+
+@metadestruct let (x,) = :(0,)
+  @metadestruct let a = 0, b = 0
+    @test 0 ==
+      (@metadestruct ()->0)()    ==
+      metad_fs()  == metad_fl()  ==
+      metad_mfs() == metad_mfl() ==
+      (@metad_mm) == x == a == b
+  end
+end
+
+
+
 end
 

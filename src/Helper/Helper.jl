@@ -28,41 +28,6 @@ function next!(l::Looping)
 end
 
 #-----------------------------------------------------------------------------------
-# @implicit
-#-----------------------------------------------------------------------------------
-
-macro implicit(vars, block)
-  esc(implicit(vars, block))
-end
-
-function implicit(varsym::Symbol, block)
-  implicit(Expr(:tuple, varsym), block)
-end
-
-function implicit(vars_expr::Expr, block)
-  vars = vars_expr.args
-  functions = map(function_name, filter(is_function_definition, block.args))
-
-  add_implicit(vars, functions, block)
-end
-
-function add_implicit(vars, functions, block)
-  exprmodify(block, on=callto(functions)) do ex
-    Expr(:call, ex.args..., vars...)
-  end
-end
-
-callto(functions) =
-  ex -> is_call(ex) && ex.args[1] in functions
-
-#-----------------------------------------------------------------------------------
-# Functional utilities
-#----------------------------------------------------------------------------------
-
-never(::Any)  = false
-always(::Any) = true
-
-#-----------------------------------------------------------------------------------
 # Iterable utilities
 #-----------------------------------------------------------------------------------
 
@@ -91,28 +56,9 @@ is_line_number(ex::Expr) = ex.head == :line
 is_line_number(ex::LineNumberNode) = true
 is_line_number(ex) = false
 
-is_function_definition(ex) = false
-is_function_definition(ex::Expr) =
-  ex.head == :function ||
-  ex.head == :(=) && is_call(ex.args[1])
-
-is_call(ex) = false
-is_call(ex::Expr) = ex.head == :call
-
-function_name(ex) = ex.args[1].args[1]
-
 function linesof(ex::Expr)
   remove(is_line_number, ex.args)
 end
-
-exprmodify(modify; on=always) =
-  ex -> exprmodify(modify, ex, on=on)
-
-exprmodify(modify, ex; on=always) =
-  on(ex) ? modify(ex) : ex
-
-exprmodify(modify, ex::Expr; on=always) =
-  on(ex) ? modify(ex) : Expr(ex.head, map(exprmodify(modify, on=on), ex.args)...)
 
 function clean_code(ex::Expr)
   nex = Expr(ex.head, map(clean_code, ex.args)...)

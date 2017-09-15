@@ -6,7 +6,7 @@ export PatternTree, PatternStep, PatternCheck,
        ExprHead, SlurpHead,
 
        nodehead, bindings, insert!, newnode!,
-       newleaf!, slicenode, depth
+       newleaf!, depth
 
 #-----------------------------------------------------------------------------------
 # Type definitions
@@ -123,16 +123,6 @@ function newleaf!(check, parent::PatternTree)
   insert!(gate, leaf)
   insert!(parent, gate)
   return leaf
-end
-
-function slicenode(node::PatternNode, range)
-  fst,lst = first(range), last(range)
-  head = node.head
-  step = node.step
-  children = node.children[fst:lst]
-  binds    = mapreduce(bindings, union, Set{Symbol}(), children)
-
-  PatternNode(head, step, children, binds, node.depth)
 end
 
 #-----------------------------------------------------------------------------------

@@ -74,7 +74,7 @@ ypx = :(y+x)
 @remove @h(x)
 @remove  h(x)
 
-@test_throws MetaMethodError try @eval @h(x) catch err throw(err isa LoadError ? err.error : err) end
+@test_throws MetaMethodError try @eval @h(x); catch err throw(err isa LoadError ? err.error : err) end
 @test_throws MetaMethodError h(:x)
 
 # which
@@ -96,6 +96,28 @@ const mfun = :m
 
 @test MF[mfun].methods[1] == @whichmeta m(x+y)
 @test MF[mfun].methods[2] == @whichmeta m(x)
+
+# conflicts
+
+@macromethod n(x,x+y)[a] ()
+@macromethod n(x+y,x)[b] ()
+
+let stdout = STDOUT
+  conflicts_io, = redirect_stdout()
+  @metaconflicts @n
+  print_with_color(:red,    "[a]<x x + y>")
+  print_with_color(:yellow, " | ")
+  print_with_color(:red,    "[b]<x + y x>")
+  println()
+
+  metaconflicts_result = readline(conflicts_io)
+  readline(conflicts_io)
+  expected = readline(conflicts_io)
+
+  redirect_stdout(stdout)
+  @test metaconflicts_result == expected
+end
+
 
 # Cross-module reflection
 

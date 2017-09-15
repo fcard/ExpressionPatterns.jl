@@ -93,8 +93,8 @@ if it passes the test.
 
 Types of test:
 
-- [`TypeCheck`](./PatternStructure.md#typecheck)  
-- [`EqualityCheck`](./PatternStructure.md#equalitycheck)  
+- [`TypeCheck`](./PatternStructure.md#typecheck)
+- [`EqualityCheck`](./PatternStructure.md#equalitycheck)
 - [`PredicateCheck`](./PatternStructure.md#predicatecheck)
 
 ---
@@ -168,17 +168,6 @@ Related:
 - [`PatternLeaf`](./PatternStructure.md#patternleaf)
 - [`PatternStep`](./PatternStructure.md#patternstep)
 - [`PatternGate`](./PatternStructure.md#patterngate)
-
----
-#### slicenode
-
-`slicenode(node, first:last)`
-
-Creates a pattern node that matches the children of `node` at
-the given interval.
-
-Related:
-- [`PatternNode`](./PatternStructure.md#patternnode)
 
 ---
 
