@@ -98,7 +98,17 @@ using  Base.Test
   end
 end
 
+# metamethod overwriting
 
+@metafunction o()[x] 1
+@metafunction o()[x] 2
+
+@test o() == 2
+
+# errors
+
+@test_throws MetaMethodError o(1)
+@test_throws ErrorException try @eval @metafunction o(x)[x] 0; catch err throw(err.error) end
 
 end
 

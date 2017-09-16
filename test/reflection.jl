@@ -1,5 +1,6 @@
 module ReflectionTests
 using  Base.Test
+using  ExpressionPatterns
 using  ExpressionPatterns.Dispatch
 using  ExpressionPatterns.Dispatch.Reflection
 
@@ -166,5 +167,46 @@ end
 @prefer a over b in B.@m
 
 @test B.@m(x+y,y+x) == (:x,:y)
+
+# Errors and warnings
+
+macro test_warning(ex, expected_warning::String)
+  @gensym had_color
+  quote
+    token  = gensym()
+    stderr = STDERR
+    nerr,  = redirect_stderr()
+
+    $(esc(had_color)) = Base.have_color
+    eval($Base, :(have_color = false))
+    try
+      $ex
+      println(STDERR)
+      println(STDERR, "$token")
+      warning = readline(nerr)
+      line = (eof(nerr) ? "" : readline(nerr))
+      while line != "$token"
+        if line != ""
+          warning = "$warning\n$line"
+        end
+        line = readline(nerr)
+      end
+      @test warning == $expected_warning
+    finally
+      redirect_stderr(stderr)
+      eval($Base, :(have_color = $$had_color))
+    end
+  end
+end
+
+@test_throws ArgumentError ExpressionPatterns.Dispatch.TableManipulation.set_conflict_warnings(:bleh)
+
+ExpressionPatterns.Dispatch.TableManipulation.set_conflict_warnings(:yes)
+
+@macromethod m()[a] ()
+@test_warning (@prefer a over a in @m) "WARNING: Using `prefer` with non-conflicting methods. (pattern`()` and pattern`()` in macromethod m)"
+@test_warning (@remove b from @m)      "WARNING: Couldn't remove the method [b] from the macromethod m"
+
+ExpressionPatterns.Dispatch.TableManipulation.set_conflict_warnings(:no)
 
 end
