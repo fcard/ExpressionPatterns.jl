@@ -181,7 +181,7 @@ macro test_warning(ex, expected_warning::String)
       $(esc(had_color)) = Base.have_color
       eval($Base, :(have_color = false))
       try
-        $ex
+        $(esc(ex))
         println(STDERR)
         println(STDERR, "$token")
         warning = readline(nerr)
