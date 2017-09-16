@@ -4,7 +4,7 @@ using  ...PatternStructure.Trees
 using  ...PatternStructure.Checks
 using  ...PatternStructure.Special
 using  ...PatternStructure.SlurpTypes
-import Base: ==, ⊆
+import Base: ==, ⊆, ⊇ ;
 export compare_trees, conflicts, ⊇;
 
 ==(a::PatternTree, b::PatternTree) = compare_trees(a,b) == :equal
@@ -32,17 +32,18 @@ PatternData(p) = PatternGenericData(p)
 struct PatternCmp{P<:Union{PatternTree, PatternCheck}}
   data::PatternData{P}
   vars::Variables
+  freeze::Bool
 
-  function PatternCmp(p::P, vars=Variables(), repeats=1) where P <: PatternNode
-    new{P}(PatternNodeData(p, 1, repeats, length(p.children)), vars)
+  function PatternCmp(p::P, vars=Variables(), freeze=false, repeats=1) where P <: PatternNode
+    new{P}(PatternNodeData(p, 1, repeats, length(p.children)), vars, freeze)
   end
 
-  function PatternCmp(p::P, vars=Variables()) where P
-    new{P}(PatternGenericData(p), vars)
+  function PatternCmp(p::P, vars=Variables(), freeze=false) where P
+    new{P}(PatternGenericData(p), vars, freeze)
   end
 
-  function PatternCmp(d::PatternData{P}, vars) where P
-    new{P}(d, vars)
+  function PatternCmp(d::PatternData{P}, vars, freeze=false) where P
+    new{P}(d, vars, freeze)
   end
 end
 
@@ -57,7 +58,7 @@ macro cmp(a::Union{Expr,Symbol})
 
     root, fields_f = dotroot(a)
 
-    esc(:($PatternCmp($(fields_f(root)), $root.vars)))
+    esc(:($PatternCmp($(fields_f(root)), $root.vars, $root.freeze)))
   end
 end
 
@@ -78,7 +79,7 @@ finished(p::PC{P}) where P <: PatternNode =
 getchild(p::PC{P}) where P <: PatternNode =
   finished(p) ?
     throw(BoundsError(pattern(p).children, p.data.index)) :
-    PatternCmp(pattern(p).children[max(1, p.data.index%(p.data.real_length+1))], p.vars)
+    PatternCmp(pattern(p).children[max(1, p.data.index%(p.data.real_length+1))], p.vars, is_slurp(pattern(p)) || p.freeze)
 
 function setchild!(p::PC{P}, i) where P <: PatternNode
   p.data.index = i
@@ -110,26 +111,33 @@ function compare_children(a, b)
       reverse_comparison_result(compare_children(b, a))
     end
   else
-    let result=:equal, onfailure=Tuple{Int,Int}[]
-      while !finished(a) && !finished(b)
-        result = update_result(result, compare_child(a, b, onfailure))
+    let result=:equal, onfailure=Tuple{Int,Int,Symbol}[]
+      while true
+
+        if !finished(a) && !finished(b)
+          result = update_result(result, compare_child(a, b, onfailure))
+
+        elseif !finished(a)
+          result = is_slurp(pattern(getchild(a))) ? update_result(result, :superset) : :unequal
+          next_child!(a)
+
+        elseif !finished(b)
+          result = is_slurp(pattern(getchild(b))) ? update_result(result, :subset) : :unequal
+          next_child!(b)
+
+        else
+          return result
+        end
+
         if result in (:conflicts, :unequal)
           if isempty(onfailure)
             return result
           else
-            indexes = pop!(onfailure)
-            setchild!(a, indexes[1])
-            setchild!(b, indexes[2])
+            a_index, b_index, result = pop!(onfailure)
+            setchild!(a, a_index)
+            setchild!(b, b_index)
           end
         end
-      end
-
-      if !finished(a)
-        is_slurp(pattern(getchild(a))) ? update_result(result, :superset) : :unequal
-      elseif !finished(b)
-        is_slurp(pattern(getchild(b))) ? update_result(result, :subset) : :unequal
-      else
-        result
       end
     end
   end
@@ -144,8 +152,8 @@ function compare_child(a, b, onfailure)
   if isla && islb
     let result = compare_slurps(ca, cb)
       if result in (:equal, :subset, :superset)
-        push!(onfailure, (a.data.index, b.data.index+1))
-        push!(onfailure, (a.data.index+1, b.data.index))
+        push!(onfailure, (a.data.index, b.data.index+1, :superset))
+        push!(onfailure, (a.data.index+1, b.data.index, :subset))
         next_child!(a)
         next_child!(b)
         return result
@@ -155,9 +163,8 @@ function compare_child(a, b, onfailure)
     end
   elseif isla
     ca = repeat(ca, Inf)
-    while !finished(b) && compare_trees(getchild(ca), cb) in (:superset, :equal)
-      cb = getchild(b)
-      push!(onfailure, (a.data.index+1, b.data.index))
+    while !finished(b) && compare_trees(getchild(ca), getchild(b)) in (:superset, :equal)
+      push!(onfailure, (a.data.index+1, b.data.index, :superset))
       next_child!(ca)
       next_child!(b)
     end
@@ -165,10 +172,10 @@ function compare_child(a, b, onfailure)
     return :superset
 
   elseif islb
-    let rev_onfailure=Tuple{Int,Int}[]
+    let rev_onfailure=Tuple{Int,Int,Symbol}[]
       compare_child(b, a, rev_onfailure)
       for onf in rev_onfailure
-        push!(onfailure, (onf[2], onf[1]))
+        push!(onfailure, (onf[2], onf[1], reverse_comparison_result(onf[3])))
       end
       return :subset
     end
@@ -199,12 +206,6 @@ function compare_slurps(a, b)
   end
 end
 
-function compare_child(a, b, pa, pb)
-  next_child!(pa)
-  next_child!(pb)
-  compare_trees(a, b)
-end
-
 function compare_trees(a::PC{PatternGate}, b::PC{PatternGate})
   checks =  compare_checks(@cmp(a.check), @cmp(b.check))
   checks == :equal ?
@@ -221,16 +222,22 @@ function compare_trees(a, b::PC{PatternGate})
   checks == :subset ? :subset : :unequal
 end
 
-function compare_checks(a::PC{Binding}, b::PC{Binding})
+compare_checks(a::PC{Binding}, b::PC{Binding}) =
+  a.freeze ? check_frozen_variable(a, b) :
+  b.freeze ? check_frozen_variable(b, a) :
   match_variable!(a.vars, pattern(a).name, pattern(b).name) &&
   match_variable!(b.vars, pattern(b).name, pattern(a).name)  ? :equal : :unequal
-end
 
 compare_checks(a::PC{Binding}, b) =
-  match_variable!(a.vars, pattern(a).name, pattern(b)) ? :superset : :unequal
+  a.freeze ? check_frozen_variable(a, b) : check_and_match_variable(a, b)
 
-compare_checks(a, b::PC{Binding}) =
-  match_variable!(b.vars, pattern(b).name, pattern(a)) ? :subset : :unequal
+compare_checks(a, b::PC{Binding}) = reverse_comparison_result(compare_checks(b, a))
+
+check_frozen_variable(a, b) =
+  !haskey(a.vars, pattern(a).name) || a.vars[pattern(a).name] == pattern(b) ? :superset : :unequal
+
+check_and_match_variable(a, b) =
+  match_variable!(a.vars, pattern(a).name, pattern(b)) ? :superset : :unequal
 
 compare_checks(a::PC{EqualityCheck{T}}, b::PC{EqualityCheck{T}}) where T =
   pattern(a).value == pattern(b).value ? :equal : :unequal
@@ -248,10 +255,6 @@ compare_checks(a, b) = :unequal
 
 compare_trees(a::PC{PatternLeaf}, b::PC{PatternLeaf}) = :equal
 compare_trees(a, b) = :unequal
-
-process_result_list(list) =
-  :subset in list && :superset in list ?
-    :conflicts : reduce(update_result, :equal, list)
 
 update_result(final, result) =
   result == :equal   ? final    :

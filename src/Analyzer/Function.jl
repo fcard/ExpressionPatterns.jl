@@ -20,7 +20,6 @@ end
 const newstate = AnalysisState
 AnalysisState(state, tree::PatternTree) = newstate(tree, state.literal, state.mod, state.consts)
 AnalysisState(state, literal::Bool)     = newstate(state.tree, literal, state.mod, state.consts)
-AnalysisState(state, mod::Module)       = newstate(state.tree, state.literal, mod, state.consts)
 
 
 #-----------------------------------------------------------------------------------

@@ -5,7 +5,10 @@ using Base.Test
 using ExpressionPatterns
 using ExpressionPatterns.Helper
 
-@test ExpressionPatterns.path("x") == "x/x.jl"
+cd("../src")
+@test isfile(ExpressionPatterns.path("Analyzer"))
+cd("../test")
+
 @test clean_code(quote x end).args == [:x]
 
 
@@ -50,6 +53,20 @@ module MakeDocsTest
 cd("../src/Docs")
 include("../src/Docs/makedocs.jl")
 cd("../../test")
+
+end
+
+module TreeComparison
+using Base.Test
+using ExpressionPatterns.Analyzer
+using ExpressionPatterns.Matching.Comparison
+
+totree(x) = analyze(x, TreeComparison)
+
+@test totree(:(a,*{x}))   ⊆ totree(:(*{x},))
+@test totree(:(*{x},))    ⊇ totree(:(a,*{x}))
+@test totree(:(*{x},1))   ⊇ totree(:(*{x},2,1))
+@test totree(:(*{x},2,1)) ⊆ totree(:(*{x},1))
 
 end
 

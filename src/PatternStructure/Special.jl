@@ -27,7 +27,6 @@ is_slurp(node::PatternNode) = isa(node.head, SlurpHead)
 is_slurp(x) = false
 
 is_special(node::PatternNode) = node.head in special_heads || is_slurp(node)
-is_special(x) = false
 
 slurptype(node::PatternNode) =
   isa(node.head, LazySlurp)   ? :? :
