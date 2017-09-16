@@ -68,6 +68,7 @@ bindings(leaf::PatternLeaf) = Set{Symbol}()
 bindings(gate::PatternGate) = gate.bindings
 bindings(node::PatternNode) = node.bindings
 
+depth(node::PatternRoot) = 0
 depth(gate::PatternGate) = gate.depth
 depth(node::PatternNode) = node.depth
 

@@ -140,12 +140,6 @@ Creates a [`PatternNode`](./PatternStructure.md#patternnode) from the provided `
 and inserts the node into `parent`.
 (returns the new node)
 
-`newnode!(check, head, step, parent) -> PatternNode`
-
-Creates a [`PatternNode`](./PatternStructure.md#patternnode) with `head` and `step`, inserts
-it into a [`PatternGate`](./PatternStructure.md#patterngate) along with the check, and inserts
-the gate into `parent`.
-
 Related:
 - [`PatternNode`](./PatternStructure.md#patternnode)
 - [`PatternStep`](./PatternStructure.md#patternstep)
@@ -153,11 +147,6 @@ Related:
 
 ---
 #### newleaf!
-
-`newleaf!(parent) -> PatternLeaf`
-
-Creates a [`PatternLeaf`](./PatternStructure.md#patternleaf) and inserts it into `parent`.
-(returns the new leaf)
 
 `newleaf!(check, parent) -> PatternLeaf`
 
