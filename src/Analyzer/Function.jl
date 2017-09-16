@@ -20,7 +20,6 @@ end
 const newstate = AnalysisState
 AnalysisState(state, tree::PatternTree) = newstate(tree, state.literal, state.mod, state.consts)
 AnalysisState(state, literal::Bool)     = newstate(state.tree, literal, state.mod, state.consts)
-AnalysisState(state, mod::Module)       = newstate(state.tree, state.literal, mod, state.consts)
 
 
 #-----------------------------------------------------------------------------------
@@ -188,12 +187,6 @@ end
 function newbinding(ex)
   name = is_macro_name(ex) ? Symbol(string(ex)[2:end]) : ex
   Binding(name)
-end
-
-function is_binding_name(x::Symbol)
-  firstchar = string(x)[1]
-
-  isalpha(firstchar) || firstchar in ['#', '@', '_']
 end
 
 equalsto(x) = EqualityCheck(x)

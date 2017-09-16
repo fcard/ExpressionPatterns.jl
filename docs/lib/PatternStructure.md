@@ -93,8 +93,8 @@ if it passes the test.
 
 Types of test:
 
-- [`TypeCheck`](./PatternStructure.md#typecheck)  
-- [`EqualityCheck`](./PatternStructure.md#equalitycheck)  
+- [`TypeCheck`](./PatternStructure.md#typecheck)
+- [`EqualityCheck`](./PatternStructure.md#equalitycheck)
 - [`PredicateCheck`](./PatternStructure.md#predicatecheck)
 
 ---
@@ -140,12 +140,6 @@ Creates a [`PatternNode`](./PatternStructure.md#patternnode) from the provided `
 and inserts the node into `parent`.
 (returns the new node)
 
-`newnode!(check, head, step, parent) -> PatternNode`
-
-Creates a [`PatternNode`](./PatternStructure.md#patternnode) with `head` and `step`, inserts
-it into a [`PatternGate`](./PatternStructure.md#patterngate) along with the check, and inserts
-the gate into `parent`.
-
 Related:
 - [`PatternNode`](./PatternStructure.md#patternnode)
 - [`PatternStep`](./PatternStructure.md#patternstep)
@@ -153,11 +147,6 @@ Related:
 
 ---
 #### newleaf!
-
-`newleaf!(parent) -> PatternLeaf`
-
-Creates a [`PatternLeaf`](./PatternStructure.md#patternleaf) and inserts it into `parent`.
-(returns the new leaf)
 
 `newleaf!(check, parent) -> PatternLeaf`
 
@@ -168,17 +157,6 @@ Related:
 - [`PatternLeaf`](./PatternStructure.md#patternleaf)
 - [`PatternStep`](./PatternStructure.md#patternstep)
 - [`PatternGate`](./PatternStructure.md#patterngate)
-
----
-#### slicenode
-
-`slicenode(node, first:last)`
-
-Creates a pattern node that matches the children of `node` at
-the given interval.
-
-Related:
-- [`PatternNode`](./PatternStructure.md#patternnode)
 
 ---
 
@@ -290,6 +268,20 @@ Slowest version of a [`GreedySlurp`](./PatternStructure.md#greedyslurp), but wor
 Assumes the slurp is the last one, and its match a single symbol.
 If the expression is of the form `*{s}, a₁,...,aₙ`, capture
 everything minus the last `n` arguments.
+
+---
+
+
+PatternStructure.Special
+==========
+
+#### is_binding_name
+
+`is_binding_name(sym) -> Bool`
+
+Determines if `sym` is to be automatically considered
+a binding name. Returns `true` if `sym` starts with a
+letter, `_`, `#` or `@`.
 
 ---
 

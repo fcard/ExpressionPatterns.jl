@@ -27,9 +27,9 @@ function expr(p::PatternNode)
 end
 
 function expr(p::PatternGate)
-  isa(p.check, Binding) ?        p.check.name  :
-  isa(p.check, EqualityCheck) ?  p.check.value :
-  isa(p.check, TypeCheck) ?      :(:type{$(expr(p.child)), $(typeof(p.check).parameters[1])}) :
+  isa(p.check, Binding)        ? ( is_binding_name(p.check.name)  ? p.check.name : :(:binding{$(p.check.name)}) )  :
+  isa(p.check, EqualityCheck)  ? ( is_binding_name(p.check.value) ? :(:equals{$(p.check.value)}) : p.check.value ) :
+  isa(p.check, TypeCheck)      ? :(:type{$(expr(p.child)), $(typeof(p.check).parameters[1])}) :
   isa(p.check, PredicateCheck) ? :(:predicate{$(expr(p.child)), $(p.check.predicate)}) :
   throw(ArgumentError("invalid check type in PatternGate: $(p.check)"))
 end

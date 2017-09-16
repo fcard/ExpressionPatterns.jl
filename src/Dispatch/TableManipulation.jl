@@ -62,7 +62,7 @@ end
 function addlabel!(table, method)
   method.label == unlabeled && return method
 
-  if haskey(table.labels, method.label) && !(method == table.labels[method.label])
+  if haskey(table.labels, method.label) && !(method.tree == table.labels[method.label].tree)
     error("$(table.name) has a different method with label :$(method.label)")
   end
   table.labels[method.label] = method

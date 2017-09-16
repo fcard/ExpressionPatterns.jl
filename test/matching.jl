@@ -176,4 +176,12 @@ end
   :(import a.b.c) => false
 end
 
+# line number nodes
+
+@testmatch LineNumberNode(1) begin
+  LineNumberNode(1) => true
+  LineNumberNode(2) => true
+  Expr(:line, 10)   => true
+end
+
 end

@@ -6,5 +6,6 @@ include("dispatch.jl")
 include("metamodule.jl")
 include("reflection.jl")
 include("slurp-optimizations.jl")
+include("extra.jl")
 
 end

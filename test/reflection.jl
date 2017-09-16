@@ -1,5 +1,6 @@
 module ReflectionTests
 using  Base.Test
+using  ExpressionPatterns
 using  ExpressionPatterns.Dispatch
 using  ExpressionPatterns.Dispatch.Reflection
 
@@ -74,7 +75,7 @@ ypx = :(y+x)
 @remove @h(x)
 @remove  h(x)
 
-@test_throws MetaMethodError try @eval @h(x) catch err throw(err isa LoadError ? err.error : err) end
+@test_throws MetaMethodError try @eval @h(x); catch err throw(err isa LoadError ? err.error : err) end
 @test_throws MetaMethodError h(:x)
 
 # which
@@ -96,6 +97,28 @@ const mfun = :m
 
 @test MF[mfun].methods[1] == @whichmeta m(x+y)
 @test MF[mfun].methods[2] == @whichmeta m(x)
+
+# conflicts
+
+@macromethod n(x,x+y)[a] ()
+@macromethod n(x+y,x)[b] ()
+
+let stdout = STDOUT
+  conflicts_io, = redirect_stdout()
+  @metaconflicts @n
+  print_with_color(:red,    "[a]<x x + y>")
+  print_with_color(:yellow, " | ")
+  print_with_color(:red,    "[b]<x + y x>")
+  println()
+
+  metaconflicts_result = readline(conflicts_io)
+  readline(conflicts_io)
+  expected = readline(conflicts_io)
+
+  redirect_stdout(stdout)
+  @test metaconflicts_result == expected
+end
+
 
 # Cross-module reflection
 
@@ -144,5 +167,48 @@ end
 @prefer a over b in B.@m
 
 @test B.@m(x+y,y+x) == (:x,:y)
+
+# Errors and warnings
+
+macro test_warning(ex, expected_warning::String)
+  @gensym had_color
+  quote
+    let
+      token  = gensym()
+      stderr = STDERR
+      nerr,  = redirect_stderr()
+
+      $(esc(had_color)) = Base.have_color
+      eval($Base, :(have_color = false))
+      try
+        $(esc(ex))
+        println(STDERR)
+        println(STDERR, "$token")
+        warning = readline(nerr)
+        line = (eof(nerr) ? "" : readline(nerr))
+        while line != "$token"
+          if line != ""
+            warning = "$warning\n$line"
+          end
+          line = readline(nerr)
+        end
+        @test warning == $expected_warning
+      finally
+        redirect_stderr(stderr)
+        eval($Base, :(have_color = $$had_color))
+      end
+    end
+  end
+end
+
+@test_throws ArgumentError ExpressionPatterns.Dispatch.TableManipulation.set_conflict_warnings(:bleh)
+
+ExpressionPatterns.Dispatch.TableManipulation.set_conflict_warnings(:yes)
+
+@macromethod m()[a] ()
+@test_warning (@prefer a over a in @m) "WARNING: Using `prefer` with non-conflicting methods. (pattern`()` and pattern`()` in macromethod m)"
+@test_warning (@remove b from @m)      "WARNING: Couldn't remove the method [b] from the macromethod m"
+
+ExpressionPatterns.Dispatch.TableManipulation.set_conflict_warnings(:no)
 
 end

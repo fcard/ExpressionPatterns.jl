@@ -113,6 +113,9 @@ const DE = ExpressionPatterns.Destructuring.Applications
 @macromethod metadestruct(let *{bindings}; *{body} end)[letds] =
   esc(:($DE.@letds $(bindings...) begin $(body...) end))
 
+@macromethod metadestruct(let binding; *{body} end)[letds_single] =
+  esc(:($DE.@letds $binding begin $(body...) end))
+
 @macromethod metadestruct(macro name(*{patterns}) *{body} end)[macrods] =
   esc(:($DE.@macrods $name($(patterns...)) begin $(body...) end))
 

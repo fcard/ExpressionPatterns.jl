@@ -6,7 +6,7 @@ export PatternTree, PatternStep, PatternCheck,
        ExprHead, SlurpHead,
 
        nodehead, bindings, insert!, newnode!,
-       newleaf!, slicenode, depth
+       newleaf!, depth
 
 #-----------------------------------------------------------------------------------
 # Type definitions
@@ -65,11 +65,10 @@ function nodehead(node::PatternNode)
 end
 
 bindings(leaf::PatternLeaf) = Set{Symbol}()
-bindings(root::PatternRoot) = bindings(root.child)
 bindings(gate::PatternGate) = gate.bindings
 bindings(node::PatternNode) = node.bindings
 
-depth(root::PatternRoot) = 0
+depth(node::PatternRoot) = 0
 depth(gate::PatternGate) = gate.depth
 depth(node::PatternNode) = node.depth
 
@@ -103,36 +102,12 @@ function newnode!(head, step, parent::PatternTree)
   return node
 end
 
-function newnode!(check, head, step, parent::PatternTree)
-  node = makenode(head, step, depth(parent))
-  gate = PatternGate(check, depth(parent))
-  insert!(gate, node)
-  insert!(parent, gate)
-  return node
-end
-
-function newleaf!(parent::PatternTree)
-  leaf = PatternLeaf()
-  insert!(parent, leaf)
-  return leaf
-end
-
 function newleaf!(check, parent::PatternTree)
   leaf = PatternLeaf()
   gate = PatternGate(check, depth(parent))
   insert!(gate, leaf)
   insert!(parent, gate)
   return leaf
-end
-
-function slicenode(node::PatternNode, range)
-  fst,lst = first(range), last(range)
-  head = node.head
-  step = node.step
-  children = node.children[fst:lst]
-  binds    = mapreduce(bindings, union, Set{Symbol}(), children)
-
-  PatternNode(head, step, children, binds, node.depth)
 end
 
 #-----------------------------------------------------------------------------------

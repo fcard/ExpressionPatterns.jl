@@ -62,16 +62,6 @@ expressions of the given `head`.
 getstep;
 
 """
-`is_binding_name(sym) -> Bool`
-
-Determines if `sym` is to be automatically considered
-a binding name. Returns `true` if `sym` starts with a
-letter, `#` or `@`.
-
-"""
-is_binding_name;
-
-"""
 `is_special_expr(ex) -> Bool`
 
 Checks if `ex` is of the form `:X{ys...}` or `(*\\?){ys...}` and thus

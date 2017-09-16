@@ -3,7 +3,7 @@
 #-----------------------------------------------------------------------------------
 import ..PatternStructure.Trees: PatternTree, PatternRoot, PatternNode,  PatternLeaf,
                                  PatternGate, PatternStep, PatternCheck, PatternHead,
-                                 ExprHead, makenode, newnode!, newleaf!, slicenode
+                                 ExprHead, makenode, newnode!, newleaf!
 """
 PatternTree is an expression pattern represented as a tree
 data structure. It can be a root, check, node or leaf.
@@ -100,8 +100,8 @@ if it passes the test.
 
 Types of test:
 
-- `TypeCheck`  
-- `EqualityCheck`  
+- `TypeCheck`
+- `EqualityCheck`
 - `PredicateCheck`
 
 """
@@ -151,12 +151,6 @@ Creates a `PatternNode` from the provided `head` and `step`
 and inserts the node into `parent`.
 (returns the new node)
 
-`newnode!(check, head, step, parent) -> PatternNode`
-
-Creates a `PatternNode` with `head` and `step`, inserts
-it into a `PatternGate` along with the check, and inserts
-the gate into `parent`.
-
 Related:
 - `PatternNode`
 - `PatternStep`
@@ -166,11 +160,6 @@ Related:
 newnode!;
 
 """
-`newleaf!(parent) -> PatternLeaf`
-
-Creates a `PatternLeaf` and inserts it into `parent`.
-(returns the new leaf)
-
 `newleaf!(check, parent) -> PatternLeaf`
 
 Creates a `PatternLeaf`, inserts it into a `PatternGate`
@@ -183,19 +172,6 @@ Related:
 
 """
 newleaf!;
-
-"""
-`slicenode(node, first:last)`
-
-Creates a pattern node that matches the children of `node` at
-the given interval.
-
-Related:
-- `PatternNode`
-
-"""
-slicenode;
-
 
 #-----------------------------------------------------------------------------------
 # PatternStructure.Checks;
@@ -327,4 +303,20 @@ everything minus the last `n` arguments.
 
 """
 SimpleLastSlurp
+
+
+#-----------------------------------------------------------------------------------
+# PatternStructure.Special;
+#-----------------------------------------------------------------------------------
+import ..PatternStructure.Special: is_binding_name
+
+"""
+`is_binding_name(sym) -> Bool`
+
+Determines if `sym` is to be automatically considered
+a binding name. Returns `true` if `sym` starts with a
+letter, `_`, `#` or `@`.
+
+"""
+is_binding_name;
 

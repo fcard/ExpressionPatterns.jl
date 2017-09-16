@@ -42,59 +42,59 @@ conflictscode(m, typ, M=current_module()) =
 # which
 #----------------------------------------------------------------------------
 
-@macromethod whichmeta(   m(*{patterns})) = whichcode(m, patterns, :fun)
-@macromethod whichmeta( M.m(*{patterns})) = whichcode(m, patterns, :fun, M)
-@macromethod whichmeta(  @m(*{patterns})) = whichcode(m, patterns, :macro)
-@macromethod whichmeta(M.@m(*{patterns})) = whichcode(m, patterns, :macro, M)
+@macromethod whichmeta(   m(*{patterns}))  whichcode(m, patterns, :fun)
+@macromethod whichmeta( M.m(*{patterns}))  whichcode(m, patterns, :fun, M)
+@macromethod whichmeta(  @m(*{patterns}))  whichcode(m, patterns, :macro)
+@macromethod whichmeta(M.@m(*{patterns}))  whichcode(m, patterns, :macro, M)
 
 
 #----------------------------------------------------------------------------
 # preference
 #----------------------------------------------------------------------------
 
-@macromethod prefer(   m(*{p1}), :L{over},    m(*{p2})) = esc(prefercode(m, p1, p2, :fun))
-@macromethod prefer( M.m(*{p1}), :L{over},  M.m(*{p2})) = esc(prefercode(m, p1, p2, :fun, M))
-@macromethod prefer(  @m(*{p1}), :L{over},   @m(*{p2})) = esc(prefercode(m, p1, p2, :macro))
-@macromethod prefer(M.@m(*{p1}), :L{over}, M.@m(*{p2})) = esc(prefercode(m, p1, p2, :macro, M))
+@macromethod prefer(   m(*{p1}), :L{over},    m(*{p2}))  esc(prefercode(m, p1, p2, :fun))
+@macromethod prefer( M.m(*{p1}), :L{over},  M.m(*{p2}))  esc(prefercode(m, p1, p2, :fun, M))
+@macromethod prefer(  @m(*{p1}), :L{over},   @m(*{p2}))  esc(prefercode(m, p1, p2, :macro))
+@macromethod prefer(M.@m(*{p1}), :L{over}, M.@m(*{p2}))  esc(prefercode(m, p1, p2, :macro, M))
 
-@macromethod prefer(label1, :L{over}, label2 in    m) = esc(prefercode(m ,label1, label2, :fun))
-@macromethod prefer(label1, :L{over}, label2 in  M.m) = esc(prefercode(m ,label1, label2, :fun, M))
-@macromethod prefer(label1, :L{over}, label2 in   @m) = esc(prefercode(m ,label1, label2, :macro))
-@macromethod prefer(label1, :L{over}, label2 in M.@m) = esc(prefercode(m ,label1, label2, :macro, M))
+@macromethod prefer(label1, :L{over}, label2 in    m)  esc(prefercode(m ,label1, label2, :fun))
+@macromethod prefer(label1, :L{over}, label2 in  M.m)  esc(prefercode(m ,label1, label2, :fun, M))
+@macromethod prefer(label1, :L{over}, label2 in   @m)  esc(prefercode(m ,label1, label2, :macro))
+@macromethod prefer(label1, :L{over}, label2 in M.@m)  esc(prefercode(m ,label1, label2, :macro, M))
 
 #----------------------------------------------------------------------------
 # remove
 #----------------------------------------------------------------------------
 
-@macromethod remove(   m(*{patterns})) = esc(removecode(m, patterns, :fun))
-@macromethod remove( M.m(*{patterns})) = esc(removecode(m, patterns, :fun, M))
-@macromethod remove(  @m(*{patterns})) = esc(removecode(m, patterns, :macro))
-@macromethod remove(M.@m(*{patterns})) = esc(removecode(m, patterns, :macro, M))
+@macromethod remove(   m(*{patterns}))  esc(removecode(m, patterns, :fun))
+@macromethod remove( M.m(*{patterns}))  esc(removecode(m, patterns, :fun, M))
+@macromethod remove(  @m(*{patterns}))  esc(removecode(m, patterns, :macro))
+@macromethod remove(M.@m(*{patterns}))  esc(removecode(m, patterns, :macro, M))
 
-@macromethod remove(label, :L{from},    m) = esc(removecode(m, label, :fun))
-@macromethod remove(label, :L{from},  M.m) = esc(removecode(m, label, :fun, M))
-@macromethod remove(label, :L{from},   @m) = esc(removecode(m, label, :macro))
-@macromethod remove(label, :L{from}, M.@m) = esc(removecode(m, label, :macro, M))
+@macromethod remove(label, :L{from},    m)  esc(removecode(m, label, :fun))
+@macromethod remove(label, :L{from},  M.m)  esc(removecode(m, label, :fun, M))
+@macromethod remove(label, :L{from},   @m)  esc(removecode(m, label, :macro))
+@macromethod remove(label, :L{from}, M.@m)  esc(removecode(m, label, :macro, M))
 
 
 #----------------------------------------------------------------------------
 # metamethods
 #----------------------------------------------------------------------------
 
-@macromethod metamethods(   m) = esc(methodscode(m, :fun))
-@macromethod metamethods( M.m) = esc(methodscode(m, :fun, M))
-@macromethod metamethods(  @m) = esc(methodscode(m, :macro))
-@macromethod metamethods(M.@m) = esc(methodscode(m, :macro, M))
+@macromethod metamethods(   m) esc(methodscode(m, :fun))
+@macromethod metamethods( M.m) esc(methodscode(m, :fun, M))
+@macromethod metamethods(  @m) esc(methodscode(m, :macro))
+@macromethod metamethods(M.@m) esc(methodscode(m, :macro, M))
 
 
 #----------------------------------------------------------------------------
 # metaconflicts
 #----------------------------------------------------------------------------
 
-@macromethod metaconflicts(   m) = esc(conflictscode(m, :fun))
-@macromethod metaconflicts( M.m) = esc(conflictscode(m, :fun, M))
-@macromethod metaconflicts(  @m) = esc(conflictscode(m, :macro))
-@macromethod metaconflicts(M.@m) = esc(conflictscode(m, :macro, M))
+@macromethod metaconflicts(   m) esc(conflictscode(m, :fun))
+@macromethod metaconflicts( M.m) esc(conflictscode(m, :fun, M))
+@macromethod metaconflicts(  @m) esc(conflictscode(m, :macro))
+@macromethod metaconflicts(M.@m) esc(conflictscode(m, :macro, M))
 
 
 end
