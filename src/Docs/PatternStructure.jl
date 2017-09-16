@@ -151,12 +151,6 @@ Creates a `PatternNode` from the provided `head` and `step`
 and inserts the node into `parent`.
 (returns the new node)
 
-`newnode!(check, head, step, parent) -> PatternNode`
-
-Creates a `PatternNode` with `head` and `step`, inserts
-it into a `PatternGate` along with the check, and inserts
-the gate into `parent`.
-
 Related:
 - `PatternNode`
 - `PatternStep`
@@ -166,11 +160,6 @@ Related:
 newnode!;
 
 """
-`newleaf!(parent) -> PatternLeaf`
-
-Creates a `PatternLeaf` and inserts it into `parent`.
-(returns the new leaf)
-
 `newleaf!(check, parent) -> PatternLeaf`
 
 Creates a `PatternLeaf`, inserts it into a `PatternGate`

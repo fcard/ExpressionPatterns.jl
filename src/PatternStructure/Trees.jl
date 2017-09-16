@@ -65,11 +65,9 @@ function nodehead(node::PatternNode)
 end
 
 bindings(leaf::PatternLeaf) = Set{Symbol}()
-bindings(root::PatternRoot) = bindings(root.child)
 bindings(gate::PatternGate) = gate.bindings
 bindings(node::PatternNode) = node.bindings
 
-depth(root::PatternRoot) = 0
 depth(gate::PatternGate) = gate.depth
 depth(node::PatternNode) = node.depth
 
@@ -101,20 +99,6 @@ function newnode!(head, step, parent::PatternTree)
   node = makenode(head, step, depth(parent))
   insert!(parent, node)
   return node
-end
-
-function newnode!(check, head, step, parent::PatternTree)
-  node = makenode(head, step, depth(parent))
-  gate = PatternGate(check, depth(parent))
-  insert!(gate, node)
-  insert!(parent, gate)
-  return node
-end
-
-function newleaf!(parent::PatternTree)
-  leaf = PatternLeaf()
-  insert!(parent, leaf)
-  return leaf
 end
 
 function newleaf!(check, parent::PatternTree)
